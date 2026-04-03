@@ -1,0 +1,15 @@
+{
+  "node_count": 2,
+  "edge_count": 1,
+  "density": 0.5,
+  "orphans": [],
+  "hubs": [],
+  "pipelines": [
+    [
+      "code-review",
+      "refactor-plan"
+    ]
+  ],
+  "cycles": [],
+  "missing_refs": []
+}

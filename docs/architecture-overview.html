@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TasteKit — Architecture &amp; System Overview</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-card-hover: #1a1a28;
+  --border: #2a2a3a;
+  --border-accent: #4a4a6a;
+  --text: #e0e0ec;
+  --text-dim: #8888aa;
+  --text-bright: #ffffff;
+  --accent: #7c6ff7;
+  --accent-glow: rgba(124, 111, 247, 0.15);
+  --green: #34d399;
+  --green-dim: rgba(52, 211, 153, 0.12);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.12);
+  --red: #f87171;
+  --red-dim: rgba(248, 113, 113, 0.12);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96, 165, 250, 0.12);
+  --pink: #f472b6;
+  --cyan: #22d3ee;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* Hero */
+.hero {
+  padding: 80px 0 60px;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 0%, var(--accent-glow) 0%, transparent 70%);
+}
+.hero h1 {
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+}
+.hero .subtitle {
+  font-size: 1.25rem;
+  color: var(--text-dim);
+  max-width: 700px;
+  margin: 0 auto 32px;
+}
+.hero .stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.hero .stat { text-align: center; }
+.hero .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+.hero .stat-label {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Section */
+section { padding: 60px 0; }
+section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-bright);
+}
+section .section-desc {
+  color: var(--text-dim);
+  margin-bottom: 32px;
+  max-width: 700px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s;
+}
+.card:hover { background: var(--bg-card-hover); border-color: var(--border-accent); }
+.card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-bright);
+}
+.card p { color: var(--text-dim); font-size: 0.95rem; }
+.card .badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 99px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-green { background: var(--green-dim); color: var(--green); }
+.badge-amber { background: var(--amber-dim); color: var(--amber); }
+.badge-blue { background: var(--blue-dim); color: var(--blue); }
+.badge-red { background: var(--red-dim); color: var(--red); }
+
+/* Pipeline Diagram */
+.pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  padding: 20px 0;
+}
+.pipeline-step {
+  flex: 1;
+  min-width: 180px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 16px;
+  position: relative;
+  text-align: center;
+}
+.pipeline-step::after {
+  content: '→';
+  position: absolute;
+  right: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  color: var(--accent);
+  z-index: 1;
+}
+.pipeline-step:last-child::after { content: ''; }
+.pipeline-step .step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+.pipeline-step h4 { font-size: 0.95rem; margin-bottom: 6px; color: var(--text-bright); }
+.pipeline-step .artifact {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+/* Runtime Flow Diagrams */
+.runtime-flow {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.runtime-flow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+.runtime-flow.claude::before { background: linear-gradient(90deg, var(--accent), var(--blue)); }
+.runtime-flow.openclaw::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+.runtime-flow.hermes::before { background: linear-gradient(90deg, var(--amber), var(--pink)); }
+.runtime-flow h3 {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+  color: var(--text-bright);
+}
+.runtime-flow .runtime-desc {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+.flow-columns {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr 40px 1fr;
+  gap: 0;
+  align-items: start;
+}
+.flow-col { min-width: 0; }
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--accent);
+  padding-top: 40px;
+}
+.flow-box {
+  background: rgba(124, 111, 247, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.flow-box h4 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+.flow-box .file-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  margin: 3px 0;
+  border-radius: 4px;
+}
+.file-json { background: rgba(96, 165, 250, 0.1); color: var(--blue); }
+.file-yaml { background: rgba(251, 191, 36, 0.1); color: var(--amber); }
+.file-md { background: rgba(52, 211, 153, 0.1); color: var(--green); }
+.file-sh { background: rgba(244, 114, 182, 0.1); color: var(--pink); }
+
+/* Comparison Table */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.compare-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--border);
+  color: var(--text-bright);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+.compare-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.compare-table tr:hover td { background: var(--bg-card); }
+.check { color: var(--green); font-weight: 700; }
+.cross { color: var(--red); opacity: 0.5; }
+.partial { color: var(--amber); }
+
+/* Schema visualization */
+.schema-tree {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.8;
+  padding: 20px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+.schema-tree .key { color: var(--cyan); }
+.schema-tree .type { color: var(--text-dim); }
+.schema-tree .required { color: var(--pink); font-size: 0.7rem; }
+.schema-tree .comment { color: #555570; font-style: italic; }
+
+/* Drift signals */
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+}
+.signal-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.signal-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.signal-item h4 { font-size: 0.9rem; color: var(--text-bright); margin-bottom: 2px; }
+.signal-item p { font-size: 0.8rem; color: var(--text-dim); }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.tab {
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Domain cards */
+.domain-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.domain-card h4 { color: var(--text-bright); margin-bottom: 8px; }
+.domain-dims {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.dim-tier {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* Footer */
+footer {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2rem; }
+  .flow-columns { grid-template-columns: 1fr; }
+  .flow-arrow { transform: rotate(90deg); padding: 10px 0; }
+  .pipeline { flex-direction: column; }
+  .pipeline-step::after { content: '↓'; right: 50%; top: auto; bottom: -16px; transform: translateX(50%); }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="container">
+    <h1>TasteKit</h1>
+    <p class="subtitle">Compile your taste — preferences, principles, personality — into portable, versioned artifacts that make any AI agent work the way you do.</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">9</div>
+        <div class="stat-label">Artifact Types</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">32+</div>
+        <div class="stat-label">Compatible Runtimes</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">7</div>
+        <div class="stat-label">Drift Signals</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">388</div>
+        <div class="stat-label">Tests Passing</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">6</div>
+        <div class="stat-label">Agent Domains</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WHAT IS TASTEKIT ============ -->
+<section>
+  <div class="container">
+    <h2>What is TasteKit?</h2>
+    <p class="section-desc">TasteKit is a CLI tool + library that interviews you about your preferences, compiles them into structured artifacts, and exports them to any AI agent runtime. One interview. Every runtime. Your taste, everywhere.</p>
+    <div class="card-grid">
+      <div class="card">
+        <span class="badge badge-green">Core</span>
+        <h3>Interview-Driven</h3>
+        <p>An LLM-powered interviewer adapts its questions based on your answers. It tracks 9–28 dimensions of your preferences across 3 depth tiers (5min / 15min / 30min).</p>
+      </div>
+      <div class="card">
+        <span class="badge badge-blue">Core</span>
+        <h3>Artifact-First</h3>
+        <p>Everything compiles to human-readable, git-friendly JSON/YAML files. No database. No runtime dependency. Version control your agent's personality like code.</p>
+      </div>
+      <div class="card">
+        <span class="badge badge-amber">Unique</span>
+        <h3>Drift Detection</h3>
+        <p>The only OSS tool that detects personality-level drift. 7 signal types monitor your agent's behavior against its constitution and propose corrections.</p>
+      </div>
+      <div class="card">
+        <span class="badge badge-green">Core</span>
+        <h3>Portable Profiles</h3>
+        <p>Skills follow the Agent Skills open standard (agentskills.io) — compatible with 32+ runtimes: Claude Code, OpenClaw, OpenAI Codex, Gemini CLI, Cursor, VS Code Copilot, GitHub, Junie, Letta, ActRun Autopilots, and more.</p>
+      </div>
+      <div class="card">
+        <span class="badge badge-blue">Core</span>
+        <h3>MCP-First Tools</h3>
+        <p>Wraps the official MCP SDK. Trust pinning with cryptographic fingerprints. Auditing catches silent tool changes. 17,665+ MCP servers available.</p>
+      </div>
+      <div class="card">
+        <span class="badge badge-green">New</span>
+        <h3>Agent Skills Spec</h3>
+        <p>Skills follow the Agent Skills open standard (agentskills.io). Progressive disclosure (3 levels), YAML frontmatter, references/ directory. Portable across all 32+ compatible runtimes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPILATION PIPELINE ============ -->
+<section style="background: rgba(124,111,247,0.03);">
+  <div class="container">
+    <h2>Compilation Pipeline</h2>
+    <p class="section-desc">The compiler runs 5 sequential steps with derivation state tracking. Each step persists progress — if compilation fails, <code>--resume</code> picks up where it left off.</p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <h4>Constitution</h4>
+        <p style="font-size:0.82rem;color:var(--text-dim)">Principles, tone, tradeoffs, evidence policy, taboos</p>
+        <span class="artifact">constitution.v1.json</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <h4>Guardrails</h4>
+        <p style="font-size:0.82rem;color:var(--text-dim)">Permissions, approvals, rate limits, rollback</p>
+        <span class="artifact">guardrails.v1.yaml</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <h4>Memory</h4>
+        <p style="font-size:0.82rem;color:var(--text-dim)">Stores, salience rules, PII handling, retention</p>
+        <span class="artifact">memory.v1.yaml</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <h4>Skills</h4>
+        <p style="font-size:0.82rem;color:var(--text-dim)">SKILL.md with frontmatter, manifest, reference files</p>
+        <span class="artifact">skills/manifest.v1.yaml</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">5</div>
+        <h4>Playbooks</h4>
+        <p style="font-size:0.82rem;color:var(--text-dim)">Multi-step workflows with triggers and checks</p>
+        <span class="artifact">playbooks/*.v1.yaml</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RUNTIME FLOWS ============ -->
+<section>
+  <div class="container">
+    <h2>How TasteKit Works With Each Runtime</h2>
+    <p class="section-desc">TasteKit compiles once, then adapters transform artifacts into the format each runtime expects. Here's the exact data flow for each.</p>
+
+    <!-- Claude Code -->
+    <div class="runtime-flow claude">
+      <h3>Claude Code</h3>
+      <p class="runtime-desc">Full-featured export: CLAUDE.md system instructions, 5 lifecycle hooks, permissions, and skills.</p>
+      <div class="flow-columns">
+        <div class="flow-col">
+          <div class="flow-box">
+            <h4>TasteKit Artifacts</h4>
+            <div class="file-item file-json">constitution.v1.json</div>
+            <div class="file-item file-yaml">guardrails.v1.yaml</div>
+            <div class="file-item file-yaml">memory.v1.yaml</div>
+            <div class="file-item file-yaml">skills/manifest.v1.yaml</div>
+            <div class="file-item file-json">bindings.v1.json</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-col">
+          <div class="flow-box">
+            <h4>Adapter Transforms</h4>
+            <div class="file-item" style="background:rgba(124,111,247,0.1);color:var(--accent);">principles → CLAUDE.md blocks</div>
+            <div class="file-item" style="background:rgba(124,111,247,0.1);color:var(--accent);">guardrails → permissions.allow/deny</div>
+            <div class="file-item" style="background:rgba(124,111,247,0.1);color:var(--accent);">autonomy → defaultMode (plan/default/acceptEdits)</div>
+            <div class="file-item" style="background:rgba(124,111,247,0.1);color:var(--accent);">approvals → PreToolUse hook</div>
+            <div class="file-item" style="background:rgba(124,111,247,0.1);color:var(--accent);">constitution → PostCompact re-injection</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-col">
+          <div class="flow-box">
+            <h4>Claude Code Output</h4>
+            <div class="file-item file-md">CLAUDE.md</div>
+            <div class="file-item file-json">.claude/settings.local.json</div>
+            <div class="file-item file-sh">.tastekit/hooks/tastekit-guard.sh</div>
+            <div class="file-item file-sh">.tastekit/hooks/session-orient.sh</div>
+            <div class="file-item file-sh">.tastekit/hooks/post-compact.sh</div>
+            <div class="file-item file-sh">.tastekit/hooks/artifact-validate.sh</div>
+            <div class="file-item file-sh">.tastekit/hooks/session-capture.sh</div>
+            <div class="file-item file-md">.claude/skills/*/SKILL.md</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OpenClaw -->
+    <div class="runtime-flow openclaw">
+      <h3>OpenClaw / PicoClaw / AutoClaw</h3>
+      <p class="runtime-desc">Complete workspace: SOUL.md (personality), IDENTITY.md (capabilities), AGENTS.md (behavior), plus skills directory.</p>
+      <div class="flow-columns">
+        <div class="flow-col">
+          <div class="flow-box">
+            <h4>TasteKit Artifacts</h4>
+            <div class="file-item file-json">constitution.v1.json</div>
+            <div class="file-item file-yaml">guardrails.v1.yaml</div>
+            <div class="file-item file-yaml">skills/manifest.v1.yaml</div>
+            <div class="file-item file-json">bindings.v1.json</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-col">
+          <div class="flow-box">
+            <h4>Adapter Transforms</h4>
+            <div class="file-item" style="background:rgba(52,211,153,0.1);color:var(--green);">principles + tone → SOUL.md</div>
+            <div class="file-item" style="background:rgba(52,211,153,0.1);color:var(--green);">domain + skills + tools → IDENTITY.md</div>
+            <div class="file-item" style="background:rgba(52,211,153,0.1);color:var(--green);">principles + guardrails → AGENTS.md</div>
+            <div class="file-item" style="background:rgba(52,211,153,0.1);color:var(--green);">skills/ → AgentSkills format</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-col">
+          <div class="flow-box">
+            <h4>OpenClaw Workspace</h4>
+            <div class="file-item file-md">SOUL.md</div>
+            <div class="file-item file-md">IDENTITY.md</div>
+            <div class="file-item file-md">AGENTS.md</div>
+            <div class="file-item file-json">openclaw.config.json</div>
+            <div class="file-item file-md">skills/*/SKILL.md</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manus / Autopilots -->
+    <div class="runtime-flow hermes">
+      <h3>Manus &amp; ActRun Autopilots</h3>
+      <p class="runtime-desc">Both use Agent Skills standard. Manus gets skills directory. ActRun Autopilots gets .agents/skills/ + autopilots.yaml config.</p>
+      <div class="flow-columns">
+        <div class="flow-col">
+          <div class="flow-box">
+            <h4>TasteKit Artifacts</h4>
+            <div class="file-item file-json">constitution.v1.json</div>
+            <div class="file-item file-yaml">skills/manifest.v1.yaml</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-col">
+          <div class="flow-box">
+            <h4>Manus Output</h4>
+            <div class="file-item file-md">skills/*/SKILL.md</div>
+            <div class="file-item file-md">README.md</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-col">
+          <div class="flow-box">
+            <h4>ActRun Autopilots Output</h4>
+            <div class="file-item file-yaml">autopilots.yaml</div>
+            <div class="file-item file-md">.agents/skills/*/SKILL.md</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DRIFT DETECTION ============ -->
+<section style="background: rgba(248,113,113,0.02);">
+  <div class="container">
+    <h2>Drift Detection — TasteKit's Unique Differentiator</h2>
+    <p class="section-desc">No other open-source tool detects personality-level drift. TasteKit monitors 7 signal types, proposes corrections with risk ratings, and supports accept/reject workflows.</p>
+    <div class="signal-grid">
+      <div class="signal-item">
+        <div class="signal-icon" style="background:var(--red-dim);">🔄</div>
+        <div>
+          <h4>Repeated Edit</h4>
+          <p>User repeatedly rejects agent actions (threshold: ≥3). Signals misalignment with preferences.</p>
+        </div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon" style="background:var(--amber-dim);">⚠️</div>
+        <div>
+          <h4>Principle Violation</h4>
+          <p>Error accumulation suggests principles are being broken (threshold: ≥3 errors).</p>
+        </div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon" style="background:var(--blue-dim);">✏️</div>
+        <div>
+          <h4>User Correction</h4>
+          <p>User edits agent output within 5 minutes. Frequent corrections mean the agent isn't matching taste.</p>
+        </div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon" style="background:var(--green-dim);">🔧</div>
+        <div>
+          <h4>Tool Change</h4>
+          <p>User switches tools for the same skill. Suggests tool bindings need updating.</p>
+        </div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon" style="background:rgba(124,111,247,0.12);">📅</div>
+        <div>
+          <h4>Staleness</h4>
+          <p>Constitution age &gt;30 days. Auto-triggered — preferences evolve, profiles should too.</p>
+        </div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon" style="background:var(--amber-dim);">🕳️</div>
+        <div>
+          <h4>Coverage Gap</h4>
+          <p>Tools/skills in use but not in manifest. The agent learned new tricks that aren't tracked.</p>
+        </div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-icon" style="background:var(--red-dim);">🚫</div>
+        <div>
+          <h4>Assertion Mismatch</h4>
+          <p>"Never do X" principle exists but traces show X happening. Direct constitution violation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPETITIVE COMPARISON ============ -->
+<section>
+  <div class="container">
+    <h2>How TasteKit Compares</h2>
+    <p class="section-desc">TasteKit generates Agent Skills-compliant output that works across 32+ runtimes. It's the only tool combining drift detection, portable profiles, and MCP-first tool integration.</p>
+    <div style="overflow-x: auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>TasteKit</th>
+          <th>OpenClaw SOUL.md</th>
+          <th>Letta</th>
+          <th>Custom GPTs</th>
+          <th>PicoClaw</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Drift detection</td>
+          <td><span class="check">✓ 7 signals</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+        </tr>
+        <tr>
+          <td>Portable profiles</td>
+          <td><span class="check">✓ 32+ runtimes</span></td>
+          <td><span class="partial">~ manual copy</span></td>
+          <td><span class="partial">~ .af file</span></td>
+          <td><span class="cross">✗ locked</span></td>
+          <td><span class="cross">✗</span></td>
+        </tr>
+        <tr>
+          <td>LLM-driven onboarding</td>
+          <td><span class="check">✓ adaptive</span></td>
+          <td><span class="cross">✗ manual</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗ manual</span></td>
+        </tr>
+        <tr>
+          <td>Version-controlled personality</td>
+          <td><span class="check">✓ git-friendly</span></td>
+          <td><span class="partial">~ flat files</span></td>
+          <td><span class="check">✓ git-backed</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="partial">~ flat files</span></td>
+        </tr>
+        <tr>
+          <td>MCP tool integration</td>
+          <td><span class="check">✓ trust pinning</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗ custom</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗ custom</span></td>
+        </tr>
+        <tr>
+          <td>Skill progressive disclosure</td>
+          <td><span class="check">✓ 3 levels</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+        </tr>
+        <tr>
+          <td>Guardrail enforcement</td>
+          <td><span class="check">✓ hooks</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="partial">~ tool rules</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+        </tr>
+        <tr>
+          <td>Open source</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Memory &lt;15MB</td>
+          <td><span class="check">✓ build-time</span></td>
+          <td><span class="cross">✗ &gt;1GB</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ &lt;10MB</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOMAINS ============ -->
+<section style="background: rgba(52,211,153,0.02);">
+  <div class="container">
+    <h2>6 Agent Domains</h2>
+    <p class="section-desc">Each domain has a specialized rubric with dimensions tailored to that agent type. Three depth tiers let you choose interview depth.</p>
+    <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+      <div class="domain-card">
+        <h4>🛠 Development Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Engineering identity, code quality, testing, naming, commits, type safety, error handling, CI/CD</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 9</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 20</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 28</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <h4>📝 Content Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Brand voice, audience, editorial standards, publishing cadence, sourcing, fact-checking</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 7</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 14</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 23</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <h4>🔬 Research Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Research scope, methodology, source evaluation, synthesis, citation standards</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 7</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 14</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 25</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <h4>💼 Sales Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Sales philosophy, buyer personas, objection handling, closing style, pipeline management</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 7</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 14</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 25</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <h4>🎧 Support Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Support philosophy, escalation criteria, empathy, SLA targets, ticket handling</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 7</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 14</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 25</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <h4>🌐 General Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Mission scope, decision style, autonomy, communication, evidence rigor, risk escalation</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 6</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 12</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 18</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONSTITUTION SCHEMA ============ -->
+<section>
+  <div class="container">
+    <h2>Constitution Schema</h2>
+    <p class="section-desc">The constitution is the core artifact — it captures who you are as a builder. Every other artifact references it.</p>
+    <div class="schema-tree">
+<span class="key">constitution.v1.json</span>
+├── <span class="key">schema_version</span>: <span class="type">"constitution.v1"</span>
+├── <span class="key">generated_at</span>: <span class="type">ISO8601</span>
+├── <span class="key">generator_version</span>: <span class="type">string</span>
+├── <span class="key">user_scope</span>: <span class="type">"single_user"</span>
+├── <span class="key">principles</span>: <span class="type">ConstitutionPrinciple[]</span>
+│   ├── <span class="key">id</span>: <span class="type">string</span> <span class="comment">// e.g., "p-readability"</span>
+│   ├── <span class="key">priority</span>: <span class="type">number</span> <span class="comment">// 1 = highest</span>
+│   ├── <span class="key">statement</span>: <span class="type">string</span> <span class="required">required</span>
+│   ├── <span class="key">rationale</span>: <span class="type">string?</span>
+│   ├── <span class="key">applies_to</span>: <span class="type">string[]</span> <span class="comment">// ["*"] or ["code", "docs"]</span>
+│   ├── <span class="key">examples_good</span>: <span class="type">string[]?</span>
+│   └── <span class="key">examples_bad</span>: <span class="type">string[]?</span>
+├── <span class="key">tone</span>: <span class="type">ConstitutionTone</span>
+│   ├── <span class="key">voice_keywords</span>: <span class="type">string[]</span> <span class="comment">// ["direct", "conversational"]</span>
+│   ├── <span class="key">forbidden_phrases</span>: <span class="type">string[]</span> <span class="comment">// ["synergy", "leverage"]</span>
+│   └── <span class="key">formatting_rules</span>: <span class="type">string[]</span>
+├── <span class="key">tradeoffs</span>: <span class="type">ConstitutionTradeoffs</span>
+│   ├── <span class="key">accuracy_vs_speed</span>: <span class="type">0.0–1.0</span> <span class="comment">// 0=speed, 1=accuracy</span>
+│   ├── <span class="key">cost_sensitivity</span>: <span class="type">0.0–1.0</span>
+│   └── <span class="key">autonomy_level</span>: <span class="type">0.0–1.0</span> <span class="comment">// → Claude Code defaultMode</span>
+├── <span class="key">evidence_policy</span>
+│   ├── <span class="key">require_citations_for</span>: <span class="type">string[]</span>
+│   └── <span class="key">uncertainty_language_rules</span>: <span class="type">string[]</span>
+├── <span class="key">taboos</span>
+│   ├── <span class="key">never_do</span>: <span class="type">string[]</span>
+│   └── <span class="key">must_escalate</span>: <span class="type">string[]</span>
+└── <span class="key">trace_map</span>: <span class="type">Record&lt;string, any&gt;</span> <span class="comment">// source traceability</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLI COMMANDS ============ -->
+<section style="background: rgba(96,165,250,0.02);">
+  <div class="container">
+    <h2>CLI Commands</h2>
+    <p class="section-desc">12 commands covering the full lifecycle: init → interview → compile → export → monitor → maintain.</p>
+    <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="card"><h3><code>tastekit init</code></h3><p>Create workspace. Pick domain, depth, LLM provider. Creates .tastekit/ with three-space layout.</p></div>
+      <div class="card"><h3><code>tastekit onboard</code></h3><p>LLM-driven interview. Adaptive questions, coverage tracking, /save to resume later. Voice mode optional.</p></div>
+      <div class="card"><h3><code>tastekit compile</code></h3><p>Generate 5 artifact types from session. Supports --resume for interrupted compilations.</p></div>
+      <div class="card"><h3><code>tastekit export</code></h3><p>Export to claude-code, openclaw, manus, autopilots, agents-md, or agent-file formats.</p></div>
+      <div class="card"><h3><code>tastekit skills</code></h3><p>list, lint, graph, pack, report, inspect, history, rollback — full skill lifecycle management.</p></div>
+      <div class="card"><h3><code>tastekit drift</code></h3><p>detect, review, accept, reject — monitor agent behavior against constitution.</p></div>
+      <div class="card"><h3><code>tastekit mcp</code></h3><p>add, list, inspect, bind — manage MCP tool servers with trust pinning.</p></div>
+      <div class="card"><h3><code>tastekit trust</code></h3><p>init, pin-mcp, pin-skill-source, audit — cryptographic trust management.</p></div>
+      <div class="card"><h3><code>tastekit eval</code></h3><p>run, replay — execute evaluation packs against compiled artifacts.</p></div>
+      <div class="card"><h3><code>tastekit import</code></h3><p>Import from SOUL.md, IDENTITY.md, or Letta Agent File (.af) format.</p></div>
+      <div class="card"><h3><code>tastekit completion</code></h3><p>Generate shell completion scripts for bash, zsh, and fish.</p></div>
+      <div class="card"><h3><code>tastekit simulate</code></h3><p>Run skill simulations with dry-run and no-side-effects modes.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARCHITECTURE DIAGRAM ============ -->
+<section>
+  <div class="container">
+    <h2>System Architecture</h2>
+    <p class="section-desc">5 packages, 9 artifact types, 4 adapters. The core compiles artifacts. Adapters export them. Drift detection closes the loop.</p>
+    <div class="schema-tree" style="font-size:0.78rem;line-height:2;">
+<span class="key">@tastekit/core</span> <span class="comment">— Schemas, compiler, interview, drift, eval, generators</span>
+├── <span class="key">schemas/</span> <span class="comment">— 9 Zod schemas (constitution, guardrails, memory, skills, bindings, trust, playbook, evalpack, workspace)</span>
+├── <span class="key">compiler/</span> <span class="comment">— 5-step pipeline with derivation state + resume</span>
+├── <span class="key">interview/</span> <span class="comment">— LLM interviewer engine with confidence tracking + cascades</span>
+├── <span class="key">domains/</span> <span class="comment">— 6 domain rubrics with 9–28 dimensions each</span>
+├── <span class="key">drift/</span> <span class="comment">— 7 signal types, proposals, consolidation (Jaccard ≥0.6)</span>
+├── <span class="key">skills/</span> <span class="comment">— graph analyzer, constraints, versioner, tracker, linter, packer</span>
+├── <span class="key">generators/</span> <span class="comment">— CLAUDE.md, SOUL.md, AGENTS.md, hooks (5 scripts)</span>
+├── <span class="key">llm/</span> <span class="comment">— Anthropic, OpenAI, Ollama providers</span>
+├── <span class="key">mcp/</span> <span class="comment">— MCP client wrapping official SDK</span>
+└── <span class="key">trust/</span> <span class="comment">— Fingerprint pinning, audit</span>
+
+<span class="key">@tastekit/cli</span> <span class="comment">— 12 commands, inquirer prompts, ora spinners</span>
+<span class="key">@tastekit/adapters</span> <span class="comment">— Claude Code (v2.0), OpenClaw (v2.0), Manus, ActRun Autopilots (v2.0)</span>
+<span class="key">@tastekit/voice</span> <span class="comment">— ElevenLabs Scribe/TTS + Whisper.cpp/Piper local fallbacks</span>
+
+<span class="key">Data Flow:</span>
+  User → <span style="color:var(--accent)">Interview</span> → Session → <span style="color:var(--cyan)">Compiler</span> → Artifacts → <span style="color:var(--green)">Adapters</span> → Runtime
+                                                          ↑
+                                              <span style="color:var(--red)">Drift Detector</span> ← Traces ← Runtime
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>TasteKit v1.0.0 — 388 tests passing — MIT License</p>
+    <p style="margin-top:8px;">Built with TypeScript. Compiles to JSON/YAML. Runs everywhere.</p>
+  </div>
+</footer>
+
+</body>
+</html>

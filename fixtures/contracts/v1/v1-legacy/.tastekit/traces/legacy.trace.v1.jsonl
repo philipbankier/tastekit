@@ -1,0 +1,1 @@
+{"schema_version":"trace_event.v1","run_id":"legacy-run","timestamp":"2026-02-20T00:00:00.000Z","actor":"agent","event_type":"plan","data":{"goal":"legacy"}}

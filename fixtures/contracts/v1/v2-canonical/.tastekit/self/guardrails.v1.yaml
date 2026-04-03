@@ -1,0 +1,15 @@
+schema_version: guardrails.v1
+permissions:
+  - scope_id: safe-read
+    tool_ref: local:read
+    resources: ["*"]
+    ops: [read]
+approvals:
+  - rule_id: destructive-write
+    when: "op == 'delete'"
+    action: require_approval
+    channel: cli
+rate_limits:
+  - tool_ref: local:read
+    limit: 300
+    window: 1h

@@ -1,0 +1,47 @@
+{
+  "name": "tastekit",
+  "version": "1.0.0",
+  "description": "CLI-first taste onboarding + Skills + MCP + Drift + Trust + Tracing",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.29.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tastekit/tastekit.git"
+  },
+  "homepage": "https://github.com/tastekit/tastekit",
+  "bugs": {
+    "url": "https://github.com/tastekit/tastekit/issues"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "test:pr-gate": "bash scripts/validation/pr-gate.sh",
+    "test:pre-release-live": "bash scripts/validation/pre-release-live-ollama.sh",
+    "lint": "pnpm -r lint",
+    "clean": "pnpm -r clean"
+  },
+  "keywords": [
+    "taste",
+    "agent",
+    "mcp",
+    "skills",
+    "cli",
+    "trust",
+    "tracing"
+  ],
+  "author": "TasteKit Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.56.1",
+    "vitest": "^2.0.0"
+  },
+  "dependencies": {
+    "@tastekit/adapters": "workspace:*"
+  }
+}

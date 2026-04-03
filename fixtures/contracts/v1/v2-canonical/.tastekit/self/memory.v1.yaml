@@ -1,0 +1,20 @@
+schema_version: memory.v1
+runtime_target: generic
+stores:
+  - store_id: default
+    type: runtime_managed
+    config: {}
+write_policy:
+  salience_rules:
+    - rule_id: corrections
+      pattern: correction
+      score: 0.9
+  pii_handling:
+    detect: true
+    redact: false
+    store_separately: true
+  update_mode: consolidate
+  revisit_triggers: [user_correction]
+retention_policy:
+  ttl_days: 30
+  prune_strategy: least_salient

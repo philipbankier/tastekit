@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "."
+  },
+  "include": [
+    "schemas/**/*",
+    "compiler/**/*",
+    "interview/**/*",
+    "domains/**/*",
+    "llm/**/*",
+    "generators/**/*",
+    "skills/**/*",
+    "mcp/**/*",
+    "trust/**/*",
+    "tracing/**/*",
+    "drift/**/*",
+    "eval/**/*",
+    "utils/**/*",
+    "index.ts"
+  ]
+}

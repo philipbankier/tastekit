@@ -1,0 +1,15 @@
+{
+  "node_count": 2,
+  "edge_count": 1,
+  "density": 0.5,
+  "orphans": [],
+  "hubs": [],
+  "pipelines": [
+    [
+      "research-trends",
+      "generate-post-options"
+    ]
+  ],
+  "cycles": [],
+  "missing_refs": []
+}

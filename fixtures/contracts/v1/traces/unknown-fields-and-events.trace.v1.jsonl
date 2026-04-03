@@ -1,0 +1,2 @@
+{"schema_version":"trace_event.v1","run_id":"compat-1","timestamp":"2026-02-21T00:00:00.000Z","actor":"agent","event_type":"tool_call","tool_ref":"web:search","data":{"query":"hello"},"extra_root":"ignored"}
+{"schema_version":"trace_event.v1","run_id":"compat-1","timestamp":"2026-02-21T00:00:01.000Z","actor":"agent","event_type":"future_event","future_payload":{"flag":true},"data":{"x":1}}

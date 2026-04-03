@@ -1,0 +1,45 @@
+{
+  "name": "@tastekit/adapters",
+  "version": "1.0.0",
+  "description": "TasteKit runtime adapters for Claude Code, Manus, OpenClaw, and Autopilots",
+  "type": "module",
+  "license": "MIT",
+  "author": "TasteKit Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tastekit/tastekit.git",
+    "directory": "packages/adapters"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./adapter-interface": "./dist/adapter-interface.js",
+    "./claude-code": "./dist/claude-code/index.js",
+    "./manus": "./dist/manus/index.js",
+    "./openclaw": "./dist/openclaw/index.js",
+    "./autopilots": "./dist/autopilots/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "lint": "eslint --ignore-pattern dist/ --ignore-pattern __tests__/ .",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@tastekit/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
+  }
+}

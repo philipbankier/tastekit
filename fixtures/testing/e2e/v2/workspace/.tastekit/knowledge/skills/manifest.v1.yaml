@@ -1,0 +1,30 @@
+schema_version: skills_manifest.v1
+skills:
+  - compatible_runtimes:
+      - claude-code
+      - openclaw
+      - manus
+    description: Review code for quality, standards compliance, and alignment with engineering principles
+    name: Code Review
+    required_tools:
+      - file-system
+    risk_level: low
+    skill_id: code-review
+    tags:
+      - development
+      - code-review
+      - quality
+  - compatible_runtimes:
+      - claude-code
+      - openclaw
+      - manus
+    description: Analyze code and propose a refactoring plan following engineering principles
+    name: Refactor Plan
+    required_tools:
+      - file-system
+    risk_level: med
+    skill_id: refactor-plan
+    tags:
+      - development
+      - refactoring
+      - architecture

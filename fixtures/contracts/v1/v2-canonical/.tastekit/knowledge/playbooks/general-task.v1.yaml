@@ -1,0 +1,24 @@
+schema_version: playbook.v1
+id: general-task
+name: General Task
+description: Execute a deterministic analysis pipeline.
+triggers:
+  - type: manual
+inputs:
+  - name: request
+    type: string
+    required: true
+steps:
+  - step_id: think-1
+    type: think
+checks:
+  - check_id: check-format
+    type: format
+    condition: output != ''
+stop_conditions:
+  - condition: output == ''
+    reason: No output generated
+escalations:
+  - escalation_id: esc-destructive
+    trigger: op == 'delete'
+    approval_ref: destructive-write

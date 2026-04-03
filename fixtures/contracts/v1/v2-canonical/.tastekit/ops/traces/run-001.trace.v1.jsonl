@@ -1,0 +1,3 @@
+{"schema_version":"trace_event.v1","run_id":"run-001","timestamp":"2026-02-21T00:00:00.000Z","actor":"agent","event_type":"plan","data":{"goal":"analyze"}}
+{"schema_version":"trace_event.v1","run_id":"run-001","timestamp":"2026-02-21T00:00:01.000Z","actor":"agent","event_type":"tool_call","tool_ref":"web:search","input_hash":"abc","data":{"query":"llm contracts"}}
+{"schema_version":"trace_event.v1","run_id":"run-001","timestamp":"2026-02-21T00:00:02.000Z","actor":"agent","event_type":"tool_result","tool_ref":"web:search","output_hash":"def","data":{"result_count":3}}

@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TasteKit workspaces (user data)
+.tastekit/
+# Keep deterministic contract fixtures checked in (nested test workspaces).
+!fixtures/contracts/**/.tastekit/
+!fixtures/contracts/**/.tastekit/**
+!fixtures/testing/e2e/**/.tastekit/
+!fixtures/testing/e2e/**/.tastekit/**
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local AI session placeholders
+CLAUDE.md
+
+# npm lockfile is not used in this pnpm workspace
+package-lock.json

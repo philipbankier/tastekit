@@ -1,0 +1,15 @@
+schema_version: guardrails.v1
+permissions:
+  - scope_id: legacy-safe-read
+    tool_ref: local:read
+    resources: ["*"]
+    ops: [read]
+approvals:
+  - rule_id: legacy-approval
+    when: "risk > 0.8"
+    action: require_approval
+    channel: cli
+rate_limits:
+  - tool_ref: local:read
+    limit: 100
+    window: 1h

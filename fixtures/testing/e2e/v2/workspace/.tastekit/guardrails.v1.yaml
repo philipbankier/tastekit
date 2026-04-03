@@ -1,0 +1,15 @@
+approvals:
+  - action: require_approval
+    channel: cli
+    rule_id: approve_destructive
+    when: action.type == "delete" || action.risk_score > 0.7
+  - action: require_approval
+    channel: cli
+    rule_id: approve_high_risk
+    when: action.risk_score > 0.9
+permissions: []
+rate_limits:
+  - limit: 100
+    tool_ref: "*:*"
+    window: 1h
+schema_version: guardrails.v1

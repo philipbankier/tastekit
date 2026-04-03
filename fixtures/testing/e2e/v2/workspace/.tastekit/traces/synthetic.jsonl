@@ -1,0 +1,5 @@
+{"schema_version":"trace_event.v1","run_id":"run-1","timestamp":"2026-02-20T10:00:00.000Z","actor":"agent","event_type":"tool_call","skill_id":"code-review","tool_ref":"shell"}
+{"schema_version":"trace_event.v1","run_id":"run-1","timestamp":"2026-02-20T10:02:00.000Z","actor":"agent","event_type":"error","skill_id":"code-review","error":"assertion mismatch on principle_1","principle_refs":["principle_1"]}
+{"schema_version":"trace_event.v1","run_id":"run-2","timestamp":"2026-02-20T10:05:00.000Z","actor":"agent","event_type":"tool_call","skill_id":"refactor-plan","tool_ref":"custom-tool"}
+{"schema_version":"trace_event.v1","run_id":"run-2","timestamp":"2026-02-20T10:07:00.000Z","actor":"agent","event_type":"error","skill_id":"refactor-plan","error":"tool failure"}
+{"schema_version":"trace_event.v1","run_id":"run-3","timestamp":"2026-02-20T10:09:00.000Z","actor":"agent","event_type":"tool_call","skill_id":"code-review","tool_ref":"shell"}

@@ -1,0 +1,151 @@
+{
+  "session_id": "SESSION_ID",
+  "started_at": "1970-01-01T00:00:00.000Z",
+  "last_updated_at": "1970-01-01T00:00:00.000Z",
+  "depth": "quick",
+  "current_step": "complete",
+  "completed_steps": [
+    "welcome",
+    "interview"
+  ],
+  "answers": {},
+  "domain_id": "development-agent",
+  "llm_provider": {
+    "name": "ollama"
+  },
+  "interview": {
+    "dimension_coverage": [
+      {
+        "dimension_id": "core_purpose",
+        "status": "in_progress",
+        "confidence": 1,
+        "confidence_threshold": 1.5,
+        "signals": [
+          {
+            "weight": 1,
+            "source": "explicit",
+            "turn_number": 1,
+            "excerpt": "User stated primary goal and success criteria"
+          }
+        ],
+        "anti_signals": [],
+        "relevant_turns": [
+          0
+        ],
+        "summary": "User stated primary goal and success criteria",
+        "extracted_facts": [
+          "User mentioned goal",
+          "User defined success metric"
+        ]
+      },
+      {
+        "dimension_id": "guiding_principles",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "communication_tone",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "autonomy_boundaries",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "engineering_identity",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "core_technical_values",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "collaboration_style",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "learning_philosophy",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "failure_tolerance",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      }
+    ],
+    "transcript": [
+      {
+        "turn_number": 1,
+        "role": "interviewer",
+        "content": "Hey there — I’m here to help you set up your AI coding agent so it writes code the way *you* would. No templates, no scripts — just a conversation to get you the right setup.\n\nLet’s start with the big picture: What’s the main goal you’re trying to achieve with this agent? Is it to ship faster, write cleaner code, reduce boilerplate, or something else? What does “success” look like for you?",
+        "timestamp": "1970-01-01T00:00:00.000Z"
+      }
+    ],
+    "turn_count": 1,
+    "is_complete": false
+  },
+  "structured_answers": {
+    "principles": [],
+    "tone": {
+      "voice_keywords": [],
+      "forbidden_phrases": [],
+      "formatting_rules": [],
+      "source_dimensions": []
+    },
+    "tradeoffs": {
+      "accuracy_vs_speed": 0.5,
+      "cost_sensitivity": 0.5,
+      "autonomy_level": 0.5,
+      "source_dimensions": []
+    },
+    "evidence_policy": {
+      "require_citations_for": [],
+      "uncertainty_language_rules": [],
+      "source_dimensions": []
+    },
+    "taboos": {
+      "never_do": [],
+      "must_escalate": [],
+      "source_dimensions": []
+    },
+    "domain_specific": {}
+  }
+}

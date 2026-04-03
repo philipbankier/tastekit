@@ -1,0 +1,46 @@
+checks:
+  - check_id: principles-check
+    condition: Output follows user constitution principles
+    type: taste
+  - check_id: safety-check
+    condition: No taboo actions taken, escalation rules respected
+    type: safety
+description: Generic task workflow that follows user principles and tone preferences.
+escalations:
+  - approval_ref: guardrails.approval_rules.irreversible
+    escalation_id: irreversible-action
+    trigger: Task involves irreversible actions (delete, publish, send)
+id: general-task
+inputs:
+  - description: The task to perform
+    name: task
+    required: true
+    type: string
+  - description: Additional context
+    name: context
+    required: false
+    type: string
+name: General Task Execution
+schema_version: playbook.v1
+steps:
+  - outputs:
+      - task_analysis
+    step_id: understand-task
+    type: think
+  - outputs:
+      - task_result
+    params_template:
+      instruction: Execute the task based on analysis
+    step_id: execute-task
+    type: tool
+  - outputs:
+      - final_output
+    params_template:
+      content: "{{task_result}}"
+    step_id: finalize
+    type: write
+stop_conditions:
+  - condition: Task cannot be completed with available tools
+    reason: Required capabilities not available
+triggers:
+  - type: manual

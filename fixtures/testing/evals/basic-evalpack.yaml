@@ -1,0 +1,29 @@
+schema_version: evalpack.v1
+id: basic-check
+name: Basic Eval Pack
+description: Minimal deterministic + regex checks for CLI integration tests.
+scenarios:
+  - scenario_id: greeting
+    name: Greeting scenario
+    description: Ensure deterministic and regex judges run.
+    setup:
+      inputs:
+        response: "hello from fixture"
+    expected:
+      rubrics:
+        - response
+      thresholds:
+        response: 0.5
+      required_outputs:
+        - response
+judging:
+  output_format: json
+  rules:
+    - rule_id: deterministic-required
+      type: deterministic
+      pattern: response
+      weight: 1
+    - rule_id: regex-hello
+      type: regex
+      pattern: hello
+      weight: 1

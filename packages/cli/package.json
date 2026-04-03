@@ -1,0 +1,51 @@
+{
+  "name": "@tastekit/cli",
+  "version": "1.0.0",
+  "description": "TasteKit CLI - command-line interface for taste compilation and management",
+  "type": "module",
+  "license": "MIT",
+  "author": "TasteKit Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tastekit/tastekit.git",
+    "directory": "packages/cli"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "tastekit": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "pnpm run build && vitest run",
+    "test:integration": "pnpm run build && vitest run tests/integration",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@tastekit/adapters": "workspace:*",
+    "@tastekit/core": "workspace:*",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "inquirer": "^10.0.0",
+    "ora": "^8.0.0",
+    "uuid": "^13.0.0",
+    "yaml": "^2.8.2"
+  },
+  "optionalDependencies": {
+    "@tastekit/voice": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.0",
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^11.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
+  }
+}

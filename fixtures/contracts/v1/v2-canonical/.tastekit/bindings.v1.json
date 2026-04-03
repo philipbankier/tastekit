@@ -1,0 +1,22 @@
+{
+  "schema_version": "bindings.v1",
+  "servers": [
+    {
+      "name": "local",
+      "url": "stdio://local",
+      "tools": [
+        {
+          "tool_ref": "local:read",
+          "risk_hints": ["filesystem"]
+        }
+      ],
+      "resources": [
+        {
+          "resource_ref": "local:workspace"
+        }
+      ],
+      "prompts": [],
+      "last_bind_at": "2026-02-21T00:00:00.000Z"
+    }
+  ]
+}

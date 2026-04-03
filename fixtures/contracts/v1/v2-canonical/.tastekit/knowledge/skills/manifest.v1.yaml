@@ -1,0 +1,9 @@
+schema_version: skills_manifest.v1
+skills:
+  - skill_id: summarize-research
+    name: Summarize Research
+    description: Condense findings into actionable bullets.
+    tags: [research, synthesis]
+    risk_level: low
+    required_tools: [web:search]
+    compatible_runtimes: [claude-code, openclaw, manus]

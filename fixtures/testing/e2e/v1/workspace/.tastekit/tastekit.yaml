@@ -1,0 +1,10 @@
+version: 1.0.0
+project_name: my-taste-profile
+created_at: 2026-02-20T20:27:14.564Z
+domain_id: development-agent
+onboarding:
+  depth: quick
+  completed: false
+llm_provider:
+  provider: ollama
+  model: huihui_ai/qwen3-vl-abliterated:8b-instruct

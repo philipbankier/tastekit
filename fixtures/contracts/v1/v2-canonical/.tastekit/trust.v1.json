@@ -1,0 +1,22 @@
+{
+  "schema_version": "trust.v1",
+  "mcp_servers": [
+    {
+      "url": "https://mcp.local",
+      "fingerprint": "abc123",
+      "pin_mode": "strict"
+    }
+  ],
+  "skill_sources": [
+    {
+      "type": "local",
+      "path": "./skills",
+      "hash": "sha256:demo",
+      "pin_mode": "warn"
+    }
+  ],
+  "update_policy": {
+    "allow_auto_updates": false,
+    "require_review": true
+  }
+}

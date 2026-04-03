@@ -1,0 +1,27 @@
+{
+  "agents": [
+    {
+      "id": "agent-1",
+      "name": "fixture-agent",
+      "agent_type": "letta_v1_agent",
+      "system": "Be practical and accurate.",
+      "description": "Fixture agent for TasteKit import tests",
+      "block_ids": ["block-1", "block-2"],
+      "messages": []
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block-1",
+      "label": "persona",
+      "value": "- Prefer correctness\n- Keep answers concise",
+      "read_only": false
+    },
+    {
+      "id": "block-2",
+      "label": "preferences",
+      "value": "- Avoid hype language\n- Use markdown bullets",
+      "read_only": true
+    }
+  ]
+}

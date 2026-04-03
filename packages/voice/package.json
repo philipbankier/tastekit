@@ -1,0 +1,47 @@
+{
+  "name": "@tastekit/voice",
+  "version": "1.0.0",
+  "description": "Voice I/O layer for TasteKit onboarding — ElevenLabs, Whisper, Piper",
+  "type": "module",
+  "license": "MIT",
+  "author": "TasteKit Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tastekit/tastekit.git",
+    "directory": "packages/voice"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "lint": "eslint --ignore-pattern dist/ --ignore-pattern __tests__/ .",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "zod": "^3.23.0",
+    "ws": "^8.16.0"
+  },
+  "optionalDependencies": {
+    "node-record-lpcm16": "^1.0.1",
+    "speaker": "^0.5.5",
+    "play-sound": "^1.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
+  }
+}

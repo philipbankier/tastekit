@@ -1,0 +1,8 @@
+node_modules
+dist
+build
+coverage
+*.log
+.tastekit
+pnpm-lock.yaml
+CHANGELOG.md

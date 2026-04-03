@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "profile": {
+    "principles": [],
+    "tone": {
+      "voice_keywords": [],
+      "forbidden_phrases": [],
+      "formatting_rules": []
+    },
+    "tradeoffs": {
+      "accuracy_vs_speed": 0.5,
+      "cost_sensitivity": 0.5,
+      "autonomy_level": 0.5
+    }
+  },
+  "behavior": {
+    "autonomy_level": 0.5,
+    "require_citations": []
+  },
+  "safety": {
+    "forbidden_phrases": [],
+    "taboos": {
+      "never_do": [],
+      "must_escalate": []
+    }
+  }
+}

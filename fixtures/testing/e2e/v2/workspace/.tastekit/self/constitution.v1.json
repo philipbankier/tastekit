@@ -1,0 +1,44 @@
+{
+  "schema_version": "constitution.v1",
+  "generated_at": "2026-02-20T20:27:24.006Z",
+  "generator_version": "0.5.0",
+  "user_scope": "single_user",
+  "principles": [],
+  "tone": {
+    "voice_keywords": [],
+    "forbidden_phrases": [],
+    "formatting_rules": []
+  },
+  "tradeoffs": {
+    "accuracy_vs_speed": 0.5,
+    "cost_sensitivity": 0.5,
+    "autonomy_level": 0.5
+  },
+  "evidence_policy": {
+    "require_citations_for": [],
+    "uncertainty_language_rules": []
+  },
+  "taboos": {
+    "never_do": [],
+    "must_escalate": []
+  },
+  "trace_map": {
+    "_session_id": "389acac7-72c0-4ea2-849b-ec15dc5c8fbe",
+    "_llm_provider": {
+      "name": "ollama"
+    },
+    "_domain_id": "development-agent",
+    "_tone": {
+      "source_dimensions": []
+    },
+    "_tradeoffs": {
+      "source_dimensions": []
+    },
+    "_evidence_policy": {
+      "source_dimensions": []
+    },
+    "_taboos": {
+      "source_dimensions": []
+    }
+  }
+}
