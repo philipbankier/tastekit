@@ -1,13 +1,13 @@
 {
   "name": "@actrun_ai/tastekit-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TasteKit core library - schemas, compiler, skills, MCP, trust, tracing",
   "type": "module",
   "license": "MIT",
   "author": "TasteKit Contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tastekit/tastekit.git",
+    "url": "https://github.com/philipbankier/tastekit.git",
     "directory": "packages/core"
   },
   "publishConfig": {

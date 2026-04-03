@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)](https://www.typescriptlang.org/)
-[![CI](https://github.com/tastekit/tastekit/actions/workflows/ci.yml/badge.svg)](https://github.com/tastekit/tastekit/actions/workflows/ci.yml)
+[![CI](https://github.com/philipbankier/tastekit/actions/workflows/ci.yml/badge.svg)](https://github.com/philipbankier/tastekit/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@actrun_ai/tastekit-cli.svg)](https://www.npmjs.com/package/@actrun_ai/tastekit-cli)
 
 **Compile your taste into portable agent artifacts.**
@@ -44,7 +44,7 @@ npx @actrun_ai/tastekit-cli init
 ### Development Setup
 
 ```bash
-git clone https://github.com/tastekit/tastekit.git
+git clone https://github.com/philipbankier/tastekit.git
 cd tastekit
 pnpm install
 pnpm build
