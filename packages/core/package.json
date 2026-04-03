@@ -1,6 +1,6 @@
 {
   "name": "@tastekit/core",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "TasteKit core library - schemas, compiler, skills, MCP, trust, tracing",
   "type": "module",
   "license": "MIT",

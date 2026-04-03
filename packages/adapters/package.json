@@ -1,6 +1,6 @@
 {
   "name": "@tastekit/adapters",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "TasteKit runtime adapters for Claude Code, Manus, OpenClaw, and Autopilots",
   "type": "module",
   "license": "MIT",

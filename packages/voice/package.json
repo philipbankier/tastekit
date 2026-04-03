@@ -1,6 +1,6 @@
 {
   "name": "@tastekit/voice",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Voice I/O layer for TasteKit onboarding — ElevenLabs, Whisper, Piper",
   "type": "module",
   "license": "MIT",
