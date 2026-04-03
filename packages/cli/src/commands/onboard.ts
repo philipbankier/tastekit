@@ -5,11 +5,11 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 import ora from 'ora';
 import YAML from 'yaml';
-import { createSession, loadSession, saveSession, Interviewer, DomainRubric } from '@tastekit/core/interview';
-import { resolveProvider, autoDetectProvider, type LLMProviderConfig } from '@tastekit/core/llm';
-import { getDomainRubric } from '@tastekit/core/domains';
-import { WorkspaceConfig, InterviewState } from '@tastekit/core/schemas';
-import { resolveSessionPath } from '@tastekit/core/utils';
+import { createSession, loadSession, saveSession, Interviewer, DomainRubric } from '@actrun_ai/tastekit-core/interview';
+import { resolveProvider, autoDetectProvider, type LLMProviderConfig } from '@actrun_ai/tastekit-core/llm';
+import { getDomainRubric } from '@actrun_ai/tastekit-core/domains';
+import { WorkspaceConfig, InterviewState } from '@actrun_ai/tastekit-core/schemas';
+import { resolveSessionPath } from '@actrun_ai/tastekit-core/utils';
 import { detail, hint, handleError } from '../ui.js';
 
 interface OnboardOptions {
@@ -48,7 +48,7 @@ export const onboardCommand = new Command('onboard')
   .addOption(createOption('--depth <type>', 'Override depth').choices(['quick', 'guided', 'operator']))
   .option('--resume', 'Resume from previous session')
   .option('--provider <name>', 'Override LLM provider: anthropic, openai, ollama')
-  .option('--voice', 'Enable voice mode (requires @tastekit/voice and sox)')
+  .option('--voice', 'Enable voice mode (requires @actrun_ai/tastekit-voice and sox)')
   .action(async (options: OnboardOptions) => {
     const workspacePath = join(process.cwd(), '.tastekit');
     const configPath = join(workspacePath, 'tastekit.yaml');
@@ -117,7 +117,7 @@ export const onboardCommand = new Command('onboard')
       // Set up voice mode if requested
       if (options.voice) {
         try {
-          const { createVoiceIO } = await import('@tastekit/voice');
+          const { createVoiceIO } = await import('@actrun_ai/tastekit-voice');
           voiceIO = await createVoiceIO((config as Record<string, unknown>).voice);
           console.log(chalk.green('Voice mode enabled. Speak into your microphone.'));
         } catch (err) {

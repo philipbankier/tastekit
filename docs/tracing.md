@@ -33,10 +33,10 @@ A trace-first approach provides several powerful advantages:
 
 ## The Tracer Module
 
-The `@tastekit/core` library includes a `Tracer` class that makes it easy to write trace events from anywhere in the system. It handles the creation of the trace file, the injection of metadata like the `run_id` and `timestamp`, and the serialization of events to the JSONL format.
+The `@actrun_ai/tastekit-core` library includes a `Tracer` class that makes it easy to write trace events from anywhere in the system. It handles the creation of the trace file, the injection of metadata like the `run_id` and `timestamp`, and the serialization of events to the JSONL format.
 
 ```typescript
-import { Tracer } from '@tastekit/core';
+import { Tracer } from '@actrun_ai/tastekit-core';
 
 const tracer = new Tracer('./.tastekit');
 

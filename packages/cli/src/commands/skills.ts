@@ -3,10 +3,10 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { lintSkills } from '@tastekit/core/skills';
-import { packSkills } from '@tastekit/core/skills';
-import { analyzeSkillGraph } from '@tastekit/core/skills';
-import { resolveSkillsPath } from '@tastekit/core/utils';
+import { lintSkills } from '@actrun_ai/tastekit-core/skills';
+import { packSkills } from '@actrun_ai/tastekit-core/skills';
+import { analyzeSkillGraph } from '@actrun_ai/tastekit-core/skills';
+import { resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
 import { getGlobalOptions, riskColor, header, detail, hint, table, handleError, jsonOutput } from '../ui.js';
 
 const skillsListCommand = new Command('list')
@@ -244,9 +244,9 @@ const skillsReportCommand = new Command('report')
   .action(async (_options, cmd) => {
     const globals = getGlobalOptions(cmd);
     const workspacePath = join(process.cwd(), '.tastekit');
-    const { resolveTracesPath } = await import('@tastekit/core/utils');
-    const { aggregateSkillRuns, getSkillPerformance, rankByFailureRate } = await import('@tastekit/core/skills');
-    const { TraceReader } = await import('@tastekit/core/tracing');
+    const { resolveTracesPath } = await import('@actrun_ai/tastekit-core/utils');
+    const { aggregateSkillRuns, getSkillPerformance, rankByFailureRate } = await import('@actrun_ai/tastekit-core/skills');
+    const { TraceReader } = await import('@actrun_ai/tastekit-core/tracing');
     const { readdirSync } = await import('fs');
 
     const tracesDir = resolveTracesPath(workspacePath);
@@ -328,9 +328,9 @@ const skillsInspectCommand = new Command('inspect')
   .action(async (skillId, _options, cmd) => {
     const globals = getGlobalOptions(cmd);
     const workspacePath = join(process.cwd(), '.tastekit');
-    const { resolveTracesPath } = await import('@tastekit/core/utils');
-    const { aggregateSkillRuns, getSkillPerformance } = await import('@tastekit/core/skills');
-    const { TraceReader } = await import('@tastekit/core/tracing');
+    const { resolveTracesPath } = await import('@actrun_ai/tastekit-core/utils');
+    const { aggregateSkillRuns, getSkillPerformance } = await import('@actrun_ai/tastekit-core/skills');
+    const { TraceReader } = await import('@actrun_ai/tastekit-core/tracing');
     const { readdirSync } = await import('fs');
 
     const tracesDir = resolveTracesPath(workspacePath);
@@ -409,7 +409,7 @@ const skillsHistoryCommand = new Command('history')
     const workspacePath = join(process.cwd(), '.tastekit');
 
     try {
-      const { SkillVersioner } = await import('@tastekit/core/skills');
+      const { SkillVersioner } = await import('@actrun_ai/tastekit-core/skills');
       const versioner = new SkillVersioner(workspacePath);
       const history = versioner.getHistory(skillId);
 
@@ -457,7 +457,7 @@ const skillsRollbackCommand = new Command('rollback')
     }
 
     try {
-      const { SkillVersioner } = await import('@tastekit/core/skills');
+      const { SkillVersioner } = await import('@actrun_ai/tastekit-core/skills');
       const versioner = new SkillVersioner(workspacePath);
       const target = versioner.rollback(skillId, version);
 

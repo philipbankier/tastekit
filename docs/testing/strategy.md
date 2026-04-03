@@ -33,9 +33,9 @@
 ## Release Gates
 ### Required on PR
 - `pnpm -r build`
-- `pnpm --filter @tastekit/core test`
-- `pnpm --filter @tastekit/adapters test`
-- `pnpm --filter @tastekit/cli test`
+- `pnpm --filter @actrun_ai/tastekit-core test`
+- `pnpm --filter @actrun_ai/tastekit-adapters test`
+- `pnpm --filter @actrun_ai/tastekit-cli test`
 - `bash scripts/validation/contract-conformance.sh`
 - `bash scripts/validation/pr-gate.sh`
 

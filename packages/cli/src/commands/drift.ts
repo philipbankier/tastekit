@@ -3,9 +3,9 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { existsSync, readFileSync, writeFileSync, readdirSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { DriftDetector } from '@tastekit/core/drift';
-import { MemoryConsolidator } from '@tastekit/core/drift';
-import { resolveArtifactPath, resolveTracesPath } from '@tastekit/core/utils';
+import { DriftDetector } from '@actrun_ai/tastekit-core/drift';
+import { MemoryConsolidator } from '@actrun_ai/tastekit-core/drift';
+import { resolveArtifactPath, resolveTracesPath } from '@actrun_ai/tastekit-core/utils';
 import { getGlobalOptions, riskColor, header, detail, hint, handleError, jsonOutput, verbose } from '../ui.js';
 
 const driftDetectCommand = new Command('detect')

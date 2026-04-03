@@ -1,5 +1,5 @@
 {
-  "name": "@tastekit/core",
+  "name": "@actrun_ai/tastekit-core",
   "version": "0.1.0",
   "description": "TasteKit core library - schemas, compiler, skills, MCP, trust, tracing",
   "type": "module",

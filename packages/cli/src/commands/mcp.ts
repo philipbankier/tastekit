@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { resolveBindingsPath } from '@tastekit/core/utils';
+import { resolveBindingsPath } from '@actrun_ai/tastekit-core/utils';
 import { getGlobalOptions, riskColor, header, detail, hint, table, handleError, jsonOutput, verbose } from '../ui.js';
 
 interface MCPServerRegistry {
@@ -140,7 +140,7 @@ const mcpInspectCommand = new Command('inspect')
     const spinner = ora(`Connecting to ${serverName}...`).start();
 
     try {
-      const { MCPClient } = await import('@tastekit/core/mcp');
+      const { MCPClient } = await import('@actrun_ai/tastekit-core/mcp');
       const client = new MCPClient(serverConfig);
 
       await client.connect();
@@ -225,7 +225,7 @@ const mcpBindCommand = new Command('bind')
         return;
       }
 
-      const { MCPClient, MCPBinder } = await import('@tastekit/core/mcp');
+      const { MCPClient, MCPBinder } = await import('@actrun_ai/tastekit-core/mcp');
       const binder = new MCPBinder();
       const allBindings: any[] = [];
       const allGuardrails: any[] = [];

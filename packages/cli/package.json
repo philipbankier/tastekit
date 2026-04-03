@@ -1,5 +1,5 @@
 {
-  "name": "@tastekit/cli",
+  "name": "@actrun_ai/tastekit-cli",
   "version": "0.1.0",
   "description": "TasteKit CLI - command-line interface for taste compilation and management",
   "type": "module",
@@ -29,8 +29,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@tastekit/adapters": "workspace:*",
-    "@tastekit/core": "workspace:*",
+    "@actrun_ai/tastekit-adapters": "workspace:*",
+    "@actrun_ai/tastekit-core": "workspace:*",
     "chalk": "^5.3.0",
     "commander": "^12.0.0",
     "inquirer": "^10.0.0",
@@ -39,7 +39,7 @@
     "yaml": "^2.8.2"
   },
   "optionalDependencies": {
-    "@tastekit/voice": "workspace:*"
+    "@actrun_ai/tastekit-voice": "workspace:*"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.0",

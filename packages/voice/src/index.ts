@@ -1,5 +1,5 @@
 /**
- * @tastekit/voice — Voice I/O layer for TasteKit onboarding
+ * @actrun_ai/tastekit-voice — Voice I/O layer for TasteKit onboarding
  *
  * Adds speech-to-text and text-to-speech to the interview,
  * turning the text questionnaire into a natural voice conversation.

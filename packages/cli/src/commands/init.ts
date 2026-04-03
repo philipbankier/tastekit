@@ -5,9 +5,9 @@ import chalk from 'chalk';
 import ora from 'ora';
 import inquirer from 'inquirer';
 import YAML from 'yaml';
-import { listDomains, getDomainRubric } from '@tastekit/core/domains';
-import { autoDetectProvider, LLMProviderConfig } from '@tastekit/core/llm';
-import { ensureDir } from '@tastekit/core/utils';
+import { listDomains, getDomainRubric } from '@actrun_ai/tastekit-core/domains';
+import { autoDetectProvider, LLMProviderConfig } from '@actrun_ai/tastekit-core/llm';
+import { ensureDir } from '@actrun_ai/tastekit-core/utils';
 import { detail, hint, handleError } from '../ui.js';
 
 interface OllamaTagsResponse {

@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)](https://www.typescriptlang.org/)
 [![CI](https://github.com/tastekit/tastekit/actions/workflows/ci.yml/badge.svg)](https://github.com/tastekit/tastekit/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/@tastekit/cli.svg)](https://www.npmjs.com/package/@tastekit/cli)
+[![npm](https://img.shields.io/npm/v/@actrun_ai/tastekit-cli.svg)](https://www.npmjs.com/package/@actrun_ai/tastekit-cli)
 
 **Compile your taste into portable agent artifacts.**
 
@@ -35,10 +35,10 @@ AI agents are powerful, but they don't know *you*. TasteKit solves this by creat
 
 ```bash
 # Install globally via npm
-npm install -g @tastekit/cli
+npm install -g @actrun_ai/tastekit-cli
 
 # Or use directly with npx
-npx @tastekit/cli init
+npx @actrun_ai/tastekit-cli init
 ```
 
 ### Development Setup

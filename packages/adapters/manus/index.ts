@@ -7,7 +7,7 @@
 import { TasteKitAdapter, ExportOpts, InstallOpts } from '../adapter-interface.js';
 import { readFileSync, writeFileSync, cpSync, existsSync } from 'fs';
 import { join } from 'path';
-import { resolveArtifactPath, resolveSkillsPath } from '@tastekit/core/utils';
+import { resolveArtifactPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
 
 export class ManusAdapter implements TasteKitAdapter {
   id = 'manus';

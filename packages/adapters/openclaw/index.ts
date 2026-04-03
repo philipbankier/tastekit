@@ -13,8 +13,8 @@ import { TasteKitAdapter, ExportOpts, InstallOpts } from '../adapter-interface.j
 import { readFileSync, writeFileSync, cpSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createRequire } from 'node:module';
-import { resolveArtifactPath, resolveSkillsPath, resolveBindingsPath } from '@tastekit/core/utils';
-import { generateSoulMd, generateAgentsMd, type GeneratorContext } from '@tastekit/core/generators';
+import { resolveArtifactPath, resolveSkillsPath, resolveBindingsPath } from '@actrun_ai/tastekit-core/utils';
+import { generateSoulMd, generateAgentsMd, type GeneratorContext } from '@actrun_ai/tastekit-core/generators';
 
 const require = createRequire(import.meta.url);
 

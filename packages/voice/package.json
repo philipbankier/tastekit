@@ -1,5 +1,5 @@
 {
-  "name": "@tastekit/voice",
+  "name": "@actrun_ai/tastekit-voice",
   "version": "0.1.0",
   "description": "Voice I/O layer for TasteKit onboarding — ElevenLabs, Whisper, Piper",
   "type": "module",

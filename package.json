@@ -42,6 +42,6 @@
     "vitest": "^2.0.0"
   },
   "dependencies": {
-    "@tastekit/adapters": "workspace:*"
+    "@actrun_ai/tastekit-adapters": "workspace:*"
   }
 }

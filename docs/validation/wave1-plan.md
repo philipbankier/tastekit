@@ -36,8 +36,8 @@ Validate TasteKit usability and reliability on three production-relevant domains
 1. Build and test workspace:
    - `pnpm install`
    - `pnpm -r build`
-   - `pnpm --filter @tastekit/core test`
-   - `pnpm --filter @tastekit/cli build`
+   - `pnpm --filter @actrun_ai/tastekit-core test`
+   - `pnpm --filter @actrun_ai/tastekit-cli build`
 2. Domain run (live + scripted):
    - `tastekit init --domain <domain> --depth guided`
    - `tastekit onboard --provider ollama` (live interactive, `/save`)

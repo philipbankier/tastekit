@@ -3,9 +3,9 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
-import { compile, canResume } from '@tastekit/core/compiler';
-import { loadSession } from '@tastekit/core/interview';
-import { resolveSessionPath } from '@tastekit/core/utils';
+import { compile, canResume } from '@actrun_ai/tastekit-core/compiler';
+import { loadSession } from '@actrun_ai/tastekit-core/interview';
+import { resolveSessionPath } from '@actrun_ai/tastekit-core/utils';
 import { getGlobalOptions, nextSteps, handleError, jsonOutput } from '../ui.js';
 
 export const compileCommand = new Command('compile')

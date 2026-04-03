@@ -33,5 +33,5 @@ Consumers may read legacy locations when canonical files are absent:
 - Legacy paths are read-compat only.
 
 ## Validation Contract
-- Artifacts must match existing `*.v1` schemas in `@tastekit/core/schemas`.
+- Artifacts must match existing `*.v1` schemas in `@actrun_ai/tastekit-core/schemas`.
 - CI conformance tests enforce strict schema adherence for canonical fixtures.

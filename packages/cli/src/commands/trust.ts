@@ -4,9 +4,9 @@ import ora from 'ora';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import YAML from 'yaml';
-import { TrustManager, TrustAuditor } from '@tastekit/core/trust';
-import { BindingsV1, TrustV1 } from '@tastekit/core/schemas';
-import { resolveBindingsPath, resolveTrustPath } from '@tastekit/core/utils';
+import { TrustManager, TrustAuditor } from '@actrun_ai/tastekit-core/trust';
+import { BindingsV1, TrustV1 } from '@actrun_ai/tastekit-core/schemas';
+import { resolveBindingsPath, resolveTrustPath } from '@actrun_ai/tastekit-core/utils';
 import { getGlobalOptions, detail, hint, table, handleError, jsonOutput } from '../ui.js';
 
 const DEFAULT_TRUST_POLICY: TrustV1 = {

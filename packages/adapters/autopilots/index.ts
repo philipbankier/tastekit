@@ -10,7 +10,7 @@ import { TasteKitAdapter, ExportOpts, InstallOpts } from '../adapter-interface.j
 import { readFileSync, writeFileSync, existsSync, cpSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createRequire } from 'node:module';
-import { resolveArtifactPath, resolveSkillsPath } from '@tastekit/core/utils';
+import { resolveArtifactPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
 
 const require = createRequire(import.meta.url);
 

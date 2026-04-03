@@ -14,7 +14,7 @@ export interface BindingOptions {
   /**
    * Custom tool selection callback. When provided and `interactive` is true,
    * this function is called with discovered tools and should return the
-   * selected subset. This keeps @tastekit/core free of UI dependencies —
+   * selected subset. This keeps @actrun_ai/tastekit-core free of UI dependencies —
    * the CLI injects an inquirer-based implementation.
    */
   toolSelector?: (tools: MCPTool[]) => Promise<MCPTool[]>;

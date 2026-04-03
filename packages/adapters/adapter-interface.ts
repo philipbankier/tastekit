@@ -4,7 +4,7 @@
  * Common interface for all runtime adapters.
  */
 
-import { MemoryV1 } from '@tastekit/core';
+import { MemoryV1 } from '@actrun_ai/tastekit-core';
 
 export interface ExportOpts {
   includeSkills?: boolean;
