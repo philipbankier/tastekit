@@ -1,7 +1,36 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { MCPClient } from '../client.js';
 
+const fixtureServerPath = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '../../../../fixtures/testing/mcp/mock-server.mjs',
+);
+
+async function withConnectedClient(
+  fn: (client: MCPClient) => Promise<void>,
+): Promise<void> {
+  const client = new MCPClient({
+    name: 'fixture-mock',
+    command: process.execPath,
+    args: [fixtureServerPath],
+  });
+
+  await client.connect();
+
+  try {
+    await fn(client);
+  } finally {
+    await client.disconnect();
+  }
+}
+
 describe('MCPClient', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('exposes config and disconnected status initially', () => {
     const client = new MCPClient({ name: 'local', command: 'node', args: ['server.js'] });
 
@@ -21,6 +50,87 @@ describe('MCPClient', () => {
     const client = new MCPClient({ name: 'local', command: 'node', args: ['server.js'] });
 
     await expect(client.listTools()).rejects.toThrow('MCPClient is not connected');
+  });
+
+  it('connects to the fixture stdio server', async () => {
+    await withConnectedClient(async client => {
+      expect(client.isConnected()).toBe(true);
+    });
+  });
+
+  it('listTools returns the fixture tool list', async () => {
+    await withConnectedClient(async client => {
+      const tools = await client.listTools();
+
+      expect(tools).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'echo',
+            description: 'Echo back text',
+          }),
+        ]),
+      );
+    });
+  });
+
+  it('callTool succeeds with valid arguments', async () => {
+    await withConnectedClient(async client => {
+      const result = await client.callTool('echo', {});
+
+      expect(result.isError).not.toBe(true);
+      expect(result.content).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: 'text',
+            text: 'ok',
+          }),
+        ]),
+      );
+    });
+  });
+
+  it('callTool handles invalid arguments gracefully', async () => {
+    await withConnectedClient(async client => {
+      await expect(client.callTool('echo', null as any)).rejects.toThrow();
+    });
+  });
+
+  it('returns a deterministic fingerprint for the same server config', async () => {
+    const clientA = new MCPClient({
+      name: 'fixture-mock',
+      command: process.execPath,
+      args: [fixtureServerPath],
+    });
+    const clientB = new MCPClient({
+      name: 'fixture-mock',
+      command: process.execPath,
+      args: [fixtureServerPath],
+    });
+
+    await clientA.connect();
+    await clientB.connect();
+
+    try {
+      const [fingerprintA, fingerprintB] = await Promise.all([
+        clientA.getFingerprint(),
+        clientB.getFingerprint(),
+      ]);
+
+      expect(fingerprintA).toBe(fingerprintB);
+      expect(fingerprintA).toHaveLength(64);
+    } finally {
+      await clientA.disconnect();
+      await clientB.disconnect();
+    }
+  });
+
+  it('surfaces startup errors when the server command is invalid', async () => {
+    const client = new MCPClient({
+      name: 'invalid-command',
+      command: '__tastekit_missing_command__',
+    });
+
+    await expect(client.connect()).rejects.toThrow(/spawn|ENOENT|not found/i);
   });
 
   it('computes stable fingerprint from discovered capabilities', async () => {

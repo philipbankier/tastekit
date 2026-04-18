@@ -18,6 +18,7 @@
     "README.md",
     "LICENSE"
   ],
+  "main": "./dist/cli.js",
   "bin": {
     "tastekit": "./dist/cli.js"
   },

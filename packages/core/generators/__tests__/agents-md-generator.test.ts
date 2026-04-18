@@ -27,8 +27,27 @@ function fullContext(): GeneratorContext {
     guardrails: {
       schema_version: 'guardrails.v1',
       permissions: [
-        { action: 'file_write', allowed: true, requires_approval: false },
-        { action: 'deploy', allowed: false, requires_approval: true },
+        {
+          scope_id: 'workspace-write',
+          tool_ref: 'filesystem:write_file',
+          resources: ['workspace/**'],
+          ops: ['write'],
+        },
+      ],
+      approvals: [
+        {
+          rule_id: 'approve_deploy',
+          when: 'action.type == "deploy"',
+          action: 'require_approval',
+          channel: 'cli',
+        },
+      ],
+      rate_limits: [
+        {
+          tool_ref: 'llm:generate',
+          limit: 60,
+          window: '1h',
+        },
       ],
     } as any,
     skills: {
@@ -65,9 +84,15 @@ describe('generateAgentsMd', () => {
   it('includes guardrails permissions section', () => {
     const result = generateAgentsMd(fullContext());
     expect(result).toContain('## Guardrails');
-    expect(result).toContain('file_write: allowed');
-    expect(result).toContain('deploy: denied');
-    expect(result).toContain('(requires approval)');
+    expect(result).toContain('filesystem:write_file: allowed');
+    expect(result).toContain('(write; resources: workspace/**)');
+    expect(result).toContain('approve_deploy: require_approval when action.type == "deploy" via cli');
+    expect(result).toContain('llm:generate: max 60/1h');
+  });
+
+  it('does not render undefined guardrail entries', () => {
+    const result = generateAgentsMd(fullContext());
+    expect(result).not.toContain('undefined');
   });
 
   it('includes tone & voice section', () => {

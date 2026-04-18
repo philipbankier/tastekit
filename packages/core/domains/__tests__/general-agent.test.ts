@@ -6,11 +6,12 @@ describe('general-agent domain registry', () => {
     const domains = listDomains();
     const general = domains.find(d => d.id === 'general-agent');
 
-    expect(domains).toHaveLength(2);
+    expect(domains).toHaveLength(4);
     expect(general).toBeDefined();
     expect(general?.name).toBe('General Agent');
     expect(general?.has_rubric).toBe(true);
-    expect(domains.some(d => d.id === 'content-agent')).toBe(false);
+    expect(domains.some(d => d.id === 'content-agent')).toBe(true);
+    expect(domains.some(d => d.id === 'research-agent')).toBe(true);
   });
 
   it('exposes a rubric with expected dimensional coverage', () => {

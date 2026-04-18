@@ -209,6 +209,10 @@ async function resolveDomainSkills(domainId?: string): Promise<DomainSkill[]> {
   if (!domainId) return [];
 
   switch (domainId) {
+    case 'content-agent': {
+      const { ContentAgentSkills } = await import('../domains/content-agent/skills/index.js');
+      return ContentAgentSkills as DomainSkill[];
+    }
     case 'development-agent': {
       const { DevelopmentAgentSkills } = await import('../domains/development-agent/skills/index.js');
       return DevelopmentAgentSkills as DomainSkill[];
@@ -216,6 +220,10 @@ async function resolveDomainSkills(domainId?: string): Promise<DomainSkill[]> {
     case 'general-agent': {
       const { GeneralAgentSkills } = await import('../domains/general-agent/skills/index.js');
       return GeneralAgentSkills as DomainSkill[];
+    }
+    case 'research-agent': {
+      const { ResearchAgentSkills } = await import('../domains/research-agent/skills/index.js');
+      return ResearchAgentSkills as DomainSkill[];
     }
     default:
       return [];
@@ -230,10 +238,17 @@ function generateGenericSkill(constitution: ConstitutionV1): {
   metadata: SkillMetadata;
   markdown: string;
 } {
+  const voiceKeywords = constitution.tone.voice_keywords.join(', ') || 'not specified';
+  const formattingRules = constitution.tone.formatting_rules.join('; ') || 'no special formatting rules specified';
+  const forbiddenPhrases = constitution.tone.forbidden_phrases.join(', ') || 'none';
+  const autonomyLevel = constitution.tradeoffs.autonomy_level;
+  const accuracyVsSpeed = constitution.tradeoffs.accuracy_vs_speed;
+  const costSensitivity = constitution.tradeoffs.cost_sensitivity;
+
   const metadata: SkillMetadata = {
     skill_id: 'general-task',
     name: 'General Task Execution',
-    description: 'Executes general tasks following user principles and tone preferences. Use when no domain-specific skill exists for the task, or when performing ad-hoc work that should still respect the user\'s established conventions.',
+    description: `Executes general tasks following user principles and tone preferences. Default voice cues: ${voiceKeywords}. Formatting preferences: ${formattingRules}. Use when no domain-specific skill exists for the task, or when performing ad-hoc work that should still respect the user's established conventions.`,
     tags: ['general', 'task-execution'],
     risk_level: 'low',
     required_tools: [],
@@ -242,11 +257,17 @@ function generateGenericSkill(constitution: ConstitutionV1): {
 
   const principlesList = constitution.principles
     .slice(0, 5)
-    .map(p => `- ${p.statement}`)
+    .map(p => {
+      const rationale = p.rationale ? `: ${p.rationale}` : '';
+      return `- ${p.statement}${rationale}`;
+    })
     .join('\n');
 
-  const voiceKeywords = constitution.tone.voice_keywords.join(', ') || 'not specified';
-  const forbiddenPhrases = constitution.tone.forbidden_phrases.join(', ') || 'none';
+  const tradeoffGuidance = [
+    `- Accuracy vs speed: ${accuracyVsSpeed >= 0.67 ? 'bias toward accuracy and verification' : accuracyVsSpeed <= 0.33 ? 'bias toward speed and iteration' : 'balance speed with verification based on risk'}`,
+    `- Cost sensitivity: ${costSensitivity >= 0.67 ? 'prefer efficient, lower-cost approaches unless quality risk is material' : costSensitivity <= 0.33 ? 'optimize for best-fit quality even if the approach is heavier' : 'consider cost, but not at the expense of useful output'}`,
+    `- Autonomy level: ${autonomyLevel >= 0.67 ? 'act independently on low-risk tasks and escalate only for meaningful risk or irreversibility' : autonomyLevel <= 0.33 ? 'ask before taking consequential steps or making assumptions that change direction' : 'move forward on routine work, but checkpoint when ambiguity or risk increases'}`,
+  ].join('\n');
 
   const markdown = `# General Task Execution
 
@@ -265,6 +286,20 @@ Executes general tasks following user principles and tone preferences.
 - When a domain-specific skill exists for the task type
 - For tasks that need specialized tooling or workflows
 
+## Your Principles
+
+${principlesList || '- No explicit principles provided.'}
+
+## Tone Preferences
+
+- Preferred voice: ${voiceKeywords}
+- Formatting guidance: ${formattingRules}
+- Avoid these phrases: ${forbiddenPhrases}
+
+## Tradeoff Guidance
+
+${tradeoffGuidance}
+
 ## Inputs
 
 - **task**: Description of the task to perform
@@ -277,22 +312,23 @@ Executes general tasks following user principles and tone preferences.
 ## Procedure
 
 1. Understand the task requirements
-2. Review applicable principles:
-${principlesList}
-3. Apply tone preferences — voice: ${voiceKeywords}; avoid: ${forbiddenPhrases}
-4. Execute while respecting tone preferences
-5. Check output against quality criteria
+2. Review the user's principles and identify which ones apply
+3. Apply tone preferences — voice: ${voiceKeywords}; avoid: ${forbiddenPhrases}; formatting: ${formattingRules}
+4. Use the tradeoff guidance to decide how much to verify, optimize, and act autonomously
+5. Execute while respecting tone preferences and tradeoff boundaries
+6. Check output against quality criteria
 
 ## Quality checks
 
 - [ ] Output follows user principles
 - [ ] Tone matches voice keywords
+- [ ] Formatting follows stated preferences where applicable
 - [ ] No forbidden phrases used
 - [ ] Task requirements fully addressed
 
 ## Guardrail notes
 
-Check autonomy level before taking irreversible actions.
+Check autonomy level before taking irreversible actions and favor higher verification when accuracy preference is high.
 `;
 
   return { metadata, markdown };
