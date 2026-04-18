@@ -4,12 +4,12 @@ import type { GeneratorContext } from '../types.js';
 
 function fullContext(): GeneratorContext {
   return {
-    generator_version: '1.0.0',
+    generator_version: '0.2.0',
     domain_id: 'development-agent',
     constitution: {
       schema_version: 'constitution.v1',
       generated_at: '2026-01-01T00:00:00.000Z',
-      generator_version: '1.0.0',
+      generator_version: '0.2.0',
       user_scope: 'single_user',
       principles: [
         { id: 'clarity', statement: 'Prioritize clarity', priority: 1, applies_to: ['*'] },
@@ -69,9 +69,9 @@ function fullContext(): GeneratorContext {
 
 describe('generateAgentsMd', () => {
   it('generates header with version', () => {
-    const result = generateAgentsMd({ generator_version: '1.0.0' });
+    const result = generateAgentsMd({ generator_version: '0.2.0' });
     expect(result).toContain('# AGENTS.md');
-    expect(result).toContain('TasteKit v1.0.0');
+    expect(result).toContain('TasteKit v0.2.0');
   });
 
   it('includes principles section', () => {
@@ -123,11 +123,11 @@ describe('generateAgentsMd', () => {
 
   it('omits sections for empty constitution', () => {
     const result = generateAgentsMd({
-      generator_version: '1.0.0',
+      generator_version: '0.2.0',
       constitution: {
         schema_version: 'constitution.v1',
         generated_at: '',
-        generator_version: '1.0.0',
+        generator_version: '0.2.0',
         user_scope: 'single_user',
         principles: [],
         tone: { voice_keywords: [], forbidden_phrases: [], formatting_rules: [] },

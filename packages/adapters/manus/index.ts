@@ -12,9 +12,11 @@ import { resolveArtifactPath, resolveSkillsPath } from '@actrun_ai/tastekit-core
 import type { GeneratorContext } from '@actrun_ai/tastekit-core/generators';
 import { buildSimulationSummary, formatMemoryBullets, writeTraceJsonl } from '../runtime-support.js';
 
+const PACKAGE_VERSION = '0.2.0';
+
 export class ManusAdapter implements TasteKitAdapter {
   id = 'manus';
-  version = '1.0.0';
+  version = PACKAGE_VERSION;
   
   async detect(target: string): Promise<boolean> {
     // Check if target has Manus skills directory

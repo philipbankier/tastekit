@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0] - 2026-02-27
+## [0.2.0] - 2026-04-18
+
+### Added
+
+- MCP pipeline coverage across export flows
+- `tastekit simulate` command support in the current pre-release line
+
+### Changed
+
+- Version alignment across the monorepo to `0.2.0`
+- Expanded runtime coverage to 6 domains
+- Manus exports now include a generated `MANUS.md` alongside skills and README
+- Autopilots exports now emit a richer `autopilots.yaml` plus `AUTOPILOTS.md`
+- Adapter output now includes guardrails, memory policy, MCP bindings, and skill summaries more consistently
+
+### Fixed
+
+- P0 blocker fixes carried forward into the release line
+- Test hardening for adapter export contracts
+- Runtime adapter methods and generated metadata coverage gaps
+
+## [0.1.1] - 2026-02-27
 
 ### Added
 
@@ -47,7 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Version**: Bumped from 0.5.0 to 1.0.0 across all packages
+- **Version**: Bumped from 0.5.0 to 0.1.1 across all packages
 - **CI workflow**: Removed silent failure suppression (`|| echo`), updated pnpm 8→10, dropped Node 18.x (keep 20.x + 22.x)
 - **Simulate command**: Now exits cleanly with a friendly "planned for v1.1" message instead of error exit
 - **npm packaging**: All packages configured for public npm publishing with proper `publishConfig`, `files`, `repository`, and `author` fields
@@ -94,7 +116,7 @@ This release introduces a major architectural shift to domain-focused agent buil
 
 ### Changed
 
-- **Version**: Bumped from 1.0.0 to 0.5.0 to reflect pre-release status
+- **Version**: Bumped from 0.1.1 to 0.5.0 to reflect pre-release status
 - **README**: Updated to emphasize domain-focused approach
 - **Project Status**: Positioned as functional but evolving, ready for community contributions
 
@@ -133,5 +155,6 @@ This internal prototype was never publicly released. It was superseded by v0.5.0
 
 The v0.1.0 prototype included all core modules (schemas, compiler, interview, skills, MCP, trust, tracing, drift, eval) but used a generic onboarding approach. Based on user feedback, we pivoted to a domain-focused architecture to make the tool immediately useful for specific use cases.
 
-[1.0.0]: https://github.com/tastekit/tastekit/releases/tag/v1.0.0
+[0.2.0]: https://github.com/tastekit/tastekit/releases/tag/v0.2.0
+[0.1.1]: https://github.com/tastekit/tastekit/releases/tag/v0.1.1
 [0.5.0]: https://github.com/tastekit/tastekit/releases/tag/v0.5.0

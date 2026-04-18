@@ -19,10 +19,11 @@ import { generateSoulMd, generateAgentsMd, type GeneratorContext } from '@actrun
 import { buildSimulationSummary, formatMemoryBullets, writeTraceJsonl } from '../runtime-support.js';
 
 const require = createRequire(import.meta.url);
+const PACKAGE_VERSION = '0.2.0';
 
 export class OpenClawAdapter implements TasteKitAdapter {
   id = 'openclaw';
-  version = '2.0.0';
+  version = PACKAGE_VERSION;
 
   async detect(target: string): Promise<boolean> {
     return existsSync(join(target, 'openclaw.config.json')) ||
@@ -85,7 +86,7 @@ export class OpenClawAdapter implements TasteKitAdapter {
 
   private buildContext(profilePath: string): GeneratorContext {
     const ctx: GeneratorContext = {
-      generator_version: '1.0.0',
+      generator_version: PACKAGE_VERSION,
     };
 
     // Constitution

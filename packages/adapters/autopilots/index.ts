@@ -16,10 +16,11 @@ import type { GeneratorContext } from '@actrun_ai/tastekit-core/generators';
 import { buildSimulationSummary, formatMemoryBullets, writeTraceJsonl } from '../runtime-support.js';
 
 const require = createRequire(import.meta.url);
+const PACKAGE_VERSION = '0.2.0';
 
 export class AutopilotsAdapter implements TasteKitAdapter {
   id = 'autopilots';
-  version = '2.0.0';
+  version = PACKAGE_VERSION;
 
   async detect(target: string): Promise<boolean> {
     return existsSync(join(target, 'autopilots.yaml')) ||

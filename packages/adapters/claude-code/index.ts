@@ -16,7 +16,7 @@ import { resolveArtifactPath, resolveBindingsPath, resolveSkillsPath } from '@ac
 import { generateClaudeMd, generateHooks, type GeneratorContext } from '@actrun_ai/tastekit-core/generators';
 import { buildSimulationSummary, formatMemoryBullets, writeTraceJsonl } from '../runtime-support.js';
 
-const require = createRequire(import.meta.url);
+const PACKAGE_VERSION = '0.2.0';
 
 function tryParseYamlOrJson(filePath: string): any {
   const content = readFileSync(filePath, 'utf-8');
@@ -34,7 +34,7 @@ function tryParseYamlOrJson(filePath: string): any {
 
 export class ClaudeCodeAdapter implements TasteKitAdapter {
   id = 'claude-code';
-  version = '2.0.0';
+  version = PACKAGE_VERSION;
 
   async detect(target: string): Promise<boolean> {
     return existsSync(join(target, '.claude', 'config.json'));
@@ -100,7 +100,7 @@ export class ClaudeCodeAdapter implements TasteKitAdapter {
 
   private buildContext(profilePath: string): GeneratorContext {
     const ctx: GeneratorContext = {
-      generator_version: '0.5.0',
+      generator_version: PACKAGE_VERSION,
     };
 
     // Constitution
