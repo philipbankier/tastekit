@@ -4,12 +4,12 @@ import type { GeneratorContext } from '../types.js';
 
 function fullContext(): GeneratorContext {
   return {
-    generator_version: '1.0.0',
+    generator_version: '0.2.0',
     domain_id: 'development-agent',
     constitution: {
       schema_version: 'constitution.v1',
       generated_at: '2026-01-01T00:00:00.000Z',
-      generator_version: '1.0.0',
+      generator_version: '0.2.0',
       user_scope: 'single_user',
       principles: [
         { id: 'clarity', statement: 'Prioritize clarity', priority: 1, applies_to: ['*'] },
@@ -27,8 +27,27 @@ function fullContext(): GeneratorContext {
     guardrails: {
       schema_version: 'guardrails.v1',
       permissions: [
-        { action: 'file_write', allowed: true, requires_approval: false },
-        { action: 'deploy', allowed: false, requires_approval: true },
+        {
+          scope_id: 'workspace-write',
+          tool_ref: 'filesystem:write_file',
+          resources: ['workspace/**'],
+          ops: ['write'],
+        },
+      ],
+      approvals: [
+        {
+          rule_id: 'approve_deploy',
+          when: 'action.type == "deploy"',
+          action: 'require_approval',
+          channel: 'cli',
+        },
+      ],
+      rate_limits: [
+        {
+          tool_ref: 'llm:generate',
+          limit: 60,
+          window: '1h',
+        },
       ],
     } as any,
     skills: {
@@ -50,9 +69,9 @@ function fullContext(): GeneratorContext {
 
 describe('generateAgentsMd', () => {
   it('generates header with version', () => {
-    const result = generateAgentsMd({ generator_version: '1.0.0' });
+    const result = generateAgentsMd({ generator_version: '0.2.0' });
     expect(result).toContain('# AGENTS.md');
-    expect(result).toContain('TasteKit v1.0.0');
+    expect(result).toContain('TasteKit v0.2.0');
   });
 
   it('includes principles section', () => {
@@ -65,9 +84,15 @@ describe('generateAgentsMd', () => {
   it('includes guardrails permissions section', () => {
     const result = generateAgentsMd(fullContext());
     expect(result).toContain('## Guardrails');
-    expect(result).toContain('file_write: allowed');
-    expect(result).toContain('deploy: denied');
-    expect(result).toContain('(requires approval)');
+    expect(result).toContain('filesystem:write_file: allowed');
+    expect(result).toContain('(write; resources: workspace/**)');
+    expect(result).toContain('approve_deploy: require_approval when action.type == "deploy" via cli');
+    expect(result).toContain('llm:generate: max 60/1h');
+  });
+
+  it('does not render undefined guardrail entries', () => {
+    const result = generateAgentsMd(fullContext());
+    expect(result).not.toContain('undefined');
   });
 
   it('includes tone & voice section', () => {
@@ -98,11 +123,11 @@ describe('generateAgentsMd', () => {
 
   it('omits sections for empty constitution', () => {
     const result = generateAgentsMd({
-      generator_version: '1.0.0',
+      generator_version: '0.2.0',
       constitution: {
         schema_version: 'constitution.v1',
         generated_at: '',
-        generator_version: '1.0.0',
+        generator_version: '0.2.0',
         user_scope: 'single_user',
         principles: [],
         tone: { voice_keywords: [], forbidden_phrases: [], formatting_rules: [] },

@@ -1,6 +1,8 @@
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'fs';
+import { mkdtempSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
-import { join } from 'path';
+import { dirname, join, relative } from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 
 export type Layout = 'v1' | 'v2';
 
@@ -107,4 +109,53 @@ export function createProfileFixture(layout: Layout): { rootDir: string; profile
 
 export function cleanupFixture(rootDir: string): void {
   rmSync(rootDir, { recursive: true, force: true });
+}
+
+const require = createRequire(import.meta.url);
+const YAML = require('yaml') as { parse(content: string): unknown };
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export function fixturePath(...parts: string[]): string {
+  return join(__dirname, '../../../fixtures', ...parts);
+}
+
+export function createTempDir(prefix: string): string {
+  return mkdtempSync(join(tmpdir(), `${prefix}-`));
+}
+
+export function parseYaml<T>(content: string): T {
+  return YAML.parse(content) as T;
+}
+
+export function listRelativeFiles(rootDir: string): string[] {
+  const files: string[] = [];
+
+  const walk = (currentDir: string) => {
+    for (const entry of readdirSync(currentDir, { withFileTypes: true })) {
+      const fullPath = join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        walk(fullPath);
+        continue;
+      }
+      if (entry.isFile()) {
+        files.push(relative(rootDir, fullPath));
+      }
+    }
+  };
+
+  walk(rootDir);
+  return files.sort();
+}
+
+export function validateMarkdown(markdown: string): void {
+  const fenceCount = (markdown.match(/```/g) ?? []).length;
+  if (fenceCount % 2 !== 0) {
+    throw new Error('Markdown contains an unmatched code fence');
+  }
+
+  for (const line of markdown.split('\n')) {
+    if (/^#{1,6}(?!\s|#|$)/.test(line)) {
+      throw new Error(`Markdown heading missing space: ${line}`);
+    }
+  }
 }

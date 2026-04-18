@@ -4,14 +4,19 @@
  * Exports TasteKit artifacts to Manus Skills format.
  */
 
-import { TasteKitAdapter, ExportOpts, InstallOpts } from '../adapter-interface.js';
+import { TasteKitAdapter, ExportOpts, InstallOpts, MappedMemoryPolicy, SimOpts, SimulationSummary } from '../adapter-interface.js';
 import { readFileSync, writeFileSync, cpSync, existsSync } from 'fs';
 import { join } from 'path';
+import type { MemoryV1, TraceEvent } from '@actrun_ai/tastekit-core';
 import { resolveArtifactPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
+import type { GeneratorContext } from '@actrun_ai/tastekit-core/generators';
+import { buildSimulationSummary, formatMemoryBullets, writeTraceJsonl } from '../runtime-support.js';
+
+const PACKAGE_VERSION = '0.2.0';
 
 export class ManusAdapter implements TasteKitAdapter {
   id = 'manus';
-  version = '1.0.0';
+  version = PACKAGE_VERSION;
   
   async detect(target: string): Promise<boolean> {
     // Check if target has Manus skills directory
@@ -49,6 +54,22 @@ export class ManusAdapter implements TasteKitAdapter {
     if (existsSync(skillsDir)) {
       cpSync(skillsDir, targetSkillsDir, { recursive: true });
     }
+  }
+
+  async runSimulation(workspace: GeneratorContext, _opts?: SimOpts): Promise<SimulationSummary> {
+    return buildSimulationSummary(workspace);
+  }
+
+  async mapMemoryPolicy(policy: MemoryV1): Promise<MappedMemoryPolicy> {
+    const lines = ['memory:', ...formatMemoryBullets(policy).map(line => `  - "${line.replace(/"/g, '\\"')}"`)];
+    return {
+      runtimeSpecific: lines.join('\n'),
+      notes: 'Use this YAML block in Manus metadata or README context.',
+    };
+  }
+
+  async emitTrace(events: TraceEvent[], outDir: string): Promise<void> {
+    await writeTraceJsonl(this.id, events, outDir);
   }
   
   private generateManusReadme(constitution: any): string {

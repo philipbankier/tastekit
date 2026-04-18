@@ -38,11 +38,11 @@ describe('development-agent domain', () => {
   });
 
   it('getDomainById returns undefined for nonexistent domain', () => {
-    expect(getDomainById('content-agent')).toBeUndefined();
+    expect(getDomainById('research-agent')).toBeDefined();
     expect(getDomainById('nonexistent')).toBeUndefined();
   });
 
   it('getDomainRubric returns undefined for nonexistent domain', () => {
-    expect(getDomainRubric('sales-agent')).toBeUndefined();
+    expect(getDomainRubric('nonexistent')).toBeUndefined();
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "tastekit",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "CLI-first taste onboarding + Skills + MCP + Drift + Trust + Tracing",
   "private": true,
   "type": "module",

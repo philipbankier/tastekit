@@ -1,6 +1,6 @@
 {
   "name": "@actrun_ai/tastekit-core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "TasteKit core library - schemas, compiler, skills, MCP, trust, tracing",
   "type": "module",
   "license": "MIT",

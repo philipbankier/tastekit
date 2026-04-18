@@ -124,5 +124,8 @@ describe('compileSkills', () => {
     const content = readFileSync(skillMdPath, 'utf-8');
     expect(content).toContain('Be thorough');
     expect(content).toContain('professional');
+    expect(content).toContain('Your Principles');
+    expect(content).toContain('Tradeoff Guidance');
+    expect(content).toContain('Formatting guidance');
   });
 });

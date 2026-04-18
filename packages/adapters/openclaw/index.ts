@@ -9,18 +9,21 @@
  * - skills/ (AgentSkills-compatible skill directories)
  */
 
-import { TasteKitAdapter, ExportOpts, InstallOpts } from '../adapter-interface.js';
+import { TasteKitAdapter, ExportOpts, InstallOpts, MappedMemoryPolicy, SimOpts, SimulationSummary } from '../adapter-interface.js';
 import { readFileSync, writeFileSync, cpSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createRequire } from 'node:module';
+import type { MemoryV1, TraceEvent } from '@actrun_ai/tastekit-core';
 import { resolveArtifactPath, resolveSkillsPath, resolveBindingsPath } from '@actrun_ai/tastekit-core/utils';
 import { generateSoulMd, generateAgentsMd, type GeneratorContext } from '@actrun_ai/tastekit-core/generators';
+import { buildSimulationSummary, formatMemoryBullets, writeTraceJsonl } from '../runtime-support.js';
 
 const require = createRequire(import.meta.url);
+const PACKAGE_VERSION = '0.2.0';
 
 export class OpenClawAdapter implements TasteKitAdapter {
   id = 'openclaw';
-  version = '2.0.0';
+  version = PACKAGE_VERSION;
 
   async detect(target: string): Promise<boolean> {
     return existsSync(join(target, 'openclaw.config.json')) ||
@@ -65,9 +68,25 @@ export class OpenClawAdapter implements TasteKitAdapter {
     cpSync(outDir, target, { recursive: true });
   }
 
+  async runSimulation(workspace: GeneratorContext, _opts?: SimOpts): Promise<SimulationSummary> {
+    return buildSimulationSummary(workspace);
+  }
+
+  async mapMemoryPolicy(policy: MemoryV1): Promise<MappedMemoryPolicy> {
+    const lines = ['## Memory Policy', '', ...formatMemoryBullets(policy).map(line => `- ${line}`)];
+    return {
+      runtimeSpecific: lines.join('\n'),
+      notes: 'Embed this block in SOUL.md or AGENTS.md.',
+    };
+  }
+
+  async emitTrace(events: TraceEvent[], outDir: string): Promise<void> {
+    await writeTraceJsonl(this.id, events, outDir);
+  }
+
   private buildContext(profilePath: string): GeneratorContext {
     const ctx: GeneratorContext = {
-      generator_version: '1.0.0',
+      generator_version: PACKAGE_VERSION,
     };
 
     // Constitution
