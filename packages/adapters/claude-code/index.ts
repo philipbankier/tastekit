@@ -7,12 +7,14 @@
  * - settings.local.json (hook configuration)
  */
 
-import { TasteKitAdapter, ExportOpts, InstallOpts } from '../adapter-interface.js';
+import { TasteKitAdapter, ExportOpts, InstallOpts, MappedMemoryPolicy, SimOpts, SimulationSummary } from '../adapter-interface.js';
 import { readFileSync, writeFileSync, cpSync, existsSync, mkdirSync, chmodSync } from 'fs';
 import { join } from 'path';
 import { createRequire } from 'node:module';
+import type { MemoryV1, TraceEvent } from '@actrun_ai/tastekit-core';
 import { resolveArtifactPath, resolveBindingsPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
 import { generateClaudeMd, generateHooks, type GeneratorContext } from '@actrun_ai/tastekit-core/generators';
+import { buildSimulationSummary, formatMemoryBullets, writeTraceJsonl } from '../runtime-support.js';
 
 const require = createRequire(import.meta.url);
 
@@ -78,6 +80,22 @@ export class ClaudeCodeAdapter implements TasteKitAdapter {
 
   async install(outDir: string, target: string, _opts: InstallOpts): Promise<void> {
     cpSync(outDir, target, { recursive: true });
+  }
+
+  async runSimulation(workspace: GeneratorContext, _opts?: SimOpts): Promise<SimulationSummary> {
+    return buildSimulationSummary(workspace);
+  }
+
+  async mapMemoryPolicy(policy: MemoryV1): Promise<MappedMemoryPolicy> {
+    const lines = ['## Memory Policy', '', ...formatMemoryBullets(policy).map(line => `- ${line}`)];
+    return {
+      runtimeSpecific: lines.join('\n'),
+      notes: 'Embed this block in CLAUDE.md.',
+    };
+  }
+
+  async emitTrace(events: TraceEvent[], outDir: string): Promise<void> {
+    await writeTraceJsonl(this.id, events, outDir);
   }
 
   private buildContext(profilePath: string): GeneratorContext {

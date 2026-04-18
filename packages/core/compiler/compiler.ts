@@ -1,7 +1,9 @@
 import { join } from 'path';
+import YAML from 'yaml';
+import { BindingsV1, GuardrailsV1, GuardrailsPermission, GuardrailsApproval } from '../schemas/index.js';
 import { SessionState } from '../schemas/workspace.js';
 import { atomicWrite } from '../utils/filesystem.js';
-import { ensureDir, resolvePlaybooksPath, resolveSkillsPath } from '../utils/filesystem.js';
+import { ensureDir, resolveBindingsPath, resolvePlaybooksPath, resolveSkillsPath } from '../utils/filesystem.js';
 import { stringifyYAML } from '../utils/yaml.js';
 import { compileConstitution } from './constitution-compiler.js';
 import { compileGuardrails } from './guardrails-compiler.js';
@@ -86,6 +88,8 @@ export async function compile(options: CompilationOptions): Promise<CompilationR
     }
   }
 
+  await attachMcpBindingsSummary(workspacePath);
+
   let constitution: unknown;
 
   // Generate SOUL.md
@@ -135,6 +139,115 @@ export async function compile(options: CompilationOptions): Promise<CompilationR
     artifacts: derivation.artifacts_written,
     resumed,
   };
+}
+
+async function attachMcpBindingsSummary(workspacePath: string): Promise<void> {
+  const bindingsPath = resolveBindingsPath(workspacePath);
+  const guardrailsPath = join(workspacePath, 'guardrails.v1.yaml');
+  const { existsSync, readFileSync } = await import('fs');
+
+  if (!existsSync(bindingsPath) || !existsSync(guardrailsPath)) {
+    return;
+  }
+
+  const bindings = parseJsonOrYaml<BindingsV1>(readFileSync(bindingsPath, 'utf-8'));
+  if (!bindings?.servers?.length) {
+    return;
+  }
+
+  const guardrails = parseJsonOrYaml<GuardrailsV1>(readFileSync(guardrailsPath, 'utf-8'));
+  const mcpPermissions = buildMcpPermissions(bindings);
+  const mcpApprovals = buildMcpApprovals(bindings);
+
+  const existingPermissionIds = new Set(guardrails.permissions.map(permission => permission.scope_id));
+  const existingApprovalIds = new Set(guardrails.approvals.map(approval => approval.rule_id));
+
+  for (const permission of mcpPermissions) {
+    if (!existingPermissionIds.has(permission.scope_id)) {
+      guardrails.permissions.push(permission);
+    }
+  }
+
+  for (const approval of mcpApprovals) {
+    if (!existingApprovalIds.has(approval.rule_id)) {
+      guardrails.approvals.push(approval);
+    }
+  }
+
+  guardrails.mcp = {
+    tool_count: bindings.servers.reduce((count, server) => count + (server.tools?.length ?? 0), 0),
+    resource_count: bindings.servers.reduce((count, server) => count + (server.resources?.length ?? 0), 0),
+    prompt_count: bindings.servers.reduce((count, server) => count + (server.prompts?.length ?? 0), 0),
+    servers: bindings.servers.map(server => ({
+      name: server.name,
+      url: server.url,
+      tools: (server.tools ?? []).map(tool => normalizeToolRef(server.name, tool.tool_ref)),
+      resources: (server.resources ?? []).map(resource => resource.uri_pattern ?? resource.resource_ref),
+      prompts: (server.prompts ?? []).map(prompt => prompt.prompt_ref),
+    })),
+  };
+
+  atomicWrite(guardrailsPath, stringifyYAML(guardrails));
+}
+
+function buildMcpPermissions(bindings: BindingsV1): GuardrailsPermission[] {
+  return bindings.servers.flatMap((server) => {
+    const resources = (server.resources ?? []).map(resource => resource.uri_pattern ?? resource.resource_ref);
+    const resourcePatterns = resources.length > 0 ? resources : ['*'];
+
+    return (server.tools ?? []).map((tool) => ({
+      scope_id: `mcp_${slugify(server.name)}_${slugify(tool.tool_ref)}`,
+      tool_ref: normalizeToolRef(server.name, tool.tool_ref),
+      resources: resourcePatterns,
+      ops: inferMcpOps(tool.risk_hints),
+      source: 'mcp' as const,
+    }));
+  });
+}
+
+function buildMcpApprovals(bindings: BindingsV1): GuardrailsApproval[] {
+  return bindings.servers.flatMap((server) =>
+    (server.tools ?? [])
+      .filter((tool) => {
+        const hints = tool.risk_hints ?? [];
+        return hints.includes('destructive') || hints.includes('high');
+      })
+      .map((tool) => ({
+        rule_id: `approve_${slugify(server.name)}_${slugify(tool.tool_ref)}`,
+        when: `tool_ref == "${normalizeToolRef(server.name, tool.tool_ref)}"`,
+        action: 'require_approval' as const,
+        channel: 'cli' as const,
+        source: 'mcp' as const,
+      })),
+  );
+}
+
+function inferMcpOps(riskHints?: string[]): Array<'read' | 'write' | 'delete' | 'execute' | 'post' | 'publish' | 'admin'> {
+  const hints = new Set((riskHints ?? []).map(hint => hint.toLowerCase()));
+
+  if (hints.has('delete') || hints.has('destructive')) return ['delete'];
+  if (hints.has('publish')) return ['publish'];
+  if (hints.has('post')) return ['post'];
+  if (hints.has('admin')) return ['admin'];
+  if (hints.has('write')) return ['write'];
+  if (hints.has('read') || hints.has('readonly') || hints.has('read_only')) return ['read'];
+  return ['execute'];
+}
+
+function normalizeToolRef(serverName: string, toolRef: string): string {
+  return toolRef.includes(':') ? toolRef : `${serverName}:${toolRef}`;
+}
+
+function slugify(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+}
+
+function parseJsonOrYaml<T>(raw: string): T {
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return YAML.parse(raw) as T;
+  }
 }
 
 /**

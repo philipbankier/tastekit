@@ -6,11 +6,14 @@
  * Also generates autopilots.yaml for backward compatibility.
  */
 
-import { TasteKitAdapter, ExportOpts, InstallOpts } from '../adapter-interface.js';
+import { TasteKitAdapter, ExportOpts, InstallOpts, MappedMemoryPolicy, SimOpts, SimulationSummary } from '../adapter-interface.js';
 import { readFileSync, writeFileSync, existsSync, cpSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createRequire } from 'node:module';
+import type { MemoryV1, TraceEvent } from '@actrun_ai/tastekit-core';
 import { resolveArtifactPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
+import type { GeneratorContext } from '@actrun_ai/tastekit-core/generators';
+import { buildSimulationSummary, formatMemoryBullets, writeTraceJsonl } from '../runtime-support.js';
 
 const require = createRequire(import.meta.url);
 
@@ -49,6 +52,22 @@ export class AutopilotsAdapter implements TasteKitAdapter {
 
   async install(outDir: string, target: string, _opts: InstallOpts): Promise<void> {
     cpSync(outDir, target, { recursive: true });
+  }
+
+  async runSimulation(workspace: GeneratorContext, _opts?: SimOpts): Promise<SimulationSummary> {
+    return buildSimulationSummary(workspace);
+  }
+
+  async mapMemoryPolicy(policy: MemoryV1): Promise<MappedMemoryPolicy> {
+    const lines = ['memory:', ...formatMemoryBullets(policy).map(line => `  - "${line.replace(/"/g, '\\"')}"`)];
+    return {
+      runtimeSpecific: lines.join('\n'),
+      notes: 'Use this YAML block in autopilots runtime config.',
+    };
+  }
+
+  async emitTrace(events: TraceEvent[], outDir: string): Promise<void> {
+    await writeTraceJsonl(this.id, events, outDir);
   }
 }
 

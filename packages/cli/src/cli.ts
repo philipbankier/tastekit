@@ -13,6 +13,7 @@ import { dirname, join } from 'path';
 import { initCommand } from './commands/init.js';
 import { onboardCommand } from './commands/onboard.js';
 import { compileCommand } from './commands/compile.js';
+import { simulateCommand } from './commands/simulate.js';
 import { mcpCommand } from './commands/mcp.js';
 import { trustCommand } from './commands/trust.js';
 import { skillsCommand } from './commands/skills.js';
@@ -40,6 +41,7 @@ program.option('--verbose', 'Enable verbose logging');
 program.addCommand(initCommand);
 program.addCommand(onboardCommand);
 program.addCommand(compileCommand);
+program.addCommand(simulateCommand);
 program.addCommand(mcpCommand);
 program.addCommand(trustCommand);
 program.addCommand(skillsCommand);
@@ -55,6 +57,7 @@ Commands:
     init         Create a new TasteKit workspace
     onboard      Run LLM-driven onboarding interview
     compile      Compile artifacts from onboarding session
+    simulate     Preview the compiled agent and guardrails
     export       Export to runtime format (claude-code, openclaw, manus)
 
   Skills:

@@ -4,7 +4,8 @@
  * Common interface for all runtime adapters.
  */
 
-import { MemoryV1 } from '@actrun_ai/tastekit-core';
+import type { MemoryV1, TraceEvent } from '@actrun_ai/tastekit-core';
+import type { GeneratorContext } from '@actrun_ai/tastekit-core/generators';
 
 export interface ExportOpts {
   includeSkills?: boolean;
@@ -22,21 +23,18 @@ export interface SimOpts {
   dryRun?: boolean;
 }
 
-export interface SimResult {
-  success: boolean;
-  outputs: any;
-  trace: any[];
+export interface SimulationSummary {
+  domain: string;
+  principleCount: number;
+  guardrailCount: number;
+  skillCount: number;
+  autonomyLevel: number;
+  adapters: string[];
 }
 
 export interface MappedMemoryPolicy {
-  runtimeSpecific: any;
+  runtimeSpecific: string;
   notes?: string;
-}
-
-export interface TraceEvent {
-  timestamp: string;
-  type: string;
-  data: any;
 }
 
 /**
@@ -69,7 +67,7 @@ export interface TasteKitAdapter {
   /**
    * Run simulation (optional)
    */
-  runSimulation?(skillId: string, opts: SimOpts): Promise<SimResult>;
+  runSimulation?(workspace: GeneratorContext, opts?: SimOpts): Promise<SimulationSummary>;
   
   /**
    * Map memory policy to runtime-specific format (optional)
@@ -79,5 +77,5 @@ export interface TasteKitAdapter {
   /**
    * Emit trace event (optional)
    */
-  emitTrace?(event: TraceEvent): Promise<void>;
+  emitTrace?(events: TraceEvent[], outDir: string): Promise<void>;
 }
