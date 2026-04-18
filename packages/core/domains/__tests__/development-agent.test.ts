@@ -43,6 +43,6 @@ describe('development-agent domain', () => {
   });
 
   it('getDomainRubric returns undefined for nonexistent domain', () => {
-    expect(getDomainRubric('sales-agent')).toBeUndefined();
+    expect(getDomainRubric('nonexistent')).toBeUndefined();
   });
 });
