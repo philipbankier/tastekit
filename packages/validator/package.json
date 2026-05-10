@@ -7,7 +7,7 @@
   "author": "TasteKit Contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tastekit/tastekit.git",
+    "url": "https://github.com/philipbankier/tastekit.git",
     "directory": "packages/validator"
   },
   "publishConfig": {

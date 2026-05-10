@@ -3,6 +3,18 @@
   "ignorePatterns": [
     {
       "pattern": "^http://localhost(:[0-9]+)?"
+    },
+    {
+      "pattern": "^mailto:"
+    },
+    {
+      "pattern": "^https://www\\.npmjs\\.com/package/@actrun_ai/tastekit-cli$"
+    },
+    {
+      "pattern": "^https://spec\\.modelcontextprotocol\\.io/?$"
+    },
+    {
+      "pattern": "^https://modelcontextprotocol\\.io/docs/concepts/security$"
     }
   ]
 }

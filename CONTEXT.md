@@ -1210,7 +1210,7 @@ tastekit sync
 
 ### Community
 
-- GitHub: github.com/tastekit/tastekit
+- GitHub: github.com/philipbankier/tastekit
 - Discord: discord.gg/tastekit
 - Twitter: @tastekit_dev
 - Website: tastekit.dev

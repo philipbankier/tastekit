@@ -17,8 +17,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Use Node.js 22.x
         uses: actions/setup-node@v4
@@ -41,6 +39,12 @@ jobs:
 
       - name: Release contract gate
         run: bash scripts/validation/contract-conformance.sh
+
+      - name: Check Markdown links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          config-file: '.github/markdown-link-check-config.json'
 
       - name: Publish to npm
         run: pnpm publish -r --access public --no-git-checks

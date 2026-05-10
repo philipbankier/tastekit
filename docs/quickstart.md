@@ -11,7 +11,7 @@ This guide walks you through the complete TasteKit workflow: initialize, intervi
 ## 1. Installation
 
 ```bash
-git clone https://github.com/tastekit/tastekit.git
+git clone https://github.com/philipbankier/tastekit.git
 cd tastekit
 pnpm install
 pnpm build

@@ -11,6 +11,6 @@ export const simulateCommand = new Command('simulate')
       chalk.cyan('Simulation is planned for TasteKit v1.1.') + '\n\n' +
       'This feature will let you dry-run skills and playbooks against your\n' +
       'taste profile to preview outputs without side effects.\n\n' +
-      chalk.dim('Track progress: https://github.com/tastekit/tastekit/issues')
+      chalk.dim('Track progress: https://github.com/philipbankier/tastekit/issues')
     );
   });

@@ -7,11 +7,11 @@
   "packageManager": "pnpm@10.29.2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tastekit/tastekit.git"
+    "url": "https://github.com/philipbankier/tastekit.git"
   },
-  "homepage": "https://github.com/tastekit/tastekit",
+  "homepage": "https://github.com/philipbankier/tastekit",
   "bugs": {
-    "url": "https://github.com/tastekit/tastekit/issues"
+    "url": "https://github.com/philipbankier/tastekit/issues"
   },
   "scripts": {
     "build": "pnpm -r build",

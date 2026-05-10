@@ -5,7 +5,7 @@ All notable changes to TasteKit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2026-02-27
+## 1.0.0 - 2026-02-27
 
 ### Added
 
@@ -60,7 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Memory compiler generates domain-specific memory policies
 - ESLint lint paths corrected for packages with source at root (not in `src/`)
 
-## [0.5.0] - 2026-02-14
+## 0.5.0 - 2026-02-14
 
 ### Added - Domain-Based Architecture
 
@@ -132,6 +132,3 @@ This internal prototype was never publicly released. It was superseded by v0.5.0
 ### Notes
 
 The v0.1.0 prototype included all core modules (schemas, compiler, interview, skills, MCP, trust, tracing, drift, eval) but used a generic onboarding approach. Based on user feedback, we pivoted to a domain-focused architecture to make the tool immediately useful for specific use cases.
-
-[1.0.0]: https://github.com/tastekit/tastekit/releases/tag/v1.0.0
-[0.5.0]: https://github.com/tastekit/tastekit/releases/tag/v0.5.0
