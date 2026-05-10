@@ -25,8 +25,8 @@ tastekit init
 
 The init command walks you through three choices:
 
-1. **Domain** — What type of agent are you building? (Content, Development, Research, Sales, or Support)
-2. **Depth** — How thorough should the interview be? (quick ~5 min, guided ~15 min, or operator ~30 min)
+1. **Domain** — What type of agent are you building? (General or Development)
+2. **Depth** — How thorough should the interview be? (Quick, Guided, or Full Taste Composition)
 3. **LLM Provider** — Auto-detects from environment variables, or lets you choose manually
 
 This creates a `.tastekit/` directory with the workspace structure:
@@ -34,15 +34,17 @@ This creates a `.tastekit/` directory with the workspace structure:
 ```
 .tastekit/
 ├── tastekit.yaml          # Workspace configuration
-├── artifacts/             # Compiled artifacts (after step 4)
+├── constitution.v1.json   # Compiled principles, tone, tradeoffs, and taboos
+├── guardrails.v1.yaml     # Compiled permissions and approval rules
+├── memory.v1.yaml         # Compiled memory policy
 ├── skills/                # Skills library (after step 4)
-└── traces/                # Agent trace logs (during operation)
+└── traces/                # Agent trace logs
 ```
 
 You can also skip the interactive prompts:
 
 ```bash
-tastekit init --domain content-agent --depth guided
+tastekit init --domain general-agent --depth guided
 ```
 
 ## 3. Run the Onboarding Interview
@@ -131,7 +133,7 @@ tastekit trust audit
 
 ## What's Next?
 
-Your TasteKit profile is compiled and ready to use. As your agent runs, it generates trace files in `.tastekit/ops/traces/` (with legacy fallback to `.tastekit/traces/`). Use these for ongoing maintenance:
+Your TasteKit profile is compiled and ready to use. As your agent runs, it generates trace files in `.tastekit/traces/` (with compatibility readers for older `.tastekit/ops/traces/` fixtures). Use these for ongoing maintenance:
 
 - **List skills**: `tastekit skills list` — see your generated skills in a table
 - **Detect drift**: `tastekit drift detect` — analyze traces for behavioral drift

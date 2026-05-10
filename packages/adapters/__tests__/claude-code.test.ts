@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ClaudeCodeAdapter } from '../claude-code/index.js';
 import { cleanupFixture, createProfileFixture, type Layout } from './helpers.js';
@@ -28,6 +28,29 @@ for (const layout of ['v1', 'v2'] as Layout[]) {
 
         const settings = JSON.parse(readFileSync(join(outDir, '.claude', 'settings.local.json'), 'utf-8'));
         expect(settings.hooks).toBeDefined();
+      } finally {
+        cleanupFixture(rootDir);
+      }
+    });
+
+    it('preserves manual CLAUDE.md content outside TasteKit managed region', async () => {
+      const { rootDir, profilePath } = createProfileFixture(layout);
+      const outDir = join(rootDir, 'export-claude');
+
+      try {
+        mkdirSync(outDir, { recursive: true });
+        writeFileSync(join(outDir, 'CLAUDE.md'), '# Manual Notes\n\nKeep this section.\n', 'utf-8');
+
+        const adapter = new ClaudeCodeAdapter();
+        await adapter.export(profilePath, outDir, {
+          includeSkills: true,
+          includePlaybooks: true,
+        });
+
+        const claudeMd = readFileSync(join(outDir, 'CLAUDE.md'), 'utf-8');
+        expect(claudeMd).toContain('# Manual Notes');
+        expect(claudeMd).toContain('Keep this section.');
+        expect(claudeMd.match(/BEGIN TASTEKIT MANAGED REGION/g)).toHaveLength(1);
       } finally {
         cleanupFixture(rootDir);
       }

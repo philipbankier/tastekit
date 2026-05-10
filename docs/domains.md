@@ -1,166 +1,183 @@
 # TasteKit Domains
 
-TasteKit uses a **domain-based architecture** that provides specialized onboarding, skills, and playbooks for specific types of agents. Instead of creating a generic agent, users choose a domain that matches their use case, and TasteKit provides deep, specialized support for that domain.
+TasteKit uses a **domain-based architecture** that provides specialized onboarding, skills, and playbooks for specific types of agents. Instead of creating a generic profile from scratch every time, users choose a domain that matches their use case, and TasteKit selects the matching rubric and runtime assets.
 
-## What is a Domain?
+## What Is A Domain?
 
 A **domain** in TasteKit is a complete package that includes:
 
-- **Interview rubric** with domain-specific dimensions organized by depth tier (quick, guided, operator)
-- **Structured onboarding questions** as fallback when no LLM is available
+- **Interview rubric** with domain-specific dimensions organized by depth tier (Quick, Guided, Full Taste Composition)
 - **Pre-built skills library** with SKILL.md files and progressive disclosure
 - **Playbooks** that define multi-step execution plans for common workflows
-- **Domain constants** (methodologies, output formats, channels, etc.)
+- **Domain constants** such as recommended tools and vocabulary
 
 ## Available Domains
 
-All 5 domains are fully implemented with rubrics, questions, skills, and playbooks.
+TasteKit's production release scope is six domains. The release gates enumerate all six in deterministic replay and pre-release live Ollama smoke checks:
 
-### Content Agent
+- `development-agent`
+- `general-agent`
+- `content-agent`
+- `research-agent`
+- `sales-agent`
+- `support-agent`
 
-The Content Agent domain is designed for individuals and businesses that want to automate social media content creation, brand management, and audience engagement.
+### General Agent
 
-**Use Cases:** Personal brand management, business social media, AI influencers, newsletter/blog generation.
+The General Agent domain is for broad assistants that handle mixed technical and non-technical work.
 
-**Rubric:** 16 dimensions across 3 depth tiers. Covers brand voice, platform strategy, content workflow, engagement philosophy, and more.
+**Use Cases:** Personal copilot workflows, general task execution, planning, research-then-act flows, decision support.
 
-**Skills:** `research-trends` (web research for content ideas), `generate-post-options` (draft multiple post variations).
+**Rubric:** 17 dimensions across 3 depth tiers. Covers mission scope, decision style, communication contract, evidence rigor, risk escalation, planning horizon, tooling preferences, and more.
 
-**Playbooks:** `simple-post` (single post creation), `research-and-post` (research-informed content), `content-calendar` (multi-day planning).
+**Skills:** `context-synthesis` (summarize and ground working context), `task-orchestration` (plan, execute, and close tasks).
 
-**Learn More:** [Content Agent Documentation](./domains/content-agent.md)
+**Playbooks:** `general-task-execution`, `research-then-act`.
+
+**Capability Packs:** General Agent can opt into `development` and `content` packs when one broad agent should still receive task-specific workflows.
 
 ### Development Agent
 
 The Development Agent domain is for agents that assist with software development tasks.
 
-**Use Cases:** Code review, documentation generation, bug triage, test generation, refactoring assistance.
+**Use Cases:** Code review, documentation generation, debugging, test generation, refactoring assistance.
 
-**Rubric:** 24 dimensions (the most comprehensive domain). Covers code style, architecture preferences, testing philosophy, documentation standards, and more.
+**Rubric:** 24 dimensions. Covers engineering identity, code quality, testing philosophy, documentation standards, type safety, CI/CD, open-source etiquette, and more.
 
-**Skills:** `code-review` (automated code review), `test-generation` (generate test cases from code).
+**Skills:** `code-review`, `debugging-issues`, `documenting-code`, `refactor-plan`, `writing-tests`.
 
-**Playbooks:** `review-and-fix` (review code and apply fixes), `documentation-sprint` (generate docs for a module).
+**Playbooks:** `general-task` execution workflow adapted for software development work.
+
+### Content Agent
+
+The Content Agent domain is for agents that create, adapt, and review written content while preserving voice, audience fit, and evidence discipline.
+
+**Use Cases:** Launch posts, founder updates, README-to-social adaptation, editorial review, campaign drafts.
+
+**Rubric:** 12 dimensions. Covers brand voice, audience definition, evidence and claims policy, anti-generic standards, channel strategy, content workflow, editorial structure, publishing boundaries, and performance feedback.
+
+**Skills:** `content-voice-brief` (turn taste and source material into an editorial brief), `content-draft-options` (draft content variants from the brief while enforcing voice and claim rules).
+
+**Playbooks:** `simple-post`, `research-and-post`, `content-calendar`.
 
 ### Research Agent
 
-The Research Agent domain is for agents that gather, analyze, and synthesize information from various sources.
+The Research Agent domain is for agents that gather, evaluate, and synthesize information with explicit source discipline.
 
-**Use Cases:** Market research, competitive analysis, academic literature reviews, news monitoring, due diligence.
+**Use Cases:** Background research, market scans, literature-style summaries, competitive analysis, claim verification, briefing notes.
 
-**Rubric:** 18 dimensions. Covers research methodology, source preferences, synthesis style, citation standards, bias awareness, fact-checking rigor, and more.
+**Rubric:** Covers research scope, source quality, evidence thresholds, uncertainty handling, citation expectations, synthesis depth, and escalation for weak or restricted sources.
 
-**Skills:** `web-research` (structured web research with source tracking), `competitive-analysis` (market and competitor analysis).
+**Skills:** Research-oriented skills for web/source research and competitive analysis.
 
-**Playbooks:** `quick-lookup` (fast factual research), `deep-dive-analysis` (comprehensive multi-source research report).
+**Playbooks:** Quick lookup and deeper analysis workflows that move from scope definition to source review, synthesis, and caveats.
 
 ### Sales Agent
 
-The Sales Agent domain is for agents that support sales processes, from lead generation to deal closing.
+The Sales Agent domain is for agents that support account research, qualification, follow-up drafting, and deal-risk escalation without overclaiming.
 
-**Use Cases:** Lead qualification, outreach email sequences, CRM management, proposal generation, pipeline analytics.
+**Use Cases:** Account preparation, lead qualification, discovery-call prep, follow-up notes, objection synthesis, renewal or expansion planning.
 
-**Rubric:** 18 dimensions. Covers sales philosophy, communication style, objection handling, deal management, negotiation approach, and more.
+**Rubric:** Covers buyer relevance, product-claim discipline, CRM/data boundaries, pricing and terms escalation, outreach tone, and handoff expectations.
 
-**Skills:** `lead-qualification` (score and qualify leads), `outreach-email` (personalized outreach sequences).
+**Skills:** Sales-oriented skills for opportunity qualification, account context, and buyer-facing drafting.
 
-**Playbooks:** `lead-outreach` (qualification to first email), `proposal-workflow` (research to proposal delivery).
+**Playbooks:** Account research, qualification, and follow-up workflows with explicit approval points for external communication and commercial commitments.
 
 ### Support Agent
 
-The Support Agent domain is for agents that handle customer support, troubleshooting, and user assistance.
+The Support Agent domain is for agents that help customers troubleshoot issues while preserving privacy, accuracy, and escalation boundaries.
 
-**Use Cases:** Ticket triage, response drafting, knowledge base management, escalation workflows, quality assurance.
+**Use Cases:** Technical support, help-center response drafting, issue triage, incident-aware replies, reproduction steps, escalation summaries.
 
-**Rubric:** 18 dimensions. Covers support philosophy, tone and empathy, escalation approach, SLA awareness, crisis communication, and more.
+**Rubric:** Covers empathy, troubleshooting precision, policy accuracy, privacy handling, incident escalation, and handoff clarity.
 
-**Skills:** `ticket-triage` (classify and prioritize tickets), `response-draft` (draft customer-facing responses).
+**Skills:** Support-oriented skills for ticket triage, troubleshooting guidance, and customer response drafting.
 
-**Playbooks:** `standard-ticket` (triage through resolution), `escalation-workflow` (escalation with context handoff).
+**Playbooks:** Triage, troubleshoot, respond, and escalate workflows with approval gates for account, billing, security, and data requests.
 
-## Choosing a Domain
+## Choosing A Domain
 
 When you run `tastekit init`, you will be prompted to choose a domain:
 
 ```bash
 $ tastekit init
 ? What type of agent are you building?
-  > Content Agent - Social media, brand management, content creation
+  > General Agent - Mixed technical and non-technical work
     Development Agent - Software development tasks
-    Research Agent - Information gathering and analysis
-    Sales Agent - Lead generation and deal management
-    Support Agent - Customer support and assistance
+    Content Agent - Content creation and editorial workflows
+    Research Agent - Research and synthesis
+    Sales Agent - Sales and account workflows
+    Support Agent - Customer support and troubleshooting
 ```
 
 Your choice determines which specialized interview rubric, skills, and playbooks you receive. You can also skip the interactive prompt:
 
 ```bash
-tastekit init --domain content-agent --depth guided
+tastekit init --domain general-agent --depth guided
 ```
 
 ## Interview Depth Tiers
 
 Each domain organizes its rubric dimensions into three depth tiers:
 
-| Tier | Time | Dimensions | Description |
-|:---|:---:|:---:|:---|
-| Quick | ~5 min | 5 | Essential preferences only — enough to get started |
-| Guided | ~15 min | 13 | Thorough profile with domain-specific deep dives |
-| Operator | ~30 min | 18+ | Full exploration with examples and edge cases |
+| Tier | Scope | Description |
+|:---|:---:|:---|
+| Quick | Essential | Core preferences only, enough to get started |
+| Guided | Balanced | Thorough profile with domain-specific deep dives |
+| Full Taste Composition | Complete | Full exploration with examples, edge cases, and conflict handling |
 
-The LLM interviewer adaptively explores dimensions based on the chosen depth, spending more time on topics where your answers reveal nuance.
+The LLM interviewer adaptively explores dimensions based on the chosen depth, spending more attention on topics where your answers reveal nuance.
 
-## Contributing a New Domain
+## Contributing A New Domain
 
-We welcome community contributions of new domains! Each domain requires:
+Community domains are welcome. Each domain requires:
 
-1. **`domain.ts`** — Domain metadata, version, description, and constants
-2. **`rubric.ts`** — Interview dimensions organized by depth tier
-3. **`questions.ts`** — Structured fallback questions
-4. **`skills/`** — At least 2 skills with SKILL.md content
-5. **`index.ts`** — Barrel exports
+1. **`domain.ts`** - Domain metadata, version, description, recommended tools, and vocabulary
+2. **`rubric.ts`** - Interview dimensions organized by depth tier
+3. **`skills/`** - At least one domain-specific skill with SKILL.md content
+4. **`index.ts`** - Barrel exports
+5. Tests for registry lookup, rubric coverage, skill compilation, and playbook behavior if domain-specific playbooks are included
 
 Plus wiring into `domains/index.ts`, `skills-compiler.ts`, and `playbook-compiler.ts`.
 
-See the existing domains (e.g., `packages/core/domains/content-agent/`) as a reference implementation.
+See the shipped modules under `packages/core/domains/` as reference implementations.
 
 ## Domain Architecture
 
-Each domain is a self-contained module within the core library:
+Each shipped domain is a self-contained module within the core library:
 
 ```
 packages/core/domains/
-├── content-agent/
-│   ├── domain.ts           # Domain metadata and constants
-│   ├── rubric.ts           # 16 interview dimensions by depth tier
-│   ├── questions.ts        # 15 structured fallback questions
+├── general-agent/
+│   ├── domain.ts
+│   ├── rubric.ts           # 17 interview dimensions by depth tier
 │   ├── skills/
-│   │   ├── research-trends.ts
-│   │   ├── generate-hooks.ts
-│   │   └── index.ts
 │   └── index.ts
 ├── development-agent/
 │   ├── domain.ts
-│   ├── rubric.ts           # 24 dimensions (most comprehensive)
-│   ├── questions.ts
+│   ├── rubric.ts           # 24 dimensions
+│   ├── skills/
+│   └── index.ts
+├── content-agent/
+│   ├── domain.ts
+│   ├── rubric.ts
 │   ├── skills/
 │   └── index.ts
 ├── research-agent/
 │   ├── domain.ts
-│   ├── rubric.ts           # 18 dimensions
-│   ├── questions.ts
+│   ├── rubric.ts
 │   ├── skills/
 │   └── index.ts
 ├── sales-agent/
 │   ├── domain.ts
-│   ├── rubric.ts           # 18 dimensions
-│   ├── questions.ts
+│   ├── rubric.ts
 │   ├── skills/
 │   └── index.ts
-└── support-agent/
-    ├── domain.ts
-    ├── rubric.ts           # 18 dimensions
-    ├── questions.ts
-    ├── skills/
-    └── index.ts
+├── support-agent/
+│   ├── domain.ts
+│   ├── rubric.ts
+│   ├── skills/
+│   └── index.ts
+└── index.ts                # Domain registry
 ```

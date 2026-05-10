@@ -4,6 +4,31 @@ import ora from 'ora';
 import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { detail, hint, handleError } from '../ui.js';
+import { ConstitutionV1Schema, type ConstitutionV1 } from '@actrun_ai/tastekit-core/schemas';
+
+const CLI_GENERATOR_VERSION = '1.0.0';
+
+function principleIdFromStatement(statement: string, index: number, used: Set<string>): string {
+  const slug = statement.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40);
+  const base = slug.length > 0 ? slug : `unnamed_principle_${index}`;
+  let candidate = base;
+  let suffix = 2;
+  while (used.has(candidate)) {
+    candidate = `${base}_${suffix++}`;
+  }
+  used.add(candidate);
+  return candidate;
+}
+
+function writeValidatedConstitution(constitutionPath: string, constitution: ConstitutionV1, spinner: ReturnType<typeof ora>): void {
+  const validation = ConstitutionV1Schema.safeParse(constitution);
+  if (!validation.success) {
+    const issues = validation.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join('; ');
+    spinner.fail(chalk.red(`Imported artifact fails ConstitutionV1Schema: ${issues}`));
+    throw new Error(`tastekit import produced an invalid constitution.v1 artifact: ${issues}`);
+  }
+  writeFileSync(constitutionPath, JSON.stringify(validation.data, null, 2), 'utf-8');
+}
 
 export const importCommand = new Command('import')
   .description('Import from runtime format, SOUL.md, or Agent File (.af)')
@@ -75,11 +100,7 @@ async function importSoulMd(sourcePath: string): Promise<void> {
     const constitutionPath = join(tastekitDir, 'constitution.v1.json');
     mkdirSync(tastekitDir, { recursive: true });
 
-    writeFileSync(
-      constitutionPath,
-      JSON.stringify(constitution, null, 2),
-      'utf-8'
-    );
+    writeValidatedConstitution(constitutionPath, constitution, spinner);
 
     spinner.succeed(chalk.green('Imported SOUL.md into TasteKit constitution'));
     console.log('');
@@ -167,11 +188,7 @@ async function importAgentFile(sourcePath: string): Promise<void> {
     const constitutionPath = join(tastekitDir, 'constitution.v1.json');
     mkdirSync(tastekitDir, { recursive: true });
 
-    writeFileSync(
-      constitutionPath,
-      JSON.stringify(constitution, null, 2),
-      'utf-8'
-    );
+    writeValidatedConstitution(constitutionPath, constitution, spinner);
 
     spinner.succeed(chalk.green('Imported Agent File (.af) into TasteKit constitution'));
     console.log('');
@@ -189,180 +206,154 @@ async function importAgentFile(sourcePath: string): Promise<void> {
 function buildConstitutionFromAgentFile(
   agent: any,
   blocks: Array<{ label: string; value: string; read_only?: boolean }>
-): any {
-  const principles: any[] = [];
-  let priority = 1;
+): ConstitutionV1 {
+  const rawStatements: string[] = [];
 
-  // Extract personality from persona/soul blocks
   const personalityBlocks = ['persona', 'soul', 'custom_instructions'];
   for (const block of blocks) {
-    if (personalityBlocks.includes(block.label)) {
-      const bullets = block.value.split('\n')
+    if (!personalityBlocks.includes(block.label)) continue;
+    const bullets = block.value.split('\n')
+      .filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'))
+      .map(l => l.replace(/^[\s*-]+/, '').trim())
+      .filter(l => l.length > 0);
+    if (bullets.length > 0) {
+      rawStatements.push(...bullets);
+    } else if (block.value.trim().length > 0) {
+      rawStatements.push(...block.value.split('\n').map(l => l.trim()).filter(Boolean));
+    }
+  }
+
+  if (rawStatements.length === 0 && agent.system) {
+    rawStatements.push(...agent.system.split('\n').map((l: string) => l.trim()).filter((l: string) => l.length > 10).slice(0, 10));
+  }
+
+  if (rawStatements.length === 0) {
+    rawStatements.push("Apply the imported agent's general taste when no specific principle applies.");
+  }
+
+  const usedIds = new Set<string>();
+  return finalizeImportedConstitution({
+    rawStatements,
+    voiceKeywords: blocks
+      .filter(b => ['preferences', 'conversation_patterns'].includes(b.label))
+      .flatMap(b => b.value.split(/[,\n]/).map(w => w.replace(/^[\s*-]+/, '').trim()).filter(w => w.length > 0 && w.length < 30))
+      .slice(0, 10),
+    forbiddenPhrases: blocks
+      .filter(b => b.read_only && b.label !== 'persona')
+      .flatMap(b => b.value.split('\n')
         .filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'))
         .map(l => l.replace(/^[\s*-]+/, '').trim())
-        .filter(l => l.length > 0);
-
-      if (bullets.length > 0) {
-        for (const bullet of bullets) {
-          principles.push({
-            id: `af_${block.label}_${priority}`,
-            statement: bullet,
-            priority: priority++,
-            applies_to: ['*'],
-          });
-        }
-      } else if (block.value.trim().length > 0) {
-        // Treat the whole block as a principle
-        for (const line of block.value.split('\n').filter(l => l.trim().length > 0)) {
-          principles.push({
-            id: `af_${block.label}_${priority}`,
-            statement: line.trim(),
-            priority: priority++,
-            applies_to: ['*'],
-          });
-        }
-      }
-    }
-  }
-
-  // Extract from system prompt if no blocks yielded principles
-  if (principles.length === 0 && agent.system) {
-    const lines = agent.system.split('\n')
-      .filter((l: string) => l.trim().length > 10)
-      .slice(0, 10);
-    for (const line of lines) {
-      principles.push({
-        id: `af_system_${priority}`,
-        statement: line.trim(),
-        priority: priority++,
-        applies_to: ['*'],
-      });
-    }
-  }
-
-  // Extract voice keywords from personality-related blocks
-  const voiceKeywords: string[] = [];
-  const preferenceBlocks = ['preferences', 'conversation_patterns'];
-  for (const block of blocks) {
-    if (preferenceBlocks.includes(block.label)) {
-      const words = block.value.split(/[,\n]/)
-        .map(w => w.replace(/^[\s*-]+/, '').trim())
-        .filter(w => w.length > 0 && w.length < 30);
-      voiceKeywords.push(...words.slice(0, 5));
-    }
-  }
-
-  // Check for read-only blocks that might be constraints
-  const forbiddenPhrases: string[] = [];
-  for (const block of blocks) {
-    if (block.read_only && block.label !== 'persona') {
-      const lines = block.value.split('\n')
-        .filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'))
-        .map(l => l.replace(/^[\s*-]+/, '').trim())
-        .filter(l => l.length > 0 && (l.toLowerCase().includes('never') || l.toLowerCase().includes('avoid') || l.toLowerCase().includes("don't")));
-      forbiddenPhrases.push(...lines.slice(0, 5));
-    }
-  }
-
-  return {
-    schema_version: 'constitution.v1',
-    generator_version: '0.5.0',
-    principles: principles.slice(0, 20),
-    tone: {
-      voice_keywords: voiceKeywords.slice(0, 10),
-      forbidden_phrases: forbiddenPhrases.slice(0, 10),
+        .filter(l => l.length > 0 && /never|avoid|don't/i.test(l)))
+      .slice(0, 10),
+    importMetadata: {
+      source: 'agent-file',
+      imported_at: new Date().toISOString(),
+      ...(agent.name ? { agent_name: agent.name } : {}),
+      ...(agent.description ? { agent_description: agent.description } : {}),
     },
-    tradeoffs: {
-      autonomy_level: 'medium',
-    },
-    evidence_policy: {
-      require_citations_for: [],
-    },
-    taboos: forbiddenPhrases.slice(0, 5),
-    imported_from: 'agent-file',
-    imported_at: new Date().toISOString(),
-    agent_name: agent.name || undefined,
-    agent_description: agent.description || undefined,
-  };
+    usedIds,
+  });
 }
 
 function buildConstitutionFromSoul(
   soul: Record<string, string>,
   identity: Record<string, string>
-): any {
-  // Extract principles from SOUL.md sections
-  const principles: any[] = [];
-  let priority = 1;
+): ConstitutionV1 {
+  const rawStatements: string[] = [];
 
   for (const [section, content] of Object.entries(soul)) {
     if (section === '_preamble') continue;
-
-    // Extract bullet points as principles
     const bullets = content.split('\n')
       .filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'))
       .map(l => l.replace(/^[\s*-]+/, '').trim())
       .filter(l => l.length > 0);
-
     if (bullets.length > 0) {
-      for (const bullet of bullets) {
-        principles.push({
-          id: `soul_${section.replace(/\s+/g, '_')}_${priority}`,
-          statement: bullet,
-          priority: priority++,
-        });
-      }
+      rawStatements.push(...bullets);
     } else if (content.trim().length > 0) {
-      principles.push({
-        id: `soul_${section.replace(/\s+/g, '_')}`,
-        statement: content.trim().split('\n')[0],
-        priority: priority++,
-      });
+      rawStatements.push(content.trim().split('\n')[0]);
     }
   }
 
-  // Extract voice keywords from identity or soul
+  if (rawStatements.length === 0) {
+    rawStatements.push("Apply the imported SOUL's general taste when no specific principle applies.");
+  }
+
   const voiceKeywords: string[] = [];
-  const voiceSections = ['voice', 'tone', 'personality', 'communication style'];
-  for (const key of voiceSections) {
+  for (const key of ['voice', 'tone', 'personality', 'communication style']) {
     const content = soul[key] || identity[key];
-    if (content) {
-      const words = content.split(/[,\n]/)
-        .map(w => w.replace(/^[\s*-]+/, '').trim())
-        .filter(w => w.length > 0 && w.length < 30);
-      voiceKeywords.push(...words);
-    }
+    if (!content) continue;
+    voiceKeywords.push(
+      ...content.split(/[,\n]/).map(w => w.replace(/^[\s*-]+/, '').trim()).filter(w => w.length > 0 && w.length < 30),
+    );
   }
 
-  // Extract forbidden phrases
   const forbiddenPhrases: string[] = [];
-  const avoidSections = ['avoid', 'don\'t', 'never', 'restrictions', 'taboos'];
-  for (const key of avoidSections) {
+  for (const key of ['avoid', "don't", 'never', 'restrictions', 'taboos']) {
     const content = soul[key];
-    if (content) {
-      const phrases = content.split('\n')
+    if (!content) continue;
+    forbiddenPhrases.push(
+      ...content.split('\n')
         .filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'))
         .map(l => l.replace(/^[\s*-]+/, '').trim())
-        .filter(l => l.length > 0);
-      forbiddenPhrases.push(...phrases);
-    }
+        .filter(l => l.length > 0),
+    );
   }
+
+  const usedIds = new Set<string>();
+  return finalizeImportedConstitution({
+    rawStatements,
+    voiceKeywords: voiceKeywords.slice(0, 10),
+    forbiddenPhrases: forbiddenPhrases.slice(0, 10),
+    importMetadata: {
+      source: 'soul-md',
+      imported_at: new Date().toISOString(),
+    },
+    usedIds,
+  });
+}
+
+function finalizeImportedConstitution(input: {
+  rawStatements: string[];
+  voiceKeywords: string[];
+  forbiddenPhrases: string[];
+  importMetadata: Record<string, unknown>;
+  usedIds: Set<string>;
+}): ConstitutionV1 {
+  const statements = input.rawStatements.slice(0, 20);
+  const principles = statements.map((statement, index) => ({
+    id: principleIdFromStatement(statement, index, input.usedIds),
+    priority: index + 1,
+    statement,
+    rationale: `Imported from ${input.importMetadata.source}`,
+    applies_to: ['*'],
+  }));
 
   return {
     schema_version: 'constitution.v1',
-    generator_version: '0.5.0',
-    principles: principles.slice(0, 20), // Cap at 20 for readability
+    generated_at: new Date().toISOString(),
+    generator_version: CLI_GENERATOR_VERSION,
+    user_scope: 'single_user',
+    principles,
     tone: {
-      voice_keywords: voiceKeywords.slice(0, 10),
-      forbidden_phrases: forbiddenPhrases.slice(0, 10),
+      voice_keywords: input.voiceKeywords,
+      forbidden_phrases: input.forbiddenPhrases,
+      formatting_rules: [],
     },
     tradeoffs: {
-      autonomy_level: 'medium',
+      accuracy_vs_speed: 0.5,
+      cost_sensitivity: 0.5,
+      autonomy_level: 0.5,
     },
     evidence_policy: {
       require_citations_for: [],
+      uncertainty_language_rules: [],
     },
-    taboos: forbiddenPhrases.slice(0, 5),
-    imported_from: 'soul-md',
-    imported_at: new Date().toISOString(),
+    taboos: {
+      never_do: input.forbiddenPhrases.slice(0, 5),
+      must_escalate: [],
+    },
+    extensions: {
+      'x-tastekit-import': input.importMetadata,
+    },
   };
 }

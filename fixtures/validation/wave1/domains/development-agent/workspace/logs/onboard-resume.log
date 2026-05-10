@@ -1,0 +1,28 @@
+- Connecting to LLM...
+✔ Connected to ollama
+Resuming previous session...
+
+TasteKit Onboarding Interview
+
+Domain: development-agent | Depth: guided | LLM: ollama
+Type /save to save and quit, /skip to skip a topic
+
+? You:[8G[9G[2K[G? You: /[9G[10G[2K[G? You: /s[10G[11G[2K[G? You: /sk[11G[12G[2K[G? You: /ski[12G[13G[2K[G? You: /skip[13G[8G[2K[G? You: /skip[13G[14G[15G[16G[17G[18G[13G[2K[G? You: /skip[13G
+[?25h
+  Got it — you’re focused on execution and outcome. That’s a great starting point.
+
+Let’s shift gears: When you’re reviewing code or working with an AI agent, what’s the *one thing* you notice first when reading someone else’s code — whether it’s your own or someone else’s? Is it readability? Test coverage? Naming? Or something else entirely? 
+
+(Just curious — this helps me understand your code quality bar.)
+
+? You:[8G[9G[2K[G? You: /[9G[10G[2K[G? You: /s[10G[11G[2K[G? You: /sa[11G[12G[2K[G? You: /sav[12G[13G[2K[G? You: /save[13G[8G[2K[G? You: /save[13G[2K[G? You: /save[13G
+[?25h
+  Session saved. Run with --resume to continue later.
+
+
+Onboarding complete!
+  Dimensions covered: 1/22
+  Principles extracted: 0
+  Session saved to: .tastekit/ops/session.json
+
+  Run tastekit compile to generate your taste artifacts

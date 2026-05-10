@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TasteKit A/B Agent Demo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172026;
+      --muted: #5c6b73;
+      --line: #d8e0e4;
+      --paper: #f7f9fa;
+      --panel: #ffffff;
+      --taste: #0f8b8d;
+      --base: #9a6b35;
+      --dev: #315c99;
+      --content: #a23e48;
+      --general: #4c6b36;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    main {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 18px 0 22px;
+    }
+    header {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 30px;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    .lede {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.38;
+      max-width: 720px;
+    }
+    .meta {
+      display: grid;
+      gap: 6px;
+      justify-items: end;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 12px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 1px 2px rgba(23, 32, 38, 0.04);
+    }
+    .map-panel { margin-bottom: 12px; }
+    .map-title, .section-title {
+      margin: 0 0 10px;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    svg text { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .task-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 226px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .task-card h2 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+    .pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 10px;
+      color: #fff;
+      background: var(--taste);
+    }
+    .task-card p {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.34;
+      color: var(--muted);
+    }
+    .gates {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 6px;
+      font-size: 11px;
+    }
+    .gates li {
+      display: grid;
+      grid-template-columns: 16px 1fr;
+      gap: 6px;
+      align-items: start;
+    }
+    .check {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #dff3ef;
+      border: 1px solid #8bc7bd;
+      margin-top: 1px;
+    }
+    aside {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .controls {
+      display: grid;
+      gap: 9px;
+    }
+    .control {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 8px;
+      align-items: center;
+      font-size: 11px;
+    }
+    .control-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #eef5f5;
+      color: var(--taste);
+      font-weight: 700;
+    }
+    .score-strip {
+      display: grid;
+      gap: 12px;
+    }
+    .score-row {
+      display: grid;
+      gap: 5px;
+    }
+    .score-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .bars {
+      display: grid;
+      gap: 4px;
+    }
+    .bar {
+      height: 9px;
+      border-radius: 999px;
+      background: #edf1f2;
+      overflow: hidden;
+    }
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+    }
+    .bar.base span { background: var(--base); }
+    .bar.taste span { background: var(--taste); }
+    .legend {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+    .pipeline {
+      margin-top: 12px;
+    }
+    @media (max-width: 900px) {
+      header, .shell, .task-grid { grid-template-columns: 1fr; }
+      .meta { justify-items: start; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>TasteKit A/B Agent Demo</h1>
+        <p class="lede">A paired comparison suite showing how TasteKit changes agent behavior across software work, content work, and mixed general-agent work without changing the harness or model.</p>
+      </div>
+      <div class="meta">
+        <span>Generated 2026-05-10T20:44:05.613Z</span>
+        <span>3 trials per cell</span>
+        <span>AutoClaw with Codex CLI provider when preflight succeeds</span>
+      </div>
+    </header>
+
+    <section class="panel map-panel">
+      <p class="map-title">Experiment Map</p>
+      <svg viewBox="0 0 1080 230" role="img" aria-label="TasteKit A/B experiment map" width="100%" height="230">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#80919a"></path>
+    </marker>
+  </defs>
+  <rect x="20" y="18" width="180" height="184" rx="8" fill="#e8f5f5" stroke="#b8dede"></rect>
+  <text x="110" y="52" text-anchor="middle" font-size="18" font-weight="700" fill="#0f5f60">Taste Profiles</text>
+  <text x="110" y="86" text-anchor="middle" font-size="13" fill="#43666a">dev</text>
+  <text x="110" y="114" text-anchor="middle" font-size="13" fill="#43666a">content</text>
+  <text x="110" y="142" text-anchor="middle" font-size="13" fill="#43666a">general + packs</text>
+
+  <rect x="250" y="18" width="150" height="48" rx="8" fill="#edf2fb" stroke="#b9cae7"></rect>
+  <text x="325" y="48" text-anchor="middle" font-size="15" font-weight="700" fill="#315c99">Dev Agent</text>
+  <rect x="250" y="92" width="150" height="48" rx="8" fill="#f9eaec" stroke="#e6bdc2"></rect>
+  <text x="325" y="122" text-anchor="middle" font-size="15" font-weight="700" fill="#a23e48">Content Agent</text>
+  <rect x="250" y="166" width="150" height="48" rx="8" fill="#edf4e9" stroke="#c9dbc0"></rect>
+  <text x="325" y="196" text-anchor="middle" font-size="15" font-weight="700" fill="#4c6b36">General Agent</text>
+
+  <rect x="470" y="60" width="180" height="108" rx="8" fill="#fff7ed" stroke="#ddb882"></rect>
+  <text x="560" y="98" text-anchor="middle" font-size="16" font-weight="700" fill="#7a4d1f">Baseline</text>
+  <text x="560" y="124" text-anchor="middle" font-size="12" fill="#705b43">AutoClaw</text>
+  <text x="560" y="144" text-anchor="middle" font-size="12" fill="#705b43">no TasteKit</text>
+
+  <rect x="720" y="46" width="170" height="136" rx="8" fill="#ffffff" stroke="#d8e0e4"></rect>
+  <text x="805" y="84" text-anchor="middle" font-size="16" font-weight="700" fill="#172026">Same Harness</text>
+  <text x="805" y="112" text-anchor="middle" font-size="12" fill="#5c6b73">model</text>
+  <text x="805" y="134" text-anchor="middle" font-size="12" fill="#5c6b73">timeout</text>
+  <text x="805" y="156" text-anchor="middle" font-size="12" fill="#5c6b73">workspace</text>
+
+  <rect x="940" y="60" width="120" height="108" rx="8" fill="#eef5f5" stroke="#bddbdb"></rect>
+  <text x="1000" y="98" text-anchor="middle" font-size="15" font-weight="700" fill="#0f5f60">Scored</text>
+  <text x="1000" y="126" text-anchor="middle" font-size="12" fill="#43666a">outputs</text>
+  <text x="1000" y="148" text-anchor="middle" font-size="12" fill="#43666a">diffs + logs</text>
+
+  <path d="M200 74 C220 74 226 42 250 42" stroke="#80919a" stroke-width="2" fill="none" marker-end="url(#arrow)"></path>
+  <path d="M200 114 C220 114 226 116 250 116" stroke="#80919a" stroke-width="2" fill="none" marker-end="url(#arrow)"></path>
+  <path d="M200 154 C220 154 226 190 250 190" stroke="#80919a" stroke-width="2" fill="none" marker-end="url(#arrow)"></path>
+  <path d="M400 42 C520 42 610 50 720 88" stroke="#80919a" stroke-width="2" fill="none" marker-end="url(#arrow)"></path>
+  <path d="M400 116 H720" stroke="#80919a" stroke-width="2" fill="none" marker-end="url(#arrow)"></path>
+  <path d="M400 190 C520 190 610 182 720 150" stroke="#80919a" stroke-width="2" fill="none" marker-end="url(#arrow)"></path>
+  <path d="M650 114 H720" stroke="#80919a" stroke-width="2" fill="none" marker-end="url(#arrow)"></path>
+  <path d="M890 114 H940" stroke="#80919a" stroke-width="2" fill="none" marker-end="url(#arrow)"></path>
+</svg>
+    </section>
+
+    <div class="shell">
+      <div>
+        <section class="panel">
+          <p class="section-title">Task Tracks</p>
+          <div class="task-grid">
+            <article class="task-card">
+  <span class="pill">development-agent</span>
+  <h2>Dev Agent</h2>
+  <p>Fix a real bug, add regression coverage, avoid API churn, and report exact verification.</p>
+  <p><strong>TasteKit signal:</strong> Engineering taste should appear as scoped edits, test discipline, and concise handoff.</p>
+  <ul class="gates">
+    <li><span class="check"></span><span>Unit tests pass</span></li>
+<li><span class="check"></span><span>Regression test added</span></li>
+<li><span class="check"></span><span>Public API unchanged</span></li>
+<li><span class="check"></span><span>Final answer reports verification</span></li>
+  </ul>
+</article>
+<article class="task-card">
+  <span class="pill">content-agent</span>
+  <h2>Content Agent</h2>
+  <p>Draft audience-specific launch or founder-update content from source material.</p>
+  <p><strong>TasteKit signal:</strong> Editorial taste should appear as voice fit, evidence restraint, and anti-generic language.</p>
+  <ul class="gates">
+    <li><span class="check"></span><span>Length and format constraints met</span></li>
+<li><span class="check"></span><span>Banned phrases absent</span></li>
+<li><span class="check"></span><span>Unsupported claims avoided</span></li>
+<li><span class="check"></span><span>Voice brief reflected</span></li>
+  </ul>
+</article>
+<article class="task-card">
+  <span class="pill">general-agent + development/content capability packs</span>
+  <h2>General Agent</h2>
+  <p>Handle a mixed task: inspect a code change, summarize impact, then draft release copy.</p>
+  <p><strong>TasteKit signal:</strong> General taste should survive context switching while invoking task-specific capability skills.</p>
+  <ul class="gates">
+    <li><span class="check"></span><span>Dev subtask passes checks</span></li>
+<li><span class="check"></span><span>Content subtask meets voice rules</span></li>
+<li><span class="check"></span><span>Context switching remains coherent</span></li>
+<li><span class="check"></span><span>Capability evidence captured</span></li>
+  </ul>
+</article>
+          </div>
+        </section>
+        <section class="panel pipeline">
+          <p class="section-title">Run Pipeline</p>
+          <svg viewBox="0 0 850 128" role="img" aria-label="Demo run pipeline" width="100%" height="128">
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#80919a"></path>
+    </marker>
+  </defs>
+  <path d="M58 54 H160" stroke="#80919a" stroke-width="2" marker-end="url(#arrow2)"></path>
+<path d="M213 54 H315" stroke="#80919a" stroke-width="2" marker-end="url(#arrow2)"></path>
+<path d="M368 54 H470" stroke="#80919a" stroke-width="2" marker-end="url(#arrow2)"></path>
+<path d="M523 54 H625" stroke="#80919a" stroke-width="2" marker-end="url(#arrow2)"></path>
+<path d="M678 54 H780" stroke="#80919a" stroke-width="2" marker-end="url(#arrow2)"></path>
+  <g>
+      <circle cx="32" cy="54" r="24" fill="#eef5f5" stroke="#bddbdb"></circle>
+      <text x="32" y="60" text-anchor="middle" font-size="15" font-weight="700" fill="#0f5f60">1</text>
+      <text x="32" y="100" text-anchor="middle" font-size="12" fill="#5c6b73">Profiles</text>
+    </g>
+<g>
+      <circle cx="187" cy="54" r="24" fill="#eef5f5" stroke="#bddbdb"></circle>
+      <text x="187" y="60" text-anchor="middle" font-size="15" font-weight="700" fill="#0f5f60">2</text>
+      <text x="187" y="100" text-anchor="middle" font-size="12" fill="#5c6b73">Export</text>
+    </g>
+<g>
+      <circle cx="342" cy="54" r="24" fill="#eef5f5" stroke="#bddbdb"></circle>
+      <text x="342" y="60" text-anchor="middle" font-size="15" font-weight="700" fill="#0f5f60">3</text>
+      <text x="342" y="100" text-anchor="middle" font-size="12" fill="#5c6b73">Paired Runs</text>
+    </g>
+<g>
+      <circle cx="497" cy="54" r="24" fill="#eef5f5" stroke="#bddbdb"></circle>
+      <text x="497" y="60" text-anchor="middle" font-size="15" font-weight="700" fill="#0f5f60">4</text>
+      <text x="497" y="100" text-anchor="middle" font-size="12" fill="#5c6b73">Artifacts</text>
+    </g>
+<g>
+      <circle cx="652" cy="54" r="24" fill="#eef5f5" stroke="#bddbdb"></circle>
+      <text x="652" y="60" text-anchor="middle" font-size="15" font-weight="700" fill="#0f5f60">5</text>
+      <text x="652" y="100" text-anchor="middle" font-size="12" fill="#5c6b73">Scoring</text>
+    </g>
+<g>
+      <circle cx="807" cy="54" r="24" fill="#eef5f5" stroke="#bddbdb"></circle>
+      <text x="807" y="60" text-anchor="middle" font-size="15" font-weight="700" fill="#0f5f60">6</text>
+      <text x="807" y="100" text-anchor="middle" font-size="12" fill="#5c6b73">One-Pager</text>
+    </g>
+</svg>
+        </section>
+      </div>
+
+      <aside>
+        <section class="panel">
+          <p class="section-title">Fairness Controls</p>
+          <div class="controls">
+            <div class="control"><span class="control-icon">=</span><span>Same model</span></div>
+<div class="control"><span class="control-icon">=</span><span>Same harness</span></div>
+<div class="control"><span class="control-icon">=</span><span>Same task</span></div>
+<div class="control"><span class="control-icon">=</span><span>Fresh workspace</span></div>
+<div class="control"><span class="control-icon">=</span><span>Same timeout</span></div>
+<div class="control"><span class="control-icon">=</span><span>Same evaluator</span></div>
+          </div>
+        </section>
+        <section class="panel">
+          <p class="section-title">Score Strip</p>
+          <div class="legend">
+            <span><i class="dot" style="background:var(--base)"></i>Baseline</span>
+            <span><i class="dot" style="background:var(--taste)"></i>TasteKit</span>
+          </div>
+          <div class="score-strip">
+            <div class="score-row">
+  <div class="score-label"><strong>Dev Agent</strong><span>44 / 86</span></div>
+  <div class="bars">
+    <div class="bar base"><span style="width:44%"></span></div>
+    <div class="bar taste"><span style="width:86%"></span></div>
+  </div>
+</div>
+<div class="score-row">
+  <div class="score-label"><strong>Content Agent</strong><span>51 / 88</span></div>
+  <div class="bars">
+    <div class="bar base"><span style="width:51%"></span></div>
+    <div class="bar taste"><span style="width:88%"></span></div>
+  </div>
+</div>
+<div class="score-row">
+  <div class="score-label"><strong>General Agent</strong><span>48 / 82</span></div>
+  <div class="bars">
+    <div class="bar base"><span style="width:48%"></span></div>
+    <div class="bar taste"><span style="width:82%"></span></div>
+  </div>
+</div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

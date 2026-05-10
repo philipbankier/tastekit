@@ -14,12 +14,39 @@ interface OllamaTagsResponse {
   models?: Array<{ name?: string; model?: string }>;
 }
 
+type CanonicalOnboardingDepth = 'quick' | 'guided' | 'operator';
+type OnboardingDepthInput = CanonicalOnboardingDepth | 'full' | 'full-taste-composition';
+
+const DEPTH_CHOICES: OnboardingDepthInput[] = ['quick', 'guided', 'operator', 'full', 'full-taste-composition'];
+
+function normalizeOnboardingDepth(depth: string): CanonicalOnboardingDepth {
+  return depth === 'full' || depth === 'full-taste-composition'
+    ? 'operator'
+    : depth as CanonicalOnboardingDepth;
+}
+
+function formatDepthLabel(depth: CanonicalOnboardingDepth): string {
+  switch (depth) {
+    case 'quick':
+      return 'Quick';
+    case 'guided':
+      return 'Guided';
+    case 'operator':
+      return 'Full Taste Composition';
+  }
+}
+
 export const initCommand = new Command('init')
   .description('Initialize a new TasteKit workspace')
   .argument('[path]', 'Path to initialize workspace', '.')
   .option('--domain <id>', 'Domain ID (skip interactive selection)')
-  .addOption(createOption('--depth <type>', 'Onboarding depth').choices(['quick', 'guided', 'operator']))
-  .action(async (path: string, options: { domain?: string; depth?: string }) => {
+  .option(
+    '--capability <pack>',
+    'Optional capability pack for general-agent; repeat for multiple packs',
+    (value: string, previous: string[] = []) => [...previous, value],
+  )
+  .addOption(createOption('--depth <type>', 'Onboarding depth').choices(DEPTH_CHOICES))
+  .action(async (path: string, options: { domain?: string; depth?: string; capability?: string[] }) => {
     try {
       const workspacePath = join(process.cwd(), path, '.tastekit');
 
@@ -59,9 +86,9 @@ export const initCommand = new Command('init')
       }
 
       // Depth selection
-      let depth: string;
+      let depth: CanonicalOnboardingDepth;
       if (options.depth) {
-        depth = options.depth;
+        depth = normalizeOnboardingDepth(options.depth);
       } else {
         const { selectedDepth } = await inquirer.prompt([{
           type: 'list',
@@ -70,7 +97,7 @@ export const initCommand = new Command('init')
           choices: [
             { name: 'Quick (~5 min) - Essential preferences only', value: 'quick' },
             { name: 'Guided (~15 min) - Thorough profile', value: 'guided' },
-            { name: 'Operator (~30 min) - Deep exploration with examples', value: 'operator' },
+            { name: 'Full Taste Composition - Deep exploration with examples', value: 'operator' },
           ],
           default: 'guided',
         }]);
@@ -144,6 +171,11 @@ export const initCommand = new Command('init')
         },
       };
 
+      const capabilityPacks = [...new Set(options.capability ?? [])];
+      if (capabilityPacks.length > 0) {
+        config.capability_packs = capabilityPacks;
+      }
+
       if (llmConfig) {
         config.llm_provider = llmConfig;
       }
@@ -157,7 +189,10 @@ export const initCommand = new Command('init')
 
       console.log('');
       detail('Domain', domainId);
-      detail('Depth', depth);
+      if (capabilityPacks.length > 0) {
+        detail('Capability packs', capabilityPacks.join(', '));
+      }
+      detail('Depth', formatDepthLabel(depth));
       if (llmConfig) {
         detail('LLM', `${llmConfig.provider}${llmConfig.model ? ` (${llmConfig.model})` : ''}`);
       }

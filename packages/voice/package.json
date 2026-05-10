@@ -1,22 +1,20 @@
 {
   "name": "@actrun_ai/tastekit-voice",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Voice I/O layer for TasteKit onboarding — ElevenLabs, Whisper, Piper",
   "type": "module",
   "license": "MIT",
   "author": "TasteKit Contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/philipbankier/tastekit.git",
+    "url": "https://github.com/tastekit/tastekit.git",
     "directory": "packages/voice"
   },
   "publishConfig": {
     "access": "public"
   },
   "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
+    "dist"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

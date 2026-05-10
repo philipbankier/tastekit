@@ -1,16 +1,16 @@
-# Content Agent Example
+# Content-Style Agent Example
 
-A full content creation agent with guided onboarding, skills, playbooks, and MCP tool integration.
+This v1 example uses the shipped `content-agent` domain for content-style workflows.
 
 ## Setup
 
 ```bash
 cd examples/content-agent
 
-# Initialize for content creation with guided depth
+# Initialize with the content domain
 tastekit init --domain content-agent --depth guided
 
-# Run the 15-minute LLM interview
+# Run the guided LLM interview
 tastekit onboard
 
 # Compile all artifacts
@@ -19,22 +19,15 @@ tastekit compile
 
 ## What You Get
 
-The `guided` depth covers 13 dimensions (5 quick + 8 guided), producing a thorough content profile:
+The `guided` depth produces a content-focused profile with brand voice, channel strategy, evidence policy, and approval boundaries:
 
 ```
 .tastekit/
-├── artifacts/
-│   ├── constitution.v1.json     # Principles, tone, brand voice
-│   ├── guardrails.v1.yaml       # Content approval rules
-│   ├── memory.v1.yaml           # What the agent remembers about your style
-│   └── playbooks/
-│       ├── simple-post.v1.yaml          # Single post creation
-│       ├── research-and-post.v1.yaml    # Research-informed content
-│       └── content-calendar.v1.yaml     # Multi-day planning
+├── constitution.v1.json     # Principles, tone, tradeoffs, taboos
+├── guardrails.v1.yaml       # Approval and safety rules
+├── memory.v1.yaml           # What the agent remembers about your style
 ├── skills/
-│   ├── manifest.v1.yaml
-│   ├── research-trends/SKILL.md
-│   └── generate-post-options/SKILL.md
+│   └── manifest.v1.yaml
 └── session.json
 ```
 
@@ -42,8 +35,8 @@ The `guided` depth covers 13 dimensions (5 quick + 8 guided), producing a thorou
 
 | Skill | Risk | Description |
 |:---|:---:|:---|
-| `research-trends` | low | Research current trends and topics in your niche |
-| `generate-post-options` | low | Generate multiple post variations for review |
+| `content-voice-brief` | low | Turn source material and taste into an editorial brief |
+| `content-draft-options` | low | Generate multiple content options from the brief |
 
 Each skill uses progressive disclosure:
 - **Minimal Context** (always loaded): Skill name, description, required tools
@@ -66,7 +59,7 @@ Multi-day planning: analyze recent performance → identify content gaps → pla
 
 ## Adding MCP Tools
 
-For richer content creation, add web search:
+For richer content creation, add web search if you have an MCP server available:
 
 ```bash
 # Add a web search MCP server

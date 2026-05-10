@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tastekit.dev/schemas/constitution.v1.json",
+  "title": "TasteKit Constitution v1",
+  "description": "The locked artifact contract for a single user's taste profile. Read by all TasteKit runtime adapters (Claude Code, Hermes, future Codex). Versioning: schema_version is the wire-incompatibility breakpoint; generator_version is semver of the producing TasteKit. Forward-compat additions go in the open `extensions` slot. Readers MUST ignore unknown keys inside `extensions` without failing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "generator_version",
+    "user_scope",
+    "principles",
+    "tone",
+    "tradeoffs",
+    "evidence_policy",
+    "taboos"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "constitution.v1",
+      "description": "Wire format version. Bump to constitution.v2 only on incompatible change (renamed/removed required field, type change, broken enum)."
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+      "description": "UTC ISO 8601 with millisecond precision (3 digits): YYYY-MM-DDTHH:MM:SS.sssZ. Matches Date.prototype.toISOString() output exactly. Calendar validity (e.g. rejecting 2026-02-30) cannot be expressed in portable JSON Schema and is enforced only by Zod's runtime refinement layer."
+    },
+    "generator_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "description": "Semver 2.0.0 of the TasteKit version that produced this artifact. Leading zeros forbidden. Supports prerelease (-alpha.1) and build metadata (+sha.deadbeef). Bumping is internal to the producer; does not change wire format (that's schema_version)."
+    },
+    "user_scope": {
+      "type": "string",
+      "const": "single_user",
+      "description": "v1 supports single_user only. Multi-user comes in v2."
+    },
+    "principles": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "description": "Ordered principles (priority 1 = highest). At least one required; cap at 20 to keep the artifact useful for prompting.",
+      "items": { "$ref": "#/$defs/Principle" }
+    },
+    "tone": { "$ref": "#/$defs/Tone" },
+    "tradeoffs": { "$ref": "#/$defs/Tradeoffs" },
+    "evidence_policy": { "$ref": "#/$defs/EvidencePolicy" },
+    "taboos": { "$ref": "#/$defs/Taboos" },
+    "trace_map": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Provenance: maps principle_id and section keys to source dimensions / interview turns. Optional but strongly recommended."
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Forward-compat slot for Phase 2 features (memory hints, drift thresholds, perf budgets). Readers MUST tolerate unknown keys here. Reserved keys (informational): `memory`, `drift`, `perf`, `x-<runtime>-*`."
+    }
+  },
+  "$defs": {
+    "Principle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "priority", "statement", "applies_to"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable principle identifier. Slug-form, derived from statement (e.g., \"clarity_over_completeness\"). Numeric-only IDs (`principle_0`) are not allowed by the producer; readers should still accept any non-empty string for forward compatibility with hand-edited artifacts."
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Priority (1 = highest). Within a constitution, priorities should be unique and form a 1..N sequence."
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The principle statement. One sentence imperative."
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Why this principle matters. Each principle's rationale must be distinct from the others (validator-enforced at extraction time)."
+        },
+        "applies_to": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tags: skill_ids, domains, or contexts. Use [\"*\"] for global."
+        },
+        "examples_good": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Positive examples specific to this principle. Must not duplicate examples_good of another principle."
+        },
+        "examples_bad": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Negative examples specific to this principle."
+        }
+      }
+    },
+    "Tone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["voice_keywords", "forbidden_phrases", "formatting_rules"],
+      "properties": {
+        "voice_keywords": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Keywords describing voice/tone."
+        },
+        "forbidden_phrases": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Phrases to never use."
+        },
+        "formatting_rules": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Formatting preferences (markdown style, code-block usage, bullet vs prose)."
+        }
+      }
+    },
+    "Tradeoffs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accuracy_vs_speed", "cost_sensitivity", "autonomy_level"],
+      "properties": {
+        "accuracy_vs_speed": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = speed, 1 = accuracy."
+        },
+        "cost_sensitivity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = cost-insensitive, 1 = highly cost-sensitive."
+        },
+        "autonomy_level": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = always ask, 1 = fully autonomous."
+        }
+      }
+    },
+    "EvidencePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["require_citations_for", "uncertainty_language_rules"],
+      "properties": {
+        "require_citations_for": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Domains/types requiring citations."
+        },
+        "uncertainty_language_rules": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "How to express uncertainty."
+        }
+      }
+    },
+    "Taboos": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["never_do", "must_escalate"],
+      "properties": {
+        "never_do": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Absolute prohibitions. Agent must never take these actions under any circumstances."
+        },
+        "must_escalate": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Actions requiring human approval before proceeding. Distinct from never_do; the agent pauses and asks rather than refusing outright."
+        }
+      }
+    }
+  }
+}

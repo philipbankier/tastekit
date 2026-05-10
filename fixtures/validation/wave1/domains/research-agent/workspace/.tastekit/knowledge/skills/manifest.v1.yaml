@@ -1,0 +1,38 @@
+schema_version: skills_manifest.v1
+skills:
+  - compatible_runtimes:
+      - claude-code
+      - openclaw
+      - manus
+    context_model: inherit
+    description: Gather and synthesize information from web sources on a given topic
+    feeds_into:
+      - competitive-analysis
+    name: Web Research
+    pipeline_phase: capture
+    required_tools:
+      - web-search
+    risk_level: low
+    skill_id: web-research
+    tags:
+      - research
+      - web-search
+      - information-gathering
+  - compatible_runtimes:
+      - claude-code
+      - openclaw
+      - manus
+    context_model: inherit
+    description: Analyze competitors and market landscape with structured comparison frameworks
+    name: Competitive Analysis
+    pipeline_phase: process
+    prerequisites:
+      - web-research
+    required_tools:
+      - web-search
+    risk_level: low
+    skill_id: competitive-analysis
+    tags:
+      - research
+      - competitive-intelligence
+      - market-analysis

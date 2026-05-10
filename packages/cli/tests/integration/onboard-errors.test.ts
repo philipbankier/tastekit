@@ -16,6 +16,19 @@ describe('tastekit onboard error handling', () => {
     }
   });
 
+  it('accepts full-taste-composition depth alias before workspace validation', async () => {
+    const root = makeTempWorkspace('onboard-full-depth-alias');
+
+    try {
+      const result = await runCli(['onboard', '--depth', 'full-taste-composition'], { cwd: root });
+      expect(result.code).not.toBe(0);
+      expect(result.stderr + result.stdout).toContain('No TasteKit workspace found');
+      expect(result.stderr + result.stdout).not.toContain('invalid option');
+    } finally {
+      cleanupWorkspace(root);
+    }
+  });
+
   it('fails when workspace config is missing', async () => {
     const root = makeTempWorkspace('onboard-no-config');
 

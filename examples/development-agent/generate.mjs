@@ -96,7 +96,7 @@ class ClaudePrintProvider {
 const DOMAIN_ID = 'development-agent';
 const DEPTH = 'guided';
 const WORKSPACE = join(__dirname, '.tastekit');
-const SESSION_PATH = join(WORKSPACE, 'ops', 'session.json');
+const SESSION_PATH = join(WORKSPACE, 'session.json');
 
 // --- Pre-written answers ---
 // These are thoughtful, opinionated answers about development philosophy.
@@ -147,13 +147,12 @@ async function main() {
   // Step 1: Create workspace structure (mirrors tastekit init)
   console.log('Step 1: Creating workspace structure...');
   const dirs = [
-    'self',
-    'knowledge/skills',
-    'knowledge/playbooks',
-    'ops/traces',
-    'ops/drift',
-    'ops/observations',
-    'ops/sessions',
+    'skills',
+    'playbooks',
+    'traces',
+    'drift',
+    'observations',
+    'sessions',
   ];
   for (const dir of dirs) {
     mkdirSync(join(WORKSPACE, dir), { recursive: true });
@@ -172,7 +171,7 @@ llm_provider:
   provider: anthropic
 `;
   writeFileSync(join(WORKSPACE, 'tastekit.yaml'), yamlContent);
-  console.log('  Created .tastekit/ workspace with three-space layout\n');
+  console.log('  Created .tastekit/ workspace\n');
 
   // Step 2: Create LLM provider
   console.log('Step 2: Initializing Claude print mode provider...');
@@ -253,7 +252,7 @@ llm_provider:
   console.log(`\n  Dimensions covered: ${covered}/${total}${skipped > 0 ? ` (${skipped} skipped)` : ''}`);
   console.log(`  Principles extracted: ${structuredAnswers.principles?.length ?? 0}`);
   console.log(`  Voice keywords: ${structuredAnswers.tone?.voice_keywords?.join(', ') ?? 'none'}`);
-  console.log(`  Session saved to: .tastekit/ops/session.json`);
+  console.log(`  Session saved to: .tastekit/session.json`);
 
   console.log('\n=== Interview complete! ===');
   console.log('\nNext steps (run from this directory):');

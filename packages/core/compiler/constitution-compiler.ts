@@ -1,6 +1,29 @@
-import { ConstitutionV1 } from '../schemas/constitution.js';
-import { SessionState } from '../schemas/workspace.js';
-import { StructuredAnswers } from '../interview/interviewer.js';
+import { ConstitutionV1, ConstitutionV1Schema } from '../schemas/constitution.js';
+import type { DimensionCoverage, SessionState } from '../schemas/workspace.js';
+import type { StructuredAnswers } from '../interview/interviewer.js';
+
+type CompositionMode = 'quick' | 'guided' | 'operator' | 'full_taste_composition';
+
+interface TasteKitCompositionDimension {
+  dimension_id: string;
+  status: 'not_started' | 'in_progress' | 'covered' | 'skipped';
+  summary?: string;
+  facts?: string[];
+  anti_signals?: string[];
+  confidence?: number;
+  confidence_threshold?: number;
+  source_turns?: number[];
+}
+
+interface TasteKitCompositionExtension {
+  schema_version: 'tastekit.composition.v1';
+  mode: CompositionMode;
+  domain_id?: string;
+  domain_specific: Record<string, unknown>;
+  dimensions: Record<string, TasteKitCompositionDimension>;
+}
+
+const COMPOSITION_EXTENSION_KEY = 'x-tastekit-composition';
 
 /**
  * Constitution compiler
@@ -14,17 +37,51 @@ export function compileConstitution(
   session: SessionState,
   generatorVersion: string
 ): ConstitutionV1 {
-  // If session has structured_answers from LLM interview, use the rich path
-  if (session.structured_answers) {
-    return compileFromStructuredAnswers(
-      session.structured_answers as StructuredAnswers,
-      session,
-      generatorVersion,
+  const result = session.structured_answers
+    ? compileFromStructuredAnswers(
+        session.structured_answers as StructuredAnswers,
+        session,
+        generatorVersion,
+      )
+    : compileLegacy(session, generatorVersion);
+
+  const validation = ConstitutionV1Schema.safeParse(result);
+  if (!validation.success) {
+    const issues = validation.error.issues
+      .map(i => `${i.path.join('.')}: ${i.message}`)
+      .join('; ');
+    throw new Error(
+      `compileConstitution produced an artifact that fails ConstitutionV1Schema: ${issues}. ` +
+      `This is a producer bug — the schema is the lock. Fix the compiler, do not loosen the schema.`
     );
   }
+  return validation.data;
+}
 
-  // Otherwise, fall back to legacy flat-answer compilation
-  return compileLegacy(session, generatorVersion);
+function principleIdFromStatement(statement: string, index: number, used: Set<string>): string {
+  const slug = statement
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 40);
+  const base = slug.length > 0 ? slug : `unnamed_principle_${index}`;
+  let candidate = base;
+  let suffix = 2;
+  while (used.has(candidate)) {
+    candidate = `${base}_${suffix++}`;
+  }
+  used.add(candidate);
+  return candidate;
+}
+
+function fallbackPrinciple(): ConstitutionV1['principles'][number] {
+  return {
+    id: 'apply_user_taste',
+    priority: 1,
+    statement: 'Apply the user\'s general taste and preferences when no specific principle applies.',
+    rationale: 'Default fallback when onboarding produced no explicit principles. Re-run onboarding to capture concrete principles.',
+    applies_to: ['*'],
+  };
 }
 
 /**
@@ -37,15 +94,19 @@ function compileFromStructuredAnswers(
   session: SessionState,
   generatorVersion: string,
 ): ConstitutionV1 {
-  const principles = sa.principles.map((p, index) => ({
-    id: `principle_${index}`,
-    priority: p.priority,
+  const usedIds = new Set<string>();
+  const principles: ConstitutionV1['principles'] = sa.principles.map((p, index) => ({
+    id: principleIdFromStatement(p.statement, index, usedIds),
+    priority: index + 1,
     statement: p.statement,
     rationale: p.rationale,
     applies_to: p.applies_to,
     examples_good: p.examples_good,
     examples_bad: p.examples_bad,
   }));
+  if (principles.length === 0) {
+    principles.push(fallbackPrinciple());
+  }
 
   const tone = {
     voice_keywords: sa.tone.voice_keywords,
@@ -78,13 +139,22 @@ function compileFromStructuredAnswers(
 
   principles.forEach((p, i) => {
     const source = sa.principles[i];
-    trace_map[p.id] = { source_dimension: source.source_dimension };
+    trace_map[p.id] = {
+      source_dimension: source?.source_dimension ?? 'fallback_empty_principles',
+    };
   });
 
   trace_map['_tone'] = { source_dimensions: sa.tone.source_dimensions };
   trace_map['_tradeoffs'] = { source_dimensions: sa.tradeoffs.source_dimensions };
   trace_map['_evidence_policy'] = { source_dimensions: sa.evidence_policy.source_dimensions };
   trace_map['_taboos'] = { source_dimensions: sa.taboos.source_dimensions };
+
+  const composition = buildCompositionExtension(sa, session);
+  if (Object.keys(composition.domain_specific).length > 0) {
+    trace_map['_domain_specific'] = {
+      source_dimensions: Object.keys(composition.domain_specific),
+    };
+  }
 
   return {
     schema_version: 'constitution.v1',
@@ -97,7 +167,118 @@ function compileFromStructuredAnswers(
     evidence_policy,
     taboos,
     trace_map,
+    extensions: {
+      [COMPOSITION_EXTENSION_KEY]: composition,
+    },
   };
+}
+
+function buildCompositionExtension(
+  sa: StructuredAnswers,
+  session: SessionState,
+): TasteKitCompositionExtension {
+  const domainSpecific = toJsonSafeRecord(sa.domain_specific);
+  return {
+    schema_version: 'tastekit.composition.v1',
+    mode: session.depth as CompositionMode,
+    ...(session.domain_id ? { domain_id: session.domain_id } : {}),
+    domain_specific: domainSpecific,
+    dimensions: buildCompositionDimensions(session.interview?.dimension_coverage ?? []),
+  };
+}
+
+function buildCompositionDimensions(
+  coverage: DimensionCoverage[],
+): Record<string, TasteKitCompositionDimension> {
+  const dimensions: Record<string, TasteKitCompositionDimension> = {};
+
+  for (const dim of coverage) {
+    if (!dim.dimension_id) continue;
+
+    const entry: TasteKitCompositionDimension = {
+      dimension_id: dim.dimension_id,
+      status: dim.status,
+    };
+
+    if (dim.summary) entry.summary = dim.summary;
+
+    const facts = dim.extracted_facts?.filter(isNonEmptyString);
+    if (facts && facts.length > 0) entry.facts = facts;
+
+    const antiSignals = dim.anti_signals?.filter(isNonEmptyString);
+    if (antiSignals && antiSignals.length > 0) entry.anti_signals = antiSignals;
+
+    if (Number.isFinite(dim.confidence)) entry.confidence = dim.confidence;
+    if (Number.isFinite(dim.confidence_threshold)) {
+      entry.confidence_threshold = dim.confidence_threshold;
+    }
+
+    const sourceTurns = uniqueSortedNumbers([
+      ...(dim.relevant_turns ?? []),
+      ...(dim.signals ?? []).map(signal => signal.turn_number),
+    ]);
+    if (sourceTurns.length > 0) entry.source_turns = sourceTurns;
+
+    dimensions[dim.dimension_id] = entry;
+  }
+
+  return dimensions;
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function uniqueSortedNumbers(values: unknown[]): number[] {
+  return Array.from(new Set(
+    values.filter((value): value is number => (
+      typeof value === 'number' && Number.isInteger(value) && value >= 0
+    )),
+  )).sort((a, b) => a - b);
+}
+
+function toJsonSafeRecord(value: unknown): Record<string, unknown> {
+  if (!isPlainRecord(value)) return {};
+
+  const result: Record<string, unknown> = {};
+  for (const [key, child] of Object.entries(value)) {
+    const safe = toJsonSafeValue(child, new Set());
+    if (safe !== undefined) result[key] = safe;
+  }
+  return result;
+}
+
+function toJsonSafeValue(value: unknown, seen: Set<object>): unknown {
+  if (value === null) return null;
+  if (typeof value === 'string' || typeof value === 'boolean') return value;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : undefined;
+
+  if (Array.isArray(value)) {
+    const safeArray = value
+      .map(item => toJsonSafeValue(item, seen))
+      .filter(item => item !== undefined);
+    return safeArray;
+  }
+
+  if (isPlainRecord(value)) {
+    if (seen.has(value)) return undefined;
+    seen.add(value);
+    const safeObject: Record<string, unknown> = {};
+    for (const [key, child] of Object.entries(value)) {
+      const safe = toJsonSafeValue(child, seen);
+      if (safe !== undefined) safeObject[key] = safe;
+    }
+    seen.delete(value);
+    return safeObject;
+  }
+
+  return undefined;
+}
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 }
 
 /**
@@ -110,34 +291,37 @@ function compileLegacy(
 ): ConstitutionV1 {
   const { answers } = session;
 
-  // Parse principles from onboarding
+  const usedIds = new Set<string>();
   const principleStatements = answers.goals?.key_principles
-    ? answers.goals.key_principles.split(',').map((p: string) => p.trim())
+    ? answers.goals.key_principles.split(',').map((p: string) => p.trim()).filter(Boolean)
     : [];
 
-  const principles = principleStatements.map((statement: string, index: number): any => ({
-    id: `principle_${index + 1}`,
-    priority: index + 1,
+  const principles: ConstitutionV1['principles'] = principleStatements.map((statement: string, index: number) => ({
+    id: principleIdFromStatement(statement, index, usedIds),
+    priority: 1,
     statement,
     rationale: `Derived from onboarding session ${session.session_id}`,
     applies_to: ['*'],
   }));
 
-  // Add primary goal as top principle
   if (answers.goals?.primary_goal) {
+    const goalStatement = `Primary goal: ${answers.goals.primary_goal}`;
     principles.unshift({
-      id: 'principle_0',
+      id: principleIdFromStatement(goalStatement, 0, usedIds),
       priority: 1,
-      statement: `Primary goal: ${answers.goals.primary_goal}`,
+      statement: goalStatement,
       rationale: 'User-defined primary goal',
       applies_to: ['*'],
     });
-
-    // Adjust priorities
-    principles.forEach((p: any, i: number) => {
-      p.priority = i + 1;
-    });
   }
+
+  if (principles.length === 0) {
+    principles.push(fallbackPrinciple());
+  }
+
+  principles.forEach((p, i) => {
+    p.priority = i + 1;
+  });
 
   // Compile tone
   const voiceKeywords = answers.tone?.voice_keywords || [];

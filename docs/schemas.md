@@ -55,7 +55,7 @@ Located in `.tastekit/`, this file defines the trust policy for the workspace. I
 
 ### `playbook.v1.yaml`
 
-Playbooks are runtime-agnostic plans that define a sequence of steps for an agent to follow to accomplish a specific task. They are stored in `.tastekit/artifacts/playbooks/` and can be triggered by events, schedules, or manual invocation.
+Playbooks are runtime-agnostic plans that define a sequence of steps for an agent to follow to accomplish a specific task. They are stored in `.tastekit/playbooks/` and can be triggered by events, schedules, or manual invocation.
 
 ### `evalpack.v1.yaml`
 

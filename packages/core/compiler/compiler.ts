@@ -1,8 +1,11 @@
 import { join } from 'path';
+import { existsSync, readFileSync } from 'fs';
 import { SessionState } from '../schemas/workspace.js';
+import { ConstitutionV1Schema } from '../schemas/constitution.js';
 import { atomicWrite } from '../utils/filesystem.js';
 import { ensureDir, resolvePlaybooksPath, resolveSkillsPath } from '../utils/filesystem.js';
 import { stringifyYAML } from '../utils/yaml.js';
+import { mergeManagedRegion } from '../generators/managed-region.js';
 import { compileConstitution } from './constitution-compiler.js';
 import { compileGuardrails } from './guardrails-compiler.js';
 import { compileMemoryPolicy } from './memory-compiler.js';
@@ -42,6 +45,27 @@ export interface CompilationResult {
 /** All compiler step IDs in execution order */
 const ALL_STEPS = ['constitution', 'guardrails', 'memory', 'skills', 'playbooks'] as const;
 
+/**
+ * Steps that consume `constitution.v1.json` and must rerun if the constitution
+ * is invalidated on resume. Order does not matter (the main loop re-iterates
+ * `ALL_STEPS` and runs whichever are missing from `completed_steps`).
+ */
+const STEPS_DEPENDENT_ON_CONSTITUTION = ['constitution', 'skills', 'playbooks'];
+
+function isCachedConstitutionValid(constitutionPath: string): boolean {
+  try {
+    const data = JSON.parse(readFileSync(constitutionPath, 'utf-8'));
+    return ConstitutionV1Schema.safeParse(data).success;
+  } catch {
+    return false;
+  }
+}
+
+function mergeMarkdownArtifact(path: string, generated: string): string {
+  const existing = existsSync(path) ? readFileSync(path, 'utf-8') : undefined;
+  return mergeManagedRegion(existing, generated);
+}
+
 export async function compile(options: CompilationOptions): Promise<CompilationResult> {
   const { workspacePath, session, generatorVersion, resume } = options;
   ensureDir(workspacePath);
@@ -64,6 +88,21 @@ export async function compile(options: CompilationOptions): Promise<CompilationR
   } else {
     derivation = buildDerivationState(session, generatorVersion);
     writeDerivationState(workspacePath, derivation);
+  }
+
+  // Resume safety: invalidate the cached `constitution` step if the on-disk
+  // artifact fails the locked schema. Otherwise downstream steps (skills,
+  // playbooks, SOUL.md, AGENTS.md) would consume an out-of-spec file.
+  // When invalidating constitution, also invalidate every step that consumes
+  // it, so downstream artifacts get regenerated against the new constitution.
+  if (derivation.completed_steps.includes('constitution')) {
+    const constitutionPath = join(workspacePath, 'constitution.v1.json');
+    if (!existsSync(constitutionPath) || !isCachedConstitutionValid(constitutionPath)) {
+      derivation.completed_steps = derivation.completed_steps.filter(
+        s => !STEPS_DEPENDENT_ON_CONSTITUTION.includes(s),
+      );
+      writeDerivationState(workspacePath, derivation);
+    }
   }
 
   // Run each compilation step, skipping already-completed ones
@@ -92,7 +131,6 @@ export async function compile(options: CompilationOptions): Promise<CompilationR
   try {
     const { generateSoulMd } = await import('../generators/soul-md-generator.js');
     const constitutionPath = join(workspacePath, 'constitution.v1.json');
-    const { readFileSync, existsSync } = await import('fs');
 
     if (existsSync(constitutionPath)) {
       constitution = JSON.parse(readFileSync(constitutionPath, 'utf-8'));
@@ -101,7 +139,8 @@ export async function compile(options: CompilationOptions): Promise<CompilationR
         constitution: constitution as any,
         domain_id: session.domain_id,
       });
-      atomicWrite(join(workspacePath, '..', 'SOUL.md'), soulMd);
+      const soulPath = join(workspacePath, '..', 'SOUL.md');
+      atomicWrite(soulPath, mergeMarkdownArtifact(soulPath, soulMd));
       if (!derivation.artifacts_written.includes('SOUL.md')) {
         derivation.artifacts_written.push('SOUL.md');
       }
@@ -119,7 +158,8 @@ export async function compile(options: CompilationOptions): Promise<CompilationR
         constitution: constitution as any,
         domain_id: session.domain_id,
       });
-      atomicWrite(join(workspacePath, '..', 'AGENTS.md'), agentsMd);
+      const agentsPath = join(workspacePath, '..', 'AGENTS.md');
+      atomicWrite(agentsPath, mergeMarkdownArtifact(agentsPath, agentsMd));
       if (!derivation.artifacts_written.includes('AGENTS.md')) {
         derivation.artifacts_written.push('AGENTS.md');
       }

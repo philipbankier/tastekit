@@ -32,6 +32,11 @@ Thumbs.db
 !fixtures/contracts/**/.tastekit/**
 !fixtures/testing/e2e/**/.tastekit/
 !fixtures/testing/e2e/**/.tastekit/**
+!fixtures/validation/wave1/**/.tastekit/
+!fixtures/validation/wave1/**/.tastekit/**
+
+# E2E run outputs (regenerated; not source of truth — see examples/constitutions/ for filled examples)
+examples/*/output/
 
 # Logs
 *.log

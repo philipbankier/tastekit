@@ -1,0 +1,60 @@
+- Connecting to LLM...
+✔ Connected to ollama
+
+TasteKit Onboarding Interview
+
+Domain: content-agent | Depth: guided | LLM: ollama
+Type /save to save and quit, /skip to skip a topic
+
+
+  Hey there — I’m here to help you build an AI content agent that really *gets* your voice and goals. Think of this like a deep, friendly chat to make sure we’re aligned before we launch.
+
+Let’s start with the big picture: What’s the *main goal* you want this agent to help you achieve? Is it to grow your audience, drive traffic to a site, build a personal brand, or something else? What would “success” look like for you in the first 30 days?
+
+? You:[8G[9G[2K[G? You: C[9G[10G[2K[G? You: Cr[10G[11G[2K[G? You: Cre[11G[12G[2K[G? You: Crea[12G[13G[2K[G? You: Creat[13G[14G[2K[G? You: Create[14G[15G[2K[G? You: Create[15G[16G[2K[G? You: Create h[16G[17G[2K[G? You: Create hi[17G[18G[2K[G? You: Create hig[18G[19G[2K[G? You: Create high[19G[20G[2K[G? You: Create high-[20G[21G[2K[G? You: Create high-q[21G[22G[2K[G? You: Create high-qu[22G[23G[2K[G? You: Create high-qua[23G[24G[2K[G? You: Create high-qual[24G[25G[2K[G? You: Create high-quali[25G[26G[2K[G? You: Create high-qualit[26G[27G[2K[G? You: Create high-quality[27G[28G[2K[G? You: Create high-quality[28G[29G[2K[G? You: Create high-quality O[29G[30G[2K[G? You: Create high-quality OS[30G[31G[2K[G? You: Create high-quality OSS[31G[32G[2K[G? You: Create high-quality OSS[32G[33G[2K[G? You: Create high-quality OSS u[33G[34G[2K[G? You: Create high-quality OSS up[34G[35G[2K[G? You: Create high-quality OSS upd[35G[36G[2K[G? You: Create high-quality OSS upda[36G[37G[2K[G? You: Create high-quality OSS updat[37G[38G[2K[G? You: Create high-quality OSS update[38G[39G[2K[G? You: Create high-quality OSS updates[39G[40G[2K[G? You: Create high-quality OSS updates[40G[41G[2K[G? You: Create high-quality OSS updates a[41G[42G[2K[G? You: Create high-quality OSS updates an[42G[43G[2K[G? You: Create high-quality OSS updates and[43G[44G[2K[G? You: Create high-quality OSS updates and[44G[45G[2K[G? You: Create high-quality OSS updates and d[45G[46G[2K[G? You: Create high-quality OSS updates and de[46G[47G[2K[G? You: Create high-quality OSS updates and dev[47G[48G[2K[G? You: Create high-quality OSS updates and devl[48G[49G[2K[G? You: Create high-quality OSS updates and devlo[49G[50G[2K[G? You: Create high-quality OSS updates and devlog[50G[51G[2K[G? You: Create high-quality OSS updates and devlogs[51G[52G[2K[G? You: Create high-quality OSS updates and devlogs[52G[53G[2K[G? You: Create high-quality OSS updates and devlogs t[53G[54G[2K[G? You: Create high-quality OSS updates and devlogs th[54G[55G[2K[G? You: Create high-quality OSS updates and devlogs tha[55G[56G[2K[G? You: Create high-quality OSS updates and devlogs that[56G[57G[2K[G? You: Create high-quality OSS updates and devlogs that[57G[58G[2K[G? You: Create high-quality OSS updates and devlogs that a[58G[59G[2K[G? You: Create high-quality OSS updates and devlogs that ar[59G[60G[2K[G? You: Create high-quality OSS updates and devlogs that are[60G[61G[2K[G? You: Create high-quality OSS updates and devlogs that are[61G[62G[2K[G? You: Create high-quality OSS updates and devlogs that are c[62G[63G[2K[G? You: Create high-quality OSS updates and devlogs that are co[63G[64G[2K[G? You: Create high-quality OSS updates and devlogs that are con[64G[65G[2K[G? You: Create high-quality OSS updates and devlogs that are cons[65G[66G[2K[G? You: Create high-quality OSS updates and devlogs that are consi[66G[67G[2K[G? You: Create high-quality OSS updates and devlogs that are consis[67G[68G[2K[G? You: Create high-quality OSS updates and devlogs that are consist[68G[69G[2K[G? You: Create high-quality OSS updates and devlogs that are consiste[69G[70G[2K[G? You: Create high-quality OSS updates and devlogs that are consisten[70G[71G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent[71G[72G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent,[72G[73G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent,[73G[74G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, c[74G[75G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, cl[75G[76G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, cle[76G[77G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clea[77G[78G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear[78G[79G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,[79G[80G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,[80G[81G[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear, a
+[1A[81G[82G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+an[1A[82G[83G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and[1A[83G[84G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and[1A[84G[85G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and u[1A[85G[86G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and us[1A[86G[87G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and use[1A[87G[88G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and usef[1A[88G[89G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and usefu[1A[89G[90G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful[1A[90G[91G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful[1A[91G[92G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful t[1A[92G[93G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to[1A[93G[94G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to[1A[94G[95G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to c[1A[95G[96G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to co[1A[96G[97G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to con[1A[97G[98G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to cont[1A[98G[99G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contr[1A[99G[100G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contri[1A[100G[101G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contrib[1A[101G[102G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contribu[1A[102G[103G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contribut[1A[103G[104G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contributo[1A[104G[105G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contributor[1A[105G[106G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contributors[1A[106G[107G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contributors.[1A[107G[8G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contributors.[1A[107G[1B[2K[1A[2K[G? You: Create high-quality OSS updates and devlogs that are consistent, clear,
+and useful to contributors.[1A[107G[1B
+[?25h
+  Thanks for sharing that — you’re clearly focused on building something valuable for your open-source community. To make sure your content agent nails the tone and purpose, I’d love to know:  
+
+**What’s your primary goal for these OSS updates and devlogs?**  
+Are you trying to onboard new contributors, document technical decisions, drive engagement, or something else? What would success look like for you?
+
+? You:[8G[9G[2K[G? You: /[9G[10G[2K[G? You: /s[10G[11G[2K[G? You: /sa[11G[12G[2K[G? You: /sav[12G[13G[2K[G? You: /save[13G[8G[2K[G? You: /save[13G[2K[G? You: /save[13G
+[?25h
+  Session saved. Run with --resume to continue later.
+
+
+Onboarding complete!
+  Dimensions covered: 1/18
+  Principles extracted: 0
+  Session saved to: .tastekit/ops/session.json
+
+  Run tastekit compile to generate your taste artifacts

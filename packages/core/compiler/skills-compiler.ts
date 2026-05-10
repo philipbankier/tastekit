@@ -130,11 +130,11 @@ export async function compileSkills(options: SkillsCompilationOptions): Promise<
   const artifacts: string[] = [];
 
   // Resolve domain skills
-  const domainSkills = await resolveDomainSkills(session.domain_id);
+  const domainSkills = await resolveDomainSkills(session.domain_id, session.capability_packs);
   const allSkills: SkillMetadata[] = [];
 
   // Write each domain skill's SKILL.md
-  for (const skill of domainSkills) {
+  for (const skill of uniqueSkills(domainSkills)) {
     const metadata: SkillMetadata = {
       skill_id: skill.skill_id,
       name: skill.name,
@@ -205,21 +205,90 @@ export async function compileSkills(options: SkillsCompilationOptions): Promise<
 /**
  * Dynamically resolve domain skills by domain_id.
  */
-async function resolveDomainSkills(domainId?: string): Promise<DomainSkill[]> {
+async function resolveDomainSkills(domainId?: string, capabilityPacks: string[] = []): Promise<DomainSkill[]> {
   if (!domainId) return [];
+
+  const skills: DomainSkill[] = [];
 
   switch (domainId) {
     case 'development-agent': {
       const { DevelopmentAgentSkills } = await import('../domains/development-agent/skills/index.js');
-      return DevelopmentAgentSkills as DomainSkill[];
+      skills.push(...DevelopmentAgentSkills as DomainSkill[]);
+      break;
+    }
+    case 'content-agent': {
+      const { ContentAgentSkills } = await import('../domains/content-agent/skills/index.js');
+      skills.push(...ContentAgentSkills as DomainSkill[]);
+      break;
+    }
+    case 'research-agent': {
+      const { ResearchAgentSkills } = await import('../domains/research-agent/skills/index.js');
+      skills.push(...ResearchAgentSkills as DomainSkill[]);
+      break;
+    }
+    case 'sales-agent': {
+      const { SalesAgentSkills } = await import('../domains/sales-agent/skills/index.js');
+      skills.push(...SalesAgentSkills as DomainSkill[]);
+      break;
+    }
+    case 'support-agent': {
+      const { SupportAgentSkills } = await import('../domains/support-agent/skills/index.js');
+      skills.push(...SupportAgentSkills as DomainSkill[]);
+      break;
     }
     case 'general-agent': {
       const { GeneralAgentSkills } = await import('../domains/general-agent/skills/index.js');
-      return GeneralAgentSkills as DomainSkill[];
+      skills.push(...GeneralAgentSkills as DomainSkill[]);
+      for (const pack of capabilityPacks) {
+        skills.push(...await resolveCapabilityPackSkills(pack));
+      }
+      break;
     }
     default:
       return [];
   }
+
+  return skills;
+}
+
+async function resolveCapabilityPackSkills(pack: string): Promise<DomainSkill[]> {
+  switch (pack) {
+    case 'development': {
+      const { DevelopmentAgentSkills } = await import('../domains/development-agent/skills/index.js');
+      return DevelopmentAgentSkills as DomainSkill[];
+    }
+    case 'content': {
+      const { ContentAgentSkills } = await import('../domains/content-agent/skills/index.js');
+      return ContentAgentSkills as DomainSkill[];
+    }
+    case 'research': {
+      const { ResearchAgentSkills } = await import('../domains/research-agent/skills/index.js');
+      return ResearchAgentSkills as DomainSkill[];
+    }
+    case 'sales': {
+      const { SalesAgentSkills } = await import('../domains/sales-agent/skills/index.js');
+      return SalesAgentSkills as DomainSkill[];
+    }
+    case 'support': {
+      const { SupportAgentSkills } = await import('../domains/support-agent/skills/index.js');
+      return SupportAgentSkills as DomainSkill[];
+    }
+    default:
+      return [];
+  }
+}
+
+function uniqueSkills(skills: DomainSkill[]): DomainSkill[] {
+  const seen = new Set<string>();
+  const unique: DomainSkill[] = [];
+
+  for (const skill of skills) {
+    if (seen.has(skill.skill_id)) continue;
+    seen.add(skill.skill_id);
+    unique.push(skill);
+  }
+
+  return unique;
 }
 
 /**

@@ -1,21 +1,22 @@
 {
   "name": "tastekit",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "CLI-first taste onboarding + Skills + MCP + Drift + Trust + Tracing",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.29.2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/philipbankier/tastekit.git"
+    "url": "https://github.com/tastekit/tastekit.git"
   },
-  "homepage": "https://github.com/philipbankier/tastekit",
+  "homepage": "https://github.com/tastekit/tastekit",
   "bugs": {
-    "url": "https://github.com/philipbankier/tastekit/issues"
+    "url": "https://github.com/tastekit/tastekit/issues"
   },
   "scripts": {
     "build": "pnpm -r build",
-    "test": "pnpm -r test",
+    "test": "pnpm -r build && pnpm -r test",
+    "demo:one-pager": "pnpm --filter @actrun_ai/tastekit-core build && node scripts/demo/render-one-pager.mjs",
     "test:pr-gate": "bash scripts/validation/pr-gate.sh",
     "test:pre-release-live": "bash scripts/validation/pre-release-live-ollama.sh",
     "lint": "pnpm -r lint",

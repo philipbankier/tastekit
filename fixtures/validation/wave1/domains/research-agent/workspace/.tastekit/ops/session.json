@@ -1,0 +1,291 @@
+{
+  "session_id": "38e251a2-942b-4a7c-b05b-cda628e27ddd",
+  "started_at": "2026-02-23T23:26:08.574Z",
+  "last_updated_at": "2026-02-23T23:27:45.237Z",
+  "depth": "guided",
+  "current_step": "complete",
+  "completed_steps": [
+    "welcome",
+    "interview"
+  ],
+  "answers": {},
+  "domain_id": "research-agent",
+  "llm_provider": {
+    "name": "ollama"
+  },
+  "interview": {
+    "dimension_coverage": [
+      {
+        "dimension_id": "core_purpose",
+        "status": "covered",
+        "confidence": 1.8,
+        "confidence_threshold": 1.5,
+        "signals": [
+          {
+            "weight": 1,
+            "source": "explicit",
+            "turn_number": 1,
+            "excerpt": "User defined primary goal and success criteria"
+          },
+          {
+            "weight": 0.8,
+            "source": "explicit",
+            "turn_number": 3,
+            "excerpt": "User wants research summaries with clear recommendations and source links."
+          }
+        ],
+        "anti_signals": [],
+        "relevant_turns": [
+          0,
+          2
+        ],
+        "summary": "User wants research summaries with clear recommendations and source links.",
+        "extracted_facts": [
+          "User expects concise, actionable output."
+        ]
+      },
+      {
+        "dimension_id": "guiding_principles",
+        "status": "not_started",
+        "confidence": 0.2,
+        "confidence_threshold": 1.5,
+        "signals": [
+          {
+            "weight": 0.2,
+            "source": "inferred",
+            "turn_number": 3,
+            "excerpt": "Cascaded from core_purpose"
+          }
+        ],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "communication_tone",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "autonomy_boundaries",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "accuracy_evidence",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "hard_boundaries",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "research_methodology",
+        "status": "in_progress",
+        "confidence": 0.7,
+        "confidence_threshold": 1.5,
+        "signals": [
+          {
+            "weight": 0.7,
+            "source": "explicit",
+            "turn_number": 3,
+            "excerpt": "User likely follows a hypothesis-driven or question-first approach."
+          }
+        ],
+        "anti_signals": [],
+        "relevant_turns": [
+          2
+        ],
+        "summary": "User likely follows a hypothesis-driven or question-first approach.",
+        "extracted_facts": [
+          "User describes research as goal-oriented with clear outcomes."
+        ]
+      },
+      {
+        "dimension_id": "source_preferences",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "synthesis_style",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "output_format",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "depth_vs_breadth",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "citation_standards",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "bias_awareness",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "data_interpretation",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "competitive_analysis_style",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "temporal_scope",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "cross_referencing",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "fact_checking_rigor",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      },
+      {
+        "dimension_id": "research_tools",
+        "status": "not_started",
+        "confidence": 0,
+        "confidence_threshold": 1.5,
+        "signals": [],
+        "anti_signals": [],
+        "relevant_turns": []
+      }
+    ],
+    "transcript": [
+      {
+        "turn_number": 1,
+        "role": "interviewer",
+        "content": "Hey — thanks for taking the time to think through how you’d like your research agent to work. I’m going to ask you a few questions to get a sense of your style, goals, and preferences — so it can operate the way you’d naturally want it to.\n\nLet’s start with the big one:  \n**What’s the main problem you’re trying to solve with this agent? What would success look like for you?**\n\n(Think of it like: if you had a research partner who knew your priorities, what would they deliver?)",
+        "timestamp": "2026-02-23T23:26:24.037Z"
+      },
+      {
+        "turn_number": 2,
+        "role": "user",
+        "content": "Produce concise, source-grounded research summaries with clear recommendations and links.",
+        "timestamp": "2026-02-23T23:26:36.770Z"
+      },
+      {
+        "turn_number": 3,
+        "role": "interviewer",
+        "content": "Thanks for that — that’s a great starting point. You’re clearly looking for something practical and actionable, not just theory. To make sure the agent nails your style, I’d love to know: when you’re researching something, what’s your go-to method? Do you start with a question, dive into sources, and then synthesize — or do you often build hypotheses first and test them?",
+        "timestamp": "2026-02-23T23:26:46.942Z"
+      },
+      {
+        "turn_number": 4,
+        "role": "user",
+        "content": "[User requested to skip this topic]",
+        "timestamp": "2026-02-23T23:27:14.974Z"
+      },
+      {
+        "turn_number": 5,
+        "role": "interviewer",
+        "content": "Got it — you’re prioritizing outcome over process for now. That’s totally fine.\n\nLet’s shift gears:  \n**What’s your ideal tone or voice for the agent’s output?**  \n(Think of it as: if you were describing your ideal research partner’s writing style — what adjectives would you use? Would you want it to be formal, punchy, conversational, or something else?)",
+        "timestamp": "2026-02-23T23:27:27.967Z"
+      }
+    ],
+    "turn_count": 5,
+    "is_complete": false
+  },
+  "structured_answers": {
+    "principles": [],
+    "tone": {
+      "voice_keywords": [],
+      "forbidden_phrases": [],
+      "formatting_rules": [],
+      "source_dimensions": []
+    },
+    "tradeoffs": {
+      "accuracy_vs_speed": 0.5,
+      "cost_sensitivity": 0.5,
+      "autonomy_level": 0.5,
+      "source_dimensions": []
+    },
+    "evidence_policy": {
+      "require_citations_for": [],
+      "uncertainty_language_rules": [],
+      "source_dimensions": []
+    },
+    "taboos": {
+      "never_do": [],
+      "must_escalate": [],
+      "source_dimensions": []
+    },
+    "domain_specific": {}
+  }
+}

@@ -3,6 +3,7 @@ import { mkdtempSync, rmSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { compilePlaybooks } from '../playbook-compiler.js';
+import { compileSkills } from '../skills-compiler.js';
 import { PlaybookV1Schema } from '../../schemas/playbook.js';
 import { SessionState } from '../../schemas/workspace.js';
 import { ConstitutionV1 } from '../../schemas/constitution.js';
@@ -80,6 +81,72 @@ describe('compilePlaybooks', () => {
       const result = PlaybookV1Schema.safeParse(content);
       expect(result.success).toBe(true);
     }
+  });
+
+  it('content-agent playbooks only reference compiled content skills', async () => {
+    await compileSkills({
+      workspacePath: join(tempDir, '.tastekit'),
+      session: makeSession('content-agent'),
+      constitution: makeConstitution(),
+    });
+    const manifest = parseYAML(readFileSync(join(tempDir, '.tastekit', 'skills', 'manifest.v1.yaml'), 'utf-8'));
+    const skillIds = new Set(manifest.skills.map((skill: { skill_id: string }) => skill.skill_id));
+
+    const artifacts = await compilePlaybooks({
+      workspacePath: join(tempDir, '.tastekit'),
+      session: makeSession('content-agent'),
+      constitution: makeConstitution(),
+    });
+
+    for (const artifactPath of artifacts) {
+      const playbook = parseYAML(readFileSync(join(tempDir, '.tastekit', artifactPath), 'utf-8'));
+      const skillRefs = playbook.steps
+        .map((step: { tool_ref?: string }) => step.tool_ref)
+        .filter((toolRef?: string): toolRef is string => Boolean(toolRef?.startsWith('skill:')))
+        .map(toolRef => toolRef.replace('skill:', ''));
+
+      for (const skillRef of skillRefs) {
+        expect(skillIds.has(skillRef), `${artifactPath} references missing skill:${skillRef}`).toBe(true);
+      }
+    }
+  });
+
+  it('content-agent playbooks use voice-brief and draft-options workflows', async () => {
+    const artifacts = await compilePlaybooks({
+      workspacePath: join(tempDir, '.tastekit'),
+      session: makeSession('content-agent'),
+      constitution: makeConstitution(),
+    });
+
+    expect(artifacts).toEqual(expect.arrayContaining([
+      'playbooks/simple-post.v1.yaml',
+      'playbooks/research-and-post.v1.yaml',
+      'playbooks/content-calendar.v1.yaml',
+    ]));
+
+    const simplePost = parseYAML(readFileSync(join(tempDir, '.tastekit', 'playbooks', 'simple-post.v1.yaml'), 'utf-8'));
+    const simplePostRefs = simplePost.steps.map((step: { tool_ref?: string }) => step.tool_ref).filter(Boolean);
+    expect(simplePostRefs).toEqual(['skill:content-voice-brief', 'skill:content-draft-options']);
+
+    const researchPost = parseYAML(readFileSync(join(tempDir, '.tastekit', 'playbooks', 'research-and-post.v1.yaml'), 'utf-8'));
+    const researchPostRefs = researchPost.steps.map((step: { tool_ref?: string }) => step.tool_ref).filter(Boolean);
+    expect(researchPostRefs).toEqual(['skill:content-voice-brief', 'web-search', 'skill:content-draft-options']);
+  });
+
+  it('content-agent drafting playbooks declare audience input used by voice briefs', async () => {
+    await compilePlaybooks({
+      workspacePath: join(tempDir, '.tastekit'),
+      session: makeSession('content-agent'),
+      constitution: makeConstitution(),
+    });
+
+    const simplePost = parseYAML(readFileSync(join(tempDir, '.tastekit', 'playbooks', 'simple-post.v1.yaml'), 'utf-8'));
+    const simplePostInputs = simplePost.inputs.map((input: { name: string }) => input.name);
+    expect(simplePostInputs).toContain('audience');
+
+    const researchPost = parseYAML(readFileSync(join(tempDir, '.tastekit', 'playbooks', 'research-and-post.v1.yaml'), 'utf-8'));
+    const researchPostInputs = researchPost.inputs.map((input: { name: string }) => input.name);
+    expect(researchPostInputs).toContain('audience');
   });
 
   it('generates playbooks for sales-agent', async () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cpSync, existsSync } from 'fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { cleanupWorkspace, fixturePath, makeTempWorkspace, runCli } from '../helpers/run-cli.js';
 
@@ -41,6 +41,28 @@ describe('tastekit export', () => {
       const result = await runCli(['export', '--target', 'unknown-target'], { cwd: root });
       expect(result.code).not.toBe(0);
       expect(result.stderr + result.stdout).toContain('Allowed choices');
+    } finally {
+      cleanupWorkspace(root);
+    }
+  });
+
+  it('preserves manual AGENTS.md content when exporting agents-md', async () => {
+    const root = makeTempWorkspace('export-agents-managed-region');
+    const workspace = join(root, 'workspace');
+    const outDir = join(workspace, 'out', 'agents');
+
+    try {
+      cpSync(fixturePath('e2e', 'v2', 'workspace'), workspace, { recursive: true });
+      mkdirSync(outDir, { recursive: true });
+      writeFileSync(join(outDir, 'AGENTS.md'), '# Manual Agents\n\nKeep this export note.\n', 'utf-8');
+
+      const result = await runCli(['export', '--target', 'agents-md', '--out', outDir], { cwd: workspace });
+      expect(result.code).toBe(0);
+
+      const agents = readFileSync(join(outDir, 'AGENTS.md'), 'utf-8');
+      expect(agents).toContain('# Manual Agents');
+      expect(agents).toContain('Keep this export note.');
+      expect(agents.match(/BEGIN TASTEKIT MANAGED REGION/g)).toHaveLength(1);
     } finally {
       cleanupWorkspace(root);
     }

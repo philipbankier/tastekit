@@ -1,0 +1,13 @@
+- Resuming compilation...
+✔ Compilation complete!
+
+Generated artifacts (layout v2):
+  * self/constitution.v1.json
+  * self/guardrails.v1.yaml
+  * self/memory.v1.yaml
+  * skills/manifest.v1.yaml
+  * playbooks/general-task.v1.yaml
+
+Next steps:
+  Run tastekit export --target claude-code to export for Claude Code
+  Run tastekit export --target openclaw to export for OpenClaw

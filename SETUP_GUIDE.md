@@ -1,5 +1,7 @@
 ## Step-by-Step Guide: Creating Your Content Agents
 
+Archived v0.5 scenario note: this guide describes an older content-agent workflow. For the current v1 release surface, use `README.md` or `docs/quickstart.md`; shipped domains are `development-agent` and `general-agent`.
+
 This guide will walk you through creating two distinct, specialized Content Agents using TasteKit v0.5: one for your personal brand and one for your Autopilot brand. We will use different onboarding depths to achieve the desired level of rigor for each.
 
 ### Prerequisites
@@ -38,7 +40,7 @@ This structure ensures that when you run `tastekit` commands, the context for ea
 
 ### Part 2: Building Your Personal Brand Agent (Max Rigor)
 
-For your personal brand, we will use the most intensive onboarding process (`--depth operator`) to capture the maximum amount of nuance and detail.
+For your personal brand, we will use Full Taste Composition (`--depth full`) to capture the maximum amount of nuance and detail.
 
 1.  **Navigate to your personal brand workspace**:
 
@@ -63,10 +65,10 @@ For your personal brand, we will use the most intensive onboarding process (`--d
 
 3.  **Run the Max-Rigor Onboarding Interview**:
 
-    Now, run the `onboard` command with the `--depth operator` flag. This will trigger the most comprehensive interview, asking you all available questions, including those that require you to provide specific examples and detailed inputs.
+    Now, run the `onboard` command with the `--depth full` flag. This will trigger the most comprehensive interview, asking all applicable questions and requesting specific examples and detailed inputs.
 
     ```bash
-    tastekit onboard --depth operator
+    tastekit onboard --depth full
     ```
 
     Be prepared to answer questions about your brand voice, provide links to example posts you admire, and detail your workflow preferences. This is where you'll define that "brash, edgy" persona.
@@ -83,7 +85,7 @@ For your personal brand, we will use the most intensive onboarding process (`--d
 
 ### Part 3: Building Your Autopilot Brand Agent (Guided Rigor)
 
-For your Autopilot brand, we'll use the `guided` depth. This is still very thorough but slightly less intensive than the `operator` level, making it perfect for a professional business brand.
+For your Autopilot brand, we'll use the `guided` depth. This is still thorough but less intensive than Full Taste Composition, making it practical for a professional business brand.
 
 1.  **Navigate to your Autopilot brand workspace**:
 
@@ -101,7 +103,7 @@ For your Autopilot brand, we'll use the `guided` depth. This is still very thoro
 
 3.  **Run the Guided Onboarding Interview**:
 
-    This time, use the `--depth guided` flag. This will ask all the important strategic questions without requiring the most detailed, operator-level inputs.
+    This time, use the `--depth guided` flag. This will ask the important strategic questions without requiring the most detailed Full Taste Composition inputs.
 
     ```bash
     tastekit onboard --depth guided

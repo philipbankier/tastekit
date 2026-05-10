@@ -1,16 +1,16 @@
-# Newsletter Agent Example
+# Newsletter-Style Agent Example
 
-A content agent specialized for newsletter generation, demonstrating MCP tool integration and the `research-and-post` playbook.
+This v1 example uses the shipped `content-agent` domain for newsletter-style work.
 
 ## Setup
 
 ```bash
 cd examples/newsletter-agent
 
-# Initialize for content creation with operator depth (most thorough)
-tastekit init --domain content-agent --depth operator
+# Initialize for newsletter work with the most thorough depth
+tastekit init --domain content-agent --depth full
 
-# Run the full onboarding interview (~30 min)
+# Run the Full Taste Composition interview
 # Focus on newsletter-specific preferences when asked about content strategy
 tastekit onboard
 
@@ -45,30 +45,23 @@ tastekit trust audit
 
 ## Generated Artifacts
 
-The `operator` depth produces the most detailed profile:
+Full Taste Composition produces the most detailed profile:
 
 ```
 .tastekit/
-├── artifacts/
-│   ├── constitution.v1.json     # Deep principles, detailed tone rules
-│   ├── guardrails.v1.yaml       # Approvals for external publishing
-│   ├── memory.v1.yaml           # Remember past topics, audience feedback
-│   ├── trust.v1.json            # Pinned web-search server
-│   ├── bindings.v1.json         # Bound web-search tools
-│   └── playbooks/
-│       ├── simple-post.v1.yaml
-│       ├── research-and-post.v1.yaml    # <-- primary newsletter workflow
-│       └── content-calendar.v1.yaml
+├── constitution.v1.json     # Deep principles and detailed tone rules
+├── guardrails.v1.yaml       # Approvals for external publishing
+├── memory.v1.yaml           # Remember past topics and audience feedback
+├── trust.v1.json            # Pinned web-search server
+├── bindings.v1.json         # Bound web-search tools
 ├── skills/
-│   ├── manifest.v1.yaml
-│   ├── research-trends/SKILL.md
-│   └── generate-post-options/SKILL.md
+│   └── manifest.v1.yaml
 └── session.json
 ```
 
 ## The Newsletter Workflow
 
-The `research-and-post` playbook is ideal for newsletters:
+Use the generated constitution and guardrails to run a newsletter workflow in your host agent:
 
 1. **Think** — Identify the newsletter topic and angle
 2. **Tool (web-search)** — Research current news, data, and opinions

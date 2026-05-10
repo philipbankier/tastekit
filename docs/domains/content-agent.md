@@ -1,10 +1,10 @@
 # Content Agent Domain
 
-The Content Agent domain is a comprehensive, production-ready solution for building AI agents that create and manage social media content, brand presence, and audience engagement.
+The Content Agent domain is a production domain for building AI agents that create, adapt, and review written content while preserving voice, audience fit, and evidence discipline.
 
 ## Overview
 
-The Content Agent domain was designed based on real-world requirements from successful AI content creators, including analysis of autonomous agents that have achieved millions of views on platforms like TikTok. It provides deep specialization for content creation workflows, from simple "give me 3 tweet options" tasks to fully autonomous content campaigns.
+The Content Agent domain covers launch posts, founder updates, README-to-social adaptation, editorial review, campaign drafts, and newsletter-style workflows. It is part of the six-domain release surface alongside general, development, research, sales, and support.
 
 ## What You Get
 
@@ -46,32 +46,23 @@ The onboarding process includes over 20 domain-specific questions organized into
 
 ### Pre-Built Skills
 
-The Content Agent domain includes a growing library of specialized skills:
+The Content Agent domain includes specialized skills:
 
-#### research-trends
-Analyzes what content is currently performing well in your niche or on your target platform. Uses web search to identify trending topics, winning formats, and effective hooks.
+#### content-voice-brief
+Turns taste preferences and source material into an editorial brief that captures audience, voice, claim boundaries, and channel expectations.
 
-**When to use:** Before planning a content calendar, when needing fresh ideas, or when performance is declining.
+**When to use:** Before drafting, adapting, or reviewing content where voice and evidence discipline matter.
 
-**Inputs:** Niche, platform, timeframe  
-**Outputs:** Trending topics, winning formats, example posts, actionable insights
+**Inputs:** Source material, audience, channel, objective
+**Outputs:** Voice brief, claim boundaries, content angle, review checklist
 
-#### generate-post-options
-Creates multiple distinct variations of a social media post based on a topic, allowing you to choose the best option.
+#### content-draft-options
+Drafts multiple content options from the brief while enforcing voice, channel fit, and unsupported-claim rules.
 
-**When to use:** Quick content creation for immediate posting, A/B testing different approaches.
+**When to use:** When you need several publishable directions or want to compare tone and framing.
 
-**Inputs:** Topic, platform, tone, number of options  
-**Outputs:** 3-5 post variations with different hook styles and rationales
-
-#### Coming Soon
-- `generate-hooks`: Create attention-grabbing opening lines
-- `write-thread`: Compose multi-tweet threads or LinkedIn carousels
-- `write-long-form`: Draft blog posts or LinkedIn articles
-- `create-content-calendar`: Plan posts over time
-- `analyze-performance`: Review metrics and suggest improvements
-- `adapt-for-platform`: Reformat content for different social media
-- `generate-image-prompt`: Create prompts for image generation tools
+**Inputs:** Editorial brief, source material, target channel, number of options
+**Outputs:** Draft variants with rationale and review notes
 
 ### Workflow Modes
 
@@ -133,9 +124,9 @@ A young founder in Washington DC wants a "brash, edgy" personal brand on Twitter
 - Brand archetype: Edgy + Professional
 - Primary platform: Twitter
 - Workflow mode: Assisted
-- Skills: research-trends, generate-post-options, write-thread
+- Skills: content-voice-brief, content-draft-options
 
-The agent researches trending topics in the startup/tech space, proposes tweet ideas with bold takes, and generates thread options for deeper dives on LinkedIn.
+The agent turns source notes into a voice brief, proposes tweet or LinkedIn options with clear claim boundaries, and highlights where human approval is needed.
 
 ### Business Account (SaaS Product)
 
@@ -143,9 +134,9 @@ A software product called "Autopilot" needs consistent brand presence on Twitter
 - Brand archetype: Professional + Technical
 - Primary platform: LinkedIn
 - Workflow mode: Autopilot
-- Skills: Full suite including content calendar and scheduling
+- Skills: content-voice-brief, content-draft-options
 
-The agent autonomously creates a weekly content calendar, drafts product updates, generates educational content, and schedules posts. The founder reviews and approves before publishing.
+The agent drafts product updates and educational content from approved source material. The founder reviews before publishing.
 
 ### AI Influencer
 
@@ -153,9 +144,9 @@ An autonomous AI persona creating TikTok content. The Content Agent is configure
 - Brand archetype: Humorous + Casual
 - Primary platform: TikTok
 - Workflow mode: Autopilot
-- Skills: research-trends, generate-hooks, analyze-performance
+- Skills: content-voice-brief, content-draft-options
 
-The agent researches winning TikTok formats, generates video scripts with trending hooks, creates image slideshows, and learns from performance data to improve over time.
+The agent adapts source material into platform-specific scripts and captions while preserving the defined persona and escalation boundaries.
 
 ## Getting Started
 

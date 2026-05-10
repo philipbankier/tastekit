@@ -86,10 +86,11 @@ describe('compileConstitution', () => {
     expect(constitution.generator_version).toBe('1.0.0');
   });
 
-  it('handles empty goals gracefully', () => {
+  it('handles empty goals by synthesizing a fallback principle (artifact must validate)', () => {
     const session = makeSession({ answers: {} });
     const constitution = compileConstitution(session, '0.5.0');
-    expect(constitution.principles.length).toBe(0);
+    expect(constitution.principles.length).toBe(1);
+    expect(constitution.principles[0].id).toBe('apply_user_taste');
   });
 });
 

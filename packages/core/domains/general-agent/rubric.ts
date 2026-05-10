@@ -1,7 +1,9 @@
 /**
  * General Agent Rubric
  *
- * 18 domain-specific dimensions for broad, cross-functional agents.
+ * 17 domain-specific dimensions for broad, cross-functional agents.
+ * Universal dimensions add autonomy boundaries, evidence standards, tone,
+ * purpose, guiding principles, hard boundaries, and cost sensitivity.
  */
 
 import { DomainRubric } from '../../interview/rubric.js';
@@ -51,23 +53,6 @@ export const GeneralAgentRubric: DomainRubric = {
       ],
       cascade_to: [
         { dimension_id: 'autonomy_boundaries', weight: 0.2 },
-      ],
-    },
-    {
-      id: 'autonomy_boundaries',
-      name: 'Autonomy and Approval Boundaries',
-      description: 'When the agent should act independently versus ask for confirmation.',
-      maps_to: ['tradeoffs', 'taboos', 'domain_specific'],
-      depth_tiers: ['quick', 'guided', 'operator'],
-      priority: 'critical',
-      question_budget: { min: 1, max: 2 },
-      exploration_hints: [
-        'Capture irreversible actions that always need approval.',
-        'Identify safe low-risk actions that can be automated.',
-      ],
-      coverage_criteria: [
-        'Autonomous action envelope is explicitly bounded.',
-        'Escalation triggers and approval points are documented.',
       ],
     },
     {

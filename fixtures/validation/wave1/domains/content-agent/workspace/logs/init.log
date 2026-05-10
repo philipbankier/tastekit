@@ -1,0 +1,14 @@
+
+TasteKit Workspace Setup
+
+- Detecting LLM provider...
+✔ Detected LLM provider: ollama
+? Use ollama for onboarding interview? (Y/n)[46G[2K[G? Use ollama for onboarding interview? yes[43G
+[?25h- Creating workspace...
+✔ TasteKit workspace initialized
+
+  Domain: content-agent
+  Depth: guided
+  LLM: ollama (huihui_ai/qwen3-vl-abliterated:8b-instruct)
+
+  Run tastekit onboard to start the interview

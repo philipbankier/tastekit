@@ -1,7 +1,7 @@
 # Telemetry Contract v1
 
 ## Canonical Trace Location
-- `ops/traces/<run_id>.trace.v1.jsonl`
+- `traces/<run_id>.trace.v1.jsonl`
 
 ## Trace Record Shape
 - Schema key: `schema_version: "trace_event.v1"`

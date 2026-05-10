@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": ".tastekit/hooks/session-orient.sh"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": ".tastekit/hooks/artifact-validate.sh",
+        "matcher": "Write"
+      },
+      {
+        "type": "command",
+        "command": ".tastekit/hooks/auto-commit.sh",
+        "matcher": "Write"
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": ".tastekit/hooks/session-capture.sh"
+      }
+    ]
+  }
+}

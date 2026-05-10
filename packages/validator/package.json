@@ -1,0 +1,42 @@
+{
+  "name": "@actrun_ai/tastekit-validator",
+  "version": "1.0.0",
+  "description": "TasteKit artifact validator",
+  "type": "module",
+  "license": "MIT",
+  "author": "TasteKit Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tastekit/tastekit.git",
+    "directory": "packages/validator"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "tastekit-validator": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "pnpm --filter @actrun_ai/tastekit-core build && vitest run",
+    "lint": "eslint --ignore-pattern dist/ --ignore-pattern __tests__/ src/",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@actrun_ai/tastekit-core": "workspace:*",
+    "ajv": "^8.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
+  }
+}

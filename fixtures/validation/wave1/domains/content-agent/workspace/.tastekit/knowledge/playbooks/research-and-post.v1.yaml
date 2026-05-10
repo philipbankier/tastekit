@@ -1,0 +1,79 @@
+checks:
+  - check_id: voice-match
+    condition: Post matches constitution voice_keywords and avoids forbidden_phrases
+    type: taste
+  - check_id: trend-relevance
+    condition: Post is informed by actual research findings, not generic advice
+    type: facts
+  - check_id: platform-fit
+    condition: Post fits platform character limits and format requirements
+    type: format
+description: "Full workflow: research trends, generate ideas informed by research, create and review."
+escalations:
+  - approval_ref: guardrails.approval_rules.content_review
+    escalation_id: sensitive-topic
+    trigger: Research reveals sensitive or controversial trending topics
+id: research-and-post
+inputs:
+  - description: Topic area or industry
+    name: niche
+    required: true
+    type: string
+  - description: Target platform
+    name: platform
+    required: true
+    type: string
+  - description: "Trend timeframe (default: past week)"
+    name: timeframe
+    required: false
+    type: string
+name: Research-Driven Post
+schema_version: playbook.v1
+steps:
+  - outputs:
+      - trend_data
+    params_template:
+      niche: "{{niche}}"
+      platform: "{{platform}}"
+      timeframe: '{{timeframe || "past week"}}'
+    step_id: research-trends
+    tool_ref: skill:research-trends
+    type: tool
+  - outputs:
+      - selected_angle
+    params_template:
+      instruction: Identify the best angle based on research findings and user principles
+      research: "{{trend_data}}"
+    step_id: analyze-findings
+    type: think
+  - outputs:
+      - post_options
+    params_template:
+      num_options: 3
+      platform: "{{platform}}"
+      topic: "{{selected_angle}}"
+    step_id: generate-options
+    tool_ref: skill:generate-post-options
+    type: tool
+  - outputs:
+      - selected_post
+    params_template:
+      context: "{{trend_data}}"
+      message: Review options based on trend research. Choose or request changes.
+      options: "{{post_options}}"
+    step_id: user-review
+    type: approval_gate
+  - outputs:
+      - final_post
+    params_template:
+      content: "{{selected_post}}"
+      format: "{{platform}}_post"
+    step_id: finalize
+    type: write
+stop_conditions:
+  - condition: No relevant trends found in research
+    reason: Research did not yield actionable insights
+  - condition: User cancels
+    reason: User does not want to proceed
+triggers:
+  - type: manual

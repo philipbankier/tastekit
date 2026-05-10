@@ -14,7 +14,7 @@ import { readFileSync, writeFileSync, cpSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createRequire } from 'node:module';
 import { resolveArtifactPath, resolveSkillsPath, resolveBindingsPath } from '@actrun_ai/tastekit-core/utils';
-import { generateSoulMd, generateAgentsMd, type GeneratorContext } from '@actrun_ai/tastekit-core/generators';
+import { generateSoulMd, generateAgentsMd, mergeManagedRegion, type GeneratorContext } from '@actrun_ai/tastekit-core/generators';
 
 const require = createRequire(import.meta.url);
 
@@ -38,13 +38,27 @@ export class OpenClawAdapter implements TasteKitAdapter {
     }
 
     // 1. Generate SOUL.md (personality, values, tone)
-    writeFileSync(join(outDir, 'SOUL.md'), generateSoulMd(ctx));
+    const soulPath = join(outDir, 'SOUL.md');
+    writeFileSync(
+      soulPath,
+      mergeManagedRegion(
+        existsSync(soulPath) ? readFileSync(soulPath, 'utf-8') : undefined,
+        generateSoulMd(ctx),
+      ),
+    );
 
     // 2. Generate IDENTITY.md (capabilities, role, domain)
     writeFileSync(join(outDir, 'IDENTITY.md'), generateIdentityMd(ctx));
 
     // 3. Generate AGENTS.md (operational behavior, guardrails, skills)
-    writeFileSync(join(outDir, 'AGENTS.md'), generateAgentsMd(ctx));
+    const agentsPath = join(outDir, 'AGENTS.md');
+    writeFileSync(
+      agentsPath,
+      mergeManagedRegion(
+        existsSync(agentsPath) ? readFileSync(agentsPath, 'utf-8') : undefined,
+        generateAgentsMd(ctx),
+      ),
+    );
 
     // 4. Generate openclaw.config.json (structured, backward compatible)
     writeFileSync(

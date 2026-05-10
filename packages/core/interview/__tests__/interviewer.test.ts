@@ -272,6 +272,121 @@ describe('Interviewer confidence-weighted coverage', () => {
     });
   });
 
+  it('retries extraction when validator finds bugs (Bugs 2/4/5/6 regression)', async () => {
+    const badExtraction = JSON.stringify({
+      principles: [
+        {
+          statement: 'Prefer correctness',
+          rationale: 'Same reason',
+          priority: 1,
+          applies_to: ['*'],
+          examples_good: ['ex1', 'ex2'],
+          examples_bad: [],
+          source_dimension: 'dim_id',
+        },
+        {
+          statement: 'Cite sources',
+          rationale: 'Same reason',
+          priority: 2,
+          applies_to: ['*'],
+          examples_good: ['ex1', 'ex2'],
+          examples_bad: [],
+          source_dimension: 'dim_id',
+        },
+      ],
+      tone: { voice_keywords: [], forbidden_phrases: [], formatting_rules: [], source_dimensions: [] },
+      tradeoffs: { accuracy_vs_speed: 0.5, cost_sensitivity: 0.5, autonomy_level: 0.5, source_dimensions: [] },
+      evidence_policy: { require_citations_for: [], uncertainty_language_rules: [], source_dimensions: [] },
+      taboos: { never_do: ['Ask before deploying to prod'], must_escalate: [], source_dimensions: [] },
+      domain_specific: {},
+    });
+
+    const goodExtraction = JSON.stringify({
+      principles: [
+        {
+          statement: 'Prefer correctness',
+          rationale: 'Regressions are expensive to find later',
+          priority: 1,
+          applies_to: ['*'],
+          examples_good: ['Run tests before opening a PR'],
+          examples_bad: [],
+          source_dimension: 'focus',
+        },
+        {
+          statement: 'Cite sources',
+          rationale: 'Trust requires verifiability',
+          priority: 2,
+          applies_to: ['*'],
+          examples_good: ['Inline links for stats'],
+          examples_bad: [],
+          source_dimension: 'style',
+        },
+      ],
+      tone: { voice_keywords: [], forbidden_phrases: [], formatting_rules: [], source_dimensions: [] },
+      tradeoffs: { accuracy_vs_speed: 0.5, cost_sensitivity: 0.5, autonomy_level: 0.5, source_dimensions: [] },
+      evidence_policy: { require_citations_for: [], uncertainty_language_rules: [], source_dimensions: [] },
+      taboos: { never_do: [], must_escalate: ['Production deploys'], source_dimensions: [] },
+      domain_specific: {},
+    });
+
+    const llm = new QueueLLM([
+      `Opening\n<!--COVERAGE\n{"dimensions_touched":["focus"],"dimension_updates":{"focus":{"status":"in_progress","confidence_delta":0.2,"signal_source":"implicit","summary":"hint","facts":[]}},"should_complete":false}\nCOVERAGE-->`,
+      `Follow-up\n<!--COVERAGE\n{"dimensions_touched":["focus"],"dimension_updates":{"focus":{"status":"in_progress","confidence_delta":1.4,"signal_source":"explicit","summary":"Strong","facts":["correctness"]}},"should_complete":true}\nCOVERAGE-->`,
+      badExtraction,
+      goodExtraction,
+    ]);
+
+    const interviewer = new Interviewer({
+      llm,
+      rubric: makeRubric(false),
+      depth: 'quick',
+      onInterviewerMessage: () => undefined,
+      getUserInput: async () => 'I prefer correctness.',
+    });
+
+    const result = await interviewer.run();
+
+    expect(result.principles[0].rationale).toBe('Regressions are expensive to find later');
+    expect(result.principles[1].rationale).toBe('Trust requires verifiability');
+    expect(result.principles[0].source_dimension).toBe('focus');
+    expect(result.principles[1].source_dimension).toBe('style');
+    expect(result.taboos.must_escalate).toContain('Production deploys');
+    expect(result.principles[0].examples_good).not.toEqual(result.principles[1].examples_good);
+  });
+
+  it('keeps the bad extraction if retry also fails (graceful degradation)', async () => {
+    const badExtraction = JSON.stringify({
+      principles: [
+        { statement: 'A', rationale: 'same', priority: 1, applies_to: ['*'], source_dimension: 'dim_id' },
+        { statement: 'B', rationale: 'same', priority: 2, applies_to: ['*'], source_dimension: 'dim_id' },
+      ],
+      tone: { voice_keywords: [], forbidden_phrases: [], formatting_rules: [], source_dimensions: [] },
+      tradeoffs: { accuracy_vs_speed: 0.5, cost_sensitivity: 0.5, autonomy_level: 0.5, source_dimensions: [] },
+      evidence_policy: { require_citations_for: [], uncertainty_language_rules: [], source_dimensions: [] },
+      taboos: { never_do: [], must_escalate: [], source_dimensions: [] },
+      domain_specific: {},
+    });
+
+    const llm = new QueueLLM([
+      `Opening\n<!--COVERAGE\n{"dimensions_touched":["focus"],"dimension_updates":{"focus":{"status":"in_progress","confidence_delta":0.2,"signal_source":"implicit","summary":"x","facts":[]}},"should_complete":false}\nCOVERAGE-->`,
+      `Follow\n<!--COVERAGE\n{"dimensions_touched":["focus"],"dimension_updates":{"focus":{"status":"in_progress","confidence_delta":1.4,"signal_source":"explicit","summary":"x","facts":[]}},"should_complete":true}\nCOVERAGE-->`,
+      badExtraction,
+      'not valid json at all',
+    ]);
+
+    const interviewer = new Interviewer({
+      llm,
+      rubric: makeRubric(false),
+      depth: 'quick',
+      onInterviewerMessage: () => undefined,
+      getUserInput: async () => 'x',
+    });
+
+    const result = await interviewer.run();
+
+    expect(result.principles).toHaveLength(2);
+  });
+
   it('resumes old state snapshots without interview_meta', () => {
     const resumeFrom: InterviewState = {
       transcript: [],

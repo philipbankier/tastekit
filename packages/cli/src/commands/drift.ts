@@ -6,7 +6,43 @@ import { join } from 'path';
 import { DriftDetector } from '@actrun_ai/tastekit-core/drift';
 import { MemoryConsolidator } from '@actrun_ai/tastekit-core/drift';
 import { resolveArtifactPath, resolveTracesPath } from '@actrun_ai/tastekit-core/utils';
+import { ConstitutionV1Schema, type ConstitutionV1, type ConstitutionPrinciple } from '@actrun_ai/tastekit-core/schemas';
 import { getGlobalOptions, riskColor, header, detail, hint, handleError, jsonOutput, verbose } from '../ui.js';
+
+function slugify(statement: string, fallbackIndex: number, used: Set<string>): string {
+  const slug = statement.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40);
+  const base = slug.length > 0 ? slug : `unnamed_principle_${fallbackIndex}`;
+  let candidate = base;
+  let suffix = 2;
+  while (used.has(candidate)) {
+    candidate = `${base}_${suffix++}`;
+  }
+  used.add(candidate);
+  return candidate;
+}
+
+function applyAddPrincipleToConstitution(
+  constitution: ConstitutionV1,
+  proposed: Partial<ConstitutionPrinciple> & { statement: string },
+): ConstitutionV1 {
+  const usedIds = new Set(constitution.principles.map(p => p.id));
+  const newPrinciple: ConstitutionPrinciple = {
+    id: proposed.id && proposed.id.length > 0 ? proposed.id : slugify(proposed.statement, constitution.principles.length, usedIds),
+    priority: 0, // renumbered below
+    statement: proposed.statement,
+    ...(proposed.rationale ? { rationale: proposed.rationale } : {}),
+    applies_to: proposed.applies_to ?? ['*'],
+    ...(proposed.examples_good ? { examples_good: proposed.examples_good } : {}),
+    ...(proposed.examples_bad ? { examples_bad: proposed.examples_bad } : {}),
+  };
+
+  const merged: ConstitutionV1 = {
+    ...constitution,
+    principles: [...constitution.principles, newPrinciple].map((p, i) => ({ ...p, priority: i + 1 })),
+  };
+
+  return merged;
+}
 
 const driftDetectCommand = new Command('detect')
   .description('Detect drift from traces and feedback')
@@ -106,16 +142,34 @@ const driftApplyCommand = new Command('apply')
     try {
       const proposal = JSON.parse(readFileSync(proposalPath, 'utf-8'));
 
-      // Apply changes to constitution
+      // Apply changes to constitution — validate before writing (the schema is the lock).
       const constitutionPath = resolveArtifactPath(join(workspacePath, '.tastekit'), 'constitution');
       if (existsSync(constitutionPath) && proposal.proposed_changes.constitution) {
-        const constitution = JSON.parse(readFileSync(constitutionPath, 'utf-8'));
+        const onDisk = JSON.parse(readFileSync(constitutionPath, 'utf-8'));
+        const beforeValidation = ConstitutionV1Schema.safeParse(onDisk);
+        if (!beforeValidation.success) {
+          spinner.fail(chalk.red('Cannot apply drift: existing constitution.v1.json fails ConstitutionV1Schema. Re-run `tastekit compile` to regenerate it first.'));
+          process.exit(1);
+        }
+        let constitution: ConstitutionV1 = beforeValidation.data;
 
         if (proposal.proposed_changes.constitution.add_principle) {
-          constitution.principles.push(proposal.proposed_changes.constitution.add_principle);
+          const proposed = proposal.proposed_changes.constitution.add_principle;
+          if (typeof proposed?.statement !== 'string' || proposed.statement.length === 0) {
+            spinner.fail(chalk.red('Drift proposal add_principle is missing a statement.'));
+            process.exit(1);
+          }
+          constitution = applyAddPrincipleToConstitution(constitution, proposed);
         }
 
-        writeFileSync(constitutionPath, JSON.stringify(constitution, null, 2), 'utf-8');
+        const afterValidation = ConstitutionV1Schema.safeParse(constitution);
+        if (!afterValidation.success) {
+          const issues = afterValidation.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join('; ');
+          spinner.fail(chalk.red(`Drift apply would produce an invalid constitution: ${issues}`));
+          process.exit(1);
+        }
+
+        writeFileSync(constitutionPath, JSON.stringify(afterValidation.data, null, 2), 'utf-8');
       }
 
       // Mark proposal as applied

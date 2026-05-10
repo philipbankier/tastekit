@@ -70,6 +70,39 @@ describe('tastekit init', () => {
     }
   });
 
+  it('stores general-agent capability packs from repeated --capability options', async () => {
+    const root = makeTempWorkspace('init-general-capability-packs');
+
+    try {
+      const result = await runCli([
+        'init',
+        '--domain',
+        'general-agent',
+        '--depth',
+        'guided',
+        '--capability',
+        'development',
+        '--capability',
+        'content',
+      ], {
+        cwd: root,
+        input: '\n',
+        env: {
+          ANTHROPIC_API_KEY: 'fixture-key',
+        },
+      });
+
+      expect(result.code).toBe(0);
+      const config = readFileSync(join(root, '.tastekit', 'tastekit.yaml'), 'utf-8');
+      expect(config).toContain('domain_id: general-agent');
+      expect(config).toContain('capability_packs:');
+      expect(config).toContain('- development');
+      expect(config).toContain('- content');
+    } finally {
+      cleanupWorkspace(root);
+    }
+  });
+
   it('writes explicit Ollama model from OLLAMA_MODEL env', async () => {
     const root = makeTempWorkspace('init-ollama-model');
 
@@ -88,6 +121,28 @@ describe('tastekit init', () => {
       const config = readFileSync(join(root, '.tastekit', 'tastekit.yaml'), 'utf-8');
       expect(config).toContain('provider: ollama');
       expect(config).toContain('model: fixture-ollama-model');
+    } finally {
+      cleanupWorkspace(root);
+    }
+  });
+
+  it('accepts full depth alias and stores the internal operator depth', async () => {
+    const root = makeTempWorkspace('init-full-depth');
+
+    try {
+      const result = await runCli(['init', '--domain', 'development-agent', '--depth', 'full'], {
+        cwd: root,
+        input: '\n',
+        env: {
+          ANTHROPIC_API_KEY: 'fixture-key',
+        },
+      });
+
+      expect(result.code).toBe(0);
+      const config = readFileSync(join(root, '.tastekit', 'tastekit.yaml'), 'utf-8');
+      expect(config).toContain('depth: operator');
+      expect(result.stdout).toContain('Full Taste Composition');
+      expect(result.stdout).not.toContain('~30 min Operator');
     } finally {
       cleanupWorkspace(root);
     }

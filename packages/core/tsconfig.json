@@ -17,6 +17,7 @@
     "tracing/**/*",
     "drift/**/*",
     "eval/**/*",
+    "demo/**/*",
     "utils/**/*",
     "index.ts"
   ]

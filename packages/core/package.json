@@ -1,28 +1,27 @@
 {
   "name": "@actrun_ai/tastekit-core",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "TasteKit core library - schemas, compiler, skills, MCP, trust, tracing",
   "type": "module",
   "license": "MIT",
   "author": "TasteKit Contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/philipbankier/tastekit.git",
+    "url": "https://github.com/tastekit/tastekit.git",
     "directory": "packages/core"
   },
   "publishConfig": {
     "access": "public"
   },
   "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
+    "dist"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
     "./schemas": "./dist/schemas/index.js",
+    "./schemas/json/constitution.schema.json": "./dist/schemas/json/constitution.schema.json",
     "./compiler": "./dist/compiler/index.js",
     "./interview": "./dist/interview/index.js",
     "./domains": "./dist/domains/index.js",
@@ -34,10 +33,11 @@
     "./tracing": "./dist/tracing/index.js",
     "./drift": "./dist/drift/index.js",
     "./eval": "./dist/eval/index.js",
+    "./demo": "./dist/demo/index.js",
     "./utils": "./dist/utils/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && mkdir -p dist/schemas/json && cp schemas/json/*.json dist/schemas/json/",
     "test": "vitest run",
     "test:unit": "vitest run",
     "test:watch": "vitest",

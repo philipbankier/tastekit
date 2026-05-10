@@ -4,7 +4,7 @@ import ora from 'ora';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import YAML from 'yaml';
-import { generateAgentsMd } from '@actrun_ai/tastekit-core/generators';
+import { generateAgentsMd, mergeManagedRegion } from '@actrun_ai/tastekit-core/generators';
 import { resolveArtifactPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
 import { detail, hint, handleError } from '../ui.js';
 
@@ -85,7 +85,8 @@ export const exportCommand = new Command('export')
         });
         const outPath = join(options.out === './export' ? workspacePath : options.out, 'AGENTS.md');
         mkdirSync(join(outPath, '..'), { recursive: true });
-        writeFileSync(outPath, agentsMd, 'utf-8');
+        const existing = existsSync(outPath) ? readFileSync(outPath, 'utf-8') : undefined;
+        writeFileSync(outPath, mergeManagedRegion(existing, agentsMd), 'utf-8');
         spinner.succeed(chalk.green(`AGENTS.md exported to ${outPath}`));
       } catch (error) {
         handleError(error, spinner);

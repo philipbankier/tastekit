@@ -16,6 +16,20 @@ describe('tastekit completion', () => {
     }
   });
 
+  it('includes full depth aliases in shell completions', async () => {
+    const root = makeTempWorkspace('completion-depth-aliases');
+
+    try {
+      for (const shell of ['bash', 'zsh']) {
+        const result = await runCli(['completion', shell], { cwd: root });
+        expect(result.code).toBe(0);
+        expect(result.stdout).toContain('quick guided operator full full-taste-composition');
+      }
+    } finally {
+      cleanupWorkspace(root);
+    }
+  });
+
   it('fails for unsupported shell values', async () => {
     const root = makeTempWorkspace('completion-failure');
 

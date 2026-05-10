@@ -1,0 +1,82 @@
+checks:
+  - check_id: multi-source
+    condition: Key claims supported by multiple independent sources
+    type: facts
+  - check_id: bias-check
+    condition: Analysis presents balanced perspectives where applicable
+    type: taste
+  - check_id: citation-quality
+    condition: All claims properly cited per user citation standards
+    type: format
+description: "Multi-source research: plan scope, gather sources, cross-reference, synthesize, and review."
+escalations:
+  - approval_ref: guardrails.approval_rules.research_ethics
+    escalation_id: sensitive-research
+    trigger: Research involves confidential, proprietary, or ethically sensitive data
+id: deep-dive-analysis
+inputs:
+  - description: Research topic
+    name: topic
+    required: true
+    type: string
+  - description: Research scope and boundaries
+    name: scope
+    required: false
+    type: string
+  - description: Desired output format
+    name: output_format
+    required: false
+    type: string
+name: Deep Dive Analysis
+schema_version: playbook.v1
+steps:
+  - outputs:
+      - research_plan
+    params_template:
+      instruction: Define research scope, key questions, and source strategy
+      topic: "{{topic}}"
+    step_id: plan-scope
+    type: think
+  - outputs:
+      - raw_findings
+    params_template:
+      max_sources: 15
+      scope: broad
+      topic: "{{topic}}"
+    step_id: gather-sources
+    tool_ref: skill:web-research
+    type: tool
+  - outputs:
+      - verified_findings
+    params_template:
+      findings: "{{raw_findings}}"
+      instruction: Cross-reference findings, identify consensus and conflicts
+    step_id: cross-reference
+    type: think
+  - outputs:
+      - analysis
+    params_template:
+      findings: "{{verified_findings}}"
+      instruction: Synthesize into structured analysis with citations
+      plan: "{{research_plan}}"
+    step_id: synthesize
+    type: think
+  - outputs:
+      - approved_analysis
+    params_template:
+      analysis: "{{analysis}}"
+      message: Review the research analysis. Approve or request deeper investigation.
+    step_id: review
+    type: approval_gate
+  - outputs:
+      - final_report
+    params_template:
+      content: "{{approved_analysis}}"
+      format: '{{output_format || "detailed_report"}}'
+    step_id: finalize
+    type: write
+stop_conditions:
+  - condition: Insufficient credible sources on the topic
+    reason: Cannot produce reliable analysis without adequate sourcing
+triggers:
+  - type: manual

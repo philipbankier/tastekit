@@ -54,11 +54,11 @@ tastekit trust audit
 - Fully completed guided onboarding remains a manual UX step; this validation run captured a resumable live session and validated downstream compile/export/trust contracts end-to-end.
 
 ## Output Contracts To Verify
-- `.tastekit/ops/session.json`
-- `.tastekit/self/constitution.v1.json`
-- `.tastekit/knowledge/skills/manifest.v1.yaml`
-- `.tastekit/knowledge/playbooks/general-task-execution.v1.yaml`
-- `.tastekit/knowledge/playbooks/research-then-act.v1.yaml`
+- `.tastekit/session.json`
+- `.tastekit/constitution.v1.json`
+- `.tastekit/skills/manifest.v1.yaml`
+- `.tastekit/playbooks/general-task-execution.v1.yaml`
+- `.tastekit/playbooks/research-then-act.v1.yaml`
 - `.tastekit/bindings.v1.json`
 - `.tastekit/trust.v1.json`
 - `export/openclaw/openclaw.config.json`

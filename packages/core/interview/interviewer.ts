@@ -2,6 +2,7 @@ import { LLMProvider, LLMMessage } from '../llm/provider.js';
 import { DomainRubric, RubricDimension } from './rubric.js';
 import { getDimensionsForDepth } from './universal-rubric.js';
 import { InterviewState, InterviewTurn, DimensionCoverage, Signal } from '../schemas/workspace.js';
+import { validateStructuredAnswers, formatIssuesForRetryPrompt } from './extraction-validator.js';
 
 /**
  * Structured answers extracted at the end of the interview.
@@ -574,51 +575,100 @@ ${dimensionList}
       .map(d => `${d.dimension_id}: ${d.summary ?? 'No summary'}\nFacts: ${d.extracted_facts?.join(', ') ?? 'None'}`)
       .join('\n\n');
 
-    // Summarize transcript for extraction (avoid sending entire long transcript)
+    const availableDimIds = this.state.dimension_coverage
+      .filter(d => d.status === 'covered' || d.status === 'in_progress')
+      .map(d => d.dimension_id);
+
     const transcriptSummary = this.state.transcript
       .map(t => `[${t.role}]: ${t.content}`)
       .join('\n');
 
-    const extractionPrompt = `Based on the interview transcript and dimension summaries below, extract structured data for the user's taste profile.
+    const extractionPrompt = this.buildExtractionPrompt(coveredDims, availableDimIds, transcriptSummary);
 
-Return ONLY valid JSON matching this exact schema (no markdown, no explanation):
+    const answers = await this.callExtraction(extractionPrompt);
+    if (!answers) return this.getEmptyAnswers();
+
+    const issues = validateStructuredAnswers(answers);
+    if (issues.length === 0) return answers;
+
+    const retryPrompt = `${extractionPrompt}\n\n## Previous Attempt\n${JSON.stringify(answers, null, 2)}\n\n## Required Fixes\n${formatIssuesForRetryPrompt(issues)}`;
+    const retried = await this.callExtraction(retryPrompt);
+    if (!retried) return answers;
+    const retriedIssues = validateStructuredAnswers(retried);
+    return retriedIssues.length < issues.length ? retried : answers;
+  }
+
+  private buildExtractionPrompt(
+    coveredDims: string,
+    availableDimIds: string[],
+    transcriptSummary: string,
+  ): string {
+    const dimIdHint = availableDimIds.length > 0
+      ? `Pick from: ${availableDimIds.map(id => `"${id}"`).join(', ')}.`
+      : 'Use a real id from the Dimension Summaries section, not a placeholder.';
+
+    return `Extract structured data for the user's taste profile from the interview below.
+
+Return ONLY valid JSON matching this schema (no markdown, no explanation):
 
 {
-  "principles": [{"statement": "...", "rationale": "...", "priority": 1, "applies_to": ["*"], "examples_good": ["..."], "examples_bad": ["..."], "source_dimension": "dim_id"}],
+  "principles": [{"statement": "...", "rationale": "...", "priority": 1, "applies_to": ["*"], "examples_good": ["..."], "examples_bad": ["..."], "source_dimension": "<real-dimension-id>"}],
   "tone": {"voice_keywords": ["..."], "forbidden_phrases": ["..."], "formatting_rules": ["..."], "source_dimensions": ["..."]},
   "tradeoffs": {"accuracy_vs_speed": 0.5, "cost_sensitivity": 0.5, "autonomy_level": 0.5, "source_dimensions": ["..."]},
   "evidence_policy": {"require_citations_for": ["..."], "uncertainty_language_rules": ["..."], "source_dimensions": ["..."]},
   "taboos": {"never_do": ["..."], "must_escalate": ["..."], "source_dimensions": ["..."]},
-  "domain_specific": {}
+  "domain_specific": {"<real-dimension-id-or-stable-domain-concept>": {"summary": "...", "facts": ["..."]}}
 }
 
-Rules:
-- Principles ordered by priority (most important first), max 10
-- Tradeoff values are 0.0-1.0 (0=first option, 1=second: speed vs accuracy, cheap vs thorough, ask vs autonomous)
-- If something wasn't discussed, use sensible defaults
-- Include source_dimension to trace each piece of data back to the interview
+## Hard rules — every output must satisfy these
+
+1. **Principles ordered by priority, max 10.** First entry is the most important.
+
+2. **Each principle.rationale must be unique.** Explain *why this specific principle* matters — what would go wrong without it, what tradeoff it resolves. Do not reuse the same rationale verbatim across principles. If two principles share the same reason, merge them into one or find the deeper distinction.
+
+3. **Each principle.examples_good must be specific to that principle.** Do not copy the same example array across multiple principles. Examples should illustrate *that one principle's* point, not the user's taste broadly.
+
+4. **principle.source_dimension must be a real dimension id, not the literal string "dim_id".** ${dimIdHint}
+
+5. **taboos.never_do vs taboos.must_escalate are different things:**
+   - \`never_do\` = absolute prohibitions. The agent must never take this action under any circumstances. (e.g., "Delete production data", "Share PII without consent")
+   - \`must_escalate\` = actions that require human approval before proceeding. The agent pauses and asks. (e.g., "Financial transactions over $X", "Schema migrations on prod", "Anything reversible only via backup")
+   - If the user said "ask before", "check with", "escalate", "require approval", or "flag for review" — that goes in \`must_escalate\`, NOT \`never_do\`.
+
+6. **Tradeoff values 0.0–1.0** (0 = first option, 1 = second option):
+   - accuracy_vs_speed: 0 = speed, 1 = accuracy
+   - cost_sensitivity: 0 = cheap, 1 = thorough
+   - autonomy_level: 0 = ask first, 1 = act autonomously
+
+7. If a topic wasn't discussed, use sensible defaults — but never invent specific facts about the user.
+
+8. **domain_specific preserves rich details that do not fit the top-level fields.**
+   - Use real dimension ids from the summaries when possible. ${dimIdHint}
+   - If a useful domain concept was discussed but no exact dimension id exists, use a stable lower-case snake_case concept key.
+   - Never use placeholder keys such as "dim_id", "dimension_id", "unknown", or "todo".
+   - Values must be JSON-safe, concrete facts/preferences from the interview. Do not add generic filler like "follow user preferences"; use {} if nothing concrete was extracted.
 
 ## Dimension Summaries
 ${coveredDims}
 
 ## Transcript
 ${transcriptSummary}`;
+  }
 
+  private async callExtraction(prompt: string): Promise<StructuredAnswers | null> {
     const result = await this.llm.complete([
       { role: 'system', content: 'You are a data extraction assistant. Output only valid JSON. No markdown code fences.' },
-      { role: 'user', content: extractionPrompt },
+      { role: 'user', content: prompt },
     ], { temperature: 0.2, maxTokens: 4096 });
 
     try {
-      // Strip potential markdown fences
       const cleaned = result.content
         .replace(/^```json?\s*/m, '')
         .replace(/\s*```\s*$/m, '')
         .trim();
       return JSON.parse(cleaned) as StructuredAnswers;
     } catch {
-      // If extraction fails, return a minimal valid structure
-      return this.getEmptyAnswers();
+      return null;
     }
   }
 

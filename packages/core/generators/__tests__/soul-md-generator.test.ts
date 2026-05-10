@@ -2,6 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { generateSoulMd } from '../soul-md-generator.js';
 
 describe('generateSoulMd', () => {
+  it('wraps generated content in one TasteKit managed region', () => {
+    const result = generateSoulMd({ generator_version: '1.0.0' });
+    expect(result.match(/BEGIN TASTEKIT MANAGED REGION/g)).toHaveLength(1);
+    expect(result.match(/END TASTEKIT MANAGED REGION/g)).toHaveLength(1);
+  });
+
   it('generates SOUL.md with principles and tone', () => {
     const result = generateSoulMd({
       generator_version: '1.0.0',
@@ -26,6 +32,24 @@ describe('generateSoulMd', () => {
         },
         taboos: { never_do: ['Delete production data'], must_escalate: ['Decisions over $1M'] },
         trace_map: {},
+        extensions: {
+          'x-tastekit-composition': {
+            schema_version: 'tastekit.composition.v1',
+            mode: 'operator',
+            domain_id: 'development-agent',
+            domain_specific: {
+              code_review: { preferred_focus: 'Lead with correctness and regression risk.' },
+            },
+            dimensions: {
+              code_review: {
+                dimension_id: 'code_review',
+                status: 'covered',
+                summary: 'User wants risk-first code review.',
+                facts: ['Lead with correctness issues.'],
+              },
+            },
+          },
+        },
       },
     });
     expect(result).toContain('# SOUL.md');
@@ -33,6 +57,8 @@ describe('generateSoulMd', () => {
     expect(result).toContain('conversational');
     expect(result).toContain('Autonomy: 0.3');
     expect(result).toContain('Delete production data');
+    expect(result).toContain('## Taste Composition');
+    expect(result).toContain('User wants risk-first code review.');
   });
 
   it('handles missing optional fields', () => {

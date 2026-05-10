@@ -1,30 +1,28 @@
 {
   "name": "@actrun_ai/tastekit-cli",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "TasteKit CLI - command-line interface for taste compilation and management",
   "type": "module",
   "license": "MIT",
   "author": "TasteKit Contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/philipbankier/tastekit.git",
+    "url": "https://github.com/tastekit/tastekit.git",
     "directory": "packages/cli"
   },
   "publishConfig": {
     "access": "public"
   },
   "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
+    "dist"
   ],
   "bin": {
     "tastekit": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
-    "test": "pnpm run build && vitest run",
-    "test:integration": "pnpm run build && vitest run tests/integration",
+    "test": "pnpm --filter @actrun_ai/tastekit-core build && pnpm --filter @actrun_ai/tastekit-adapters build && pnpm run build && vitest run",
+    "test:integration": "pnpm --filter @actrun_ai/tastekit-core build && pnpm --filter @actrun_ai/tastekit-adapters build && pnpm run build && vitest run tests/integration",
     "lint": "eslint src/",
     "clean": "rm -rf dist"
   },

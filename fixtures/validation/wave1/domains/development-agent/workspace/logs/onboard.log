@@ -1,0 +1,44 @@
+- Connecting to LLM...
+✔ Connected to ollama
+
+TasteKit Onboarding Interview
+
+Domain: development-agent | Depth: guided | LLM: ollama
+Type /save to save and quit, /skip to skip a topic
+
+
+  Hey — thanks for jumping in. I’m here to help you configure an AI agent that writes code the way *you* would. No templates, no scripts — just a conversation to get your style, values, and preferences down so the agent feels like an extension of your brain.
+
+Let’s start simple: What’s the *biggest problem* you’re trying to solve with this agent? What’s the one thing you want it to do — consistently — that you’re not currently getting done (or doing yourself) in your day-to-day work?
+
+? You:[8G[9G[2K[G? You: I[9G[10G[2K[G? You: Im[10G[11G[2K[G? You: Imp[11G[12G[2K[G? You: Impl[12G[13G[2K[G? You: Imple[13G[14G[2K[G? You: Implem[14G[15G[2K[G? You: Impleme[15G[16G[2K[G? You: Implemen[16G[17G[2K[G? You: Implement[17G[18G[2K[G? You: Implement[18G[19G[2K[G? You: Implement r[19G[20G[2K[G? You: Implement ro[20G[21G[2K[G? You: Implement roa[21G[22G[2K[G? You: Implement road[22G[23G[2K[G? You: Implement roadm[23G[24G[2K[G? You: Implement roadma[24G[25G[2K[G? You: Implement roadmap[25G[26G[2K[G? You: Implement roadmap[26G[27G[2K[G? You: Implement roadmap i[27G[28G[2K[G? You: Implement roadmap it[28G[29G[2K[G? You: Implement roadmap ite[29G[30G[2K[G? You: Implement roadmap item[30G[31G[2K[G? You: Implement roadmap items[31G[32G[2K[G? You: Implement roadmap items[32G[33G[2K[G? You: Implement roadmap items e[33G[34G[2K[G? You: Implement roadmap items en[34G[35G[2K[G? You: Implement roadmap items end[35G[36G[2K[G? You: Implement roadmap items end-[36G[37G[2K[G? You: Implement roadmap items end-t[37G[38G[2K[G? You: Implement roadmap items end-to[38G[39G[2K[G? You: Implement roadmap items end-to-[39G[40G[2K[G? You: Implement roadmap items end-to-e[40G[41G[2K[G? You: Implement roadmap items end-to-en[41G[42G[2K[G? You: Implement roadmap items end-to-end[42G[43G[2K[G? You: Implement roadmap items end-to-end[43G[44G[2K[G? You: Implement roadmap items end-to-end w[44G[45G[2K[G? You: Implement roadmap items end-to-end wi[45G[46G[2K[G? You: Implement roadmap items end-to-end wit[46G[47G[2K[G? You: Implement roadmap items end-to-end with[47G[48G[2K[G? You: Implement roadmap items end-to-end with[48G[49G[2K[G? You: Implement roadmap items end-to-end with t[49G[50G[2K[G? You: Implement roadmap items end-to-end with te[50G[51G[2K[G? You: Implement roadmap items end-to-end with tes[51G[52G[2K[G? You: Implement roadmap items end-to-end with test[52G[53G[2K[G? You: Implement roadmap items end-to-end with tests[53G[54G[2K[G? You: Implement roadmap items end-to-end with tests,[54G[55G[2K[G? You: Implement roadmap items end-to-end with tests,[55G[56G[2K[G? You: Implement roadmap items end-to-end with tests, d[56G[57G[2K[G? You: Implement roadmap items end-to-end with tests, do[57G[58G[2K[G? You: Implement roadmap items end-to-end with tests, doc[58G[59G[2K[G? You: Implement roadmap items end-to-end with tests, docs[59G[60G[2K[G? You: Implement roadmap items end-to-end with tests, docs,[60G[61G[2K[G? You: Implement roadmap items end-to-end with tests, docs,[61G[62G[2K[G? You: Implement roadmap items end-to-end with tests, docs, a[62G[63G[2K[G? You: Implement roadmap items end-to-end with tests, docs, an[63G[64G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and[64G[65G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and[65G[66G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and r[66G[67G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and re[67G[68G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and rel[68G[69G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reli[69G[70G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and relia[70G[71G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliab[71G[72G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliabl[72G[73G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable[73G[74G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable[74G[75G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable C[75G[76G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable CI[76G[77G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable CI-[77G[78G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable CI-r[78G[79G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable CI-re[79G[80G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable CI-rea[80G[81G[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable CI-read
+[1A[81G[82G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready[1A[82G[83G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready[1A[83G[84G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready o[1A[84G[85G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready ou[1A[85G[86G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready out[1A[86G[87G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready outc[1A[87G[88G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready outco[1A[88G[89G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready outcom[1A[89G[90G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready outcome[1A[90G[91G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready outcomes[1A[91G[92G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready outcomes.[1A[92G[8G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready outcomes.[1A[92G[1B[2K[1A[2K[G? You: Implement roadmap items end-to-end with tests, docs, and reliable
+CI-ready outcomes.[1A[92G[1B
+[?25h
+  Thanks for sharing your goal — that’s a strong, outcome-oriented vision. To make sure the agent writes code the way *you* would, I want to understand a bit more about your engineering style. 
+
+Let’s start with the big picture: What’s the *primary problem* you’re trying to solve by implementing roadmap items this way — with tests, docs, and CI-ready outcomes? Is this for a team, a personal project, or something else? And what does “success” look like for you? For example, is it about shipping quickly, or ensuring reliability and maintainability?
+
+? You:[8G[9G[2K[G? You: /[9G[10G[2K[G? You: /s[10G[11G[2K[G? You: /sa[11G[12G[2K[G? You: /sav[12G[13G[2K[G? You: /save[13G[8G[2K[G? You: /save[13G[2K[G? You: /save[13G
+[?25h
+  Session saved. Run with --resume to continue later.
+
+
+Onboarding complete!
+  Dimensions covered: 1/22
+  Principles extracted: 0
+  Session saved to: .tastekit/ops/session.json
+
+  Run tastekit compile to generate your taste artifacts

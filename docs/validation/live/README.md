@@ -9,3 +9,5 @@ Generate a new report with:
 ```bash
 bash scripts/validation/pre-release-live-ollama.sh
 ```
+
+The live smoke defaults to all six production domains: development, general, content, research, sales, and support.

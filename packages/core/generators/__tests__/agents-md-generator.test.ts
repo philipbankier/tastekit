@@ -23,14 +23,53 @@ function fullContext(): GeneratorContext {
       tradeoffs: { autonomy_level: 0.4, accuracy_vs_speed: 0.8, cost_sensitivity: 0.3 },
       evidence_policy: { require_citations_for: ['statistics'], uncertainty_language_rules: [] },
       taboos: { never_do: ['Delete production data'], must_escalate: ['Security incidents'] },
+      extensions: {
+        'x-tastekit-composition': {
+          schema_version: 'tastekit.composition.v1',
+          mode: 'operator',
+          domain_id: 'development-agent',
+          domain_specific: {
+            code_review: { preferred_focus: 'Lead with correctness and regression risk.' },
+          },
+          dimensions: {
+            code_review: {
+              dimension_id: 'code_review',
+              status: 'covered',
+              summary: 'User wants risk-first code review.',
+              facts: ['Lead with correctness issues.'],
+            },
+          },
+        },
+      },
     },
     guardrails: {
       schema_version: 'guardrails.v1',
       permissions: [
-        { action: 'file_write', allowed: true, requires_approval: false },
-        { action: 'deploy', allowed: false, requires_approval: true },
+        {
+          scope_id: 'fs_write_src',
+          tool_ref: 'fs:write',
+          resources: ['src/**'],
+          ops: ['write'],
+        },
+        {
+          scope_id: 'deploy_prod',
+          tool_ref: 'deploy:prod',
+          resources: [],
+          ops: ['execute'],
+        },
       ],
-    } as any,
+      approvals: [
+        {
+          rule_id: 'approve_deploy',
+          when: 'tool == "deploy:prod"',
+          action: 'require_approval',
+          channel: 'cli',
+        },
+      ],
+      rate_limits: [
+        { tool_ref: 'fs:write', limit: 100, window: '1h' },
+      ],
+    },
     skills: {
       schema_version: 'skills_manifest.v1',
       skills: [
@@ -49,6 +88,12 @@ function fullContext(): GeneratorContext {
 }
 
 describe('generateAgentsMd', () => {
+  it('wraps generated content in one TasteKit managed region', () => {
+    const result = generateAgentsMd(fullContext());
+    expect(result.match(/BEGIN TASTEKIT MANAGED REGION/g)).toHaveLength(1);
+    expect(result.match(/END TASTEKIT MANAGED REGION/g)).toHaveLength(1);
+  });
+
   it('generates header with version', () => {
     const result = generateAgentsMd({ generator_version: '1.0.0' });
     expect(result).toContain('# AGENTS.md');
@@ -62,12 +107,32 @@ describe('generateAgentsMd', () => {
     expect(result).toContain('**cite**: Always cite sources');
   });
 
-  it('includes guardrails permissions section', () => {
+  it('includes guardrails permissions section with real schema fields', () => {
     const result = generateAgentsMd(fullContext());
     expect(result).toContain('## Guardrails');
-    expect(result).toContain('file_write: allowed');
-    expect(result).toContain('deploy: denied');
-    expect(result).toContain('(requires approval)');
+    expect(result).toContain('### Permissions');
+    expect(result).toContain('`fs:write` (write) on `src/**` — scope: `fs_write_src`');
+    expect(result).toContain('`deploy:prod` (execute) on `*` — scope: `deploy_prod`');
+    expect(result).not.toContain('undefined');
+  });
+
+  it('includes approval rules subsection', () => {
+    const result = generateAgentsMd(fullContext());
+    expect(result).toContain('### Approval rules');
+    expect(result).toContain('**approve_deploy**');
+    expect(result).toContain('require_approval');
+    expect(result).toContain('via cli');
+  });
+
+  it('includes rate limits subsection', () => {
+    const result = generateAgentsMd(fullContext());
+    expect(result).toContain('### Rate limits');
+    expect(result).toContain('`fs:write` — max 100/1h');
+  });
+
+  it('does not emit literal "undefined" anywhere in output (Bug 1 regression)', () => {
+    const result = generateAgentsMd(fullContext());
+    expect(result).not.toMatch(/undefined/);
   });
 
   it('includes tone & voice section', () => {
@@ -94,6 +159,13 @@ describe('generateAgentsMd', () => {
     expect(result).toContain('## Skills');
     expect(result).toContain('**Code Review**');
     expect(result).toContain('`code-review`');
+  });
+
+  it('summarizes composition extension for runtime agents', () => {
+    const result = generateAgentsMd(fullContext());
+    expect(result).toContain('## Taste Composition');
+    expect(result).toContain('Full Taste Composition');
+    expect(result).toContain('User wants risk-first code review.');
   });
 
   it('omits sections for empty constitution', () => {

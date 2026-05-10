@@ -21,8 +21,9 @@
 5. Deterministic e2e replay (`scripts/validation/pr-gate.sh`)
    - Full workspace compile/export/replay checks against committed fixtures.
    - Verifies compatibility with hidden `.tastekit` fixture workspaces checked into git.
+   - Replays release-domain fixtures for development, general, content, research, sales, and support.
 6. Live pre-release smoke (`scripts/validation/pre-release-live-ollama.sh`)
-   - Real onboarding and compile with Ollama, evidence logged for release readiness.
+   - Real provider connectivity and deterministic session replay with Ollama across all six production domains, evidence logged for release readiness.
 
 ## Ownership
 - `packages/core`: correctness and backward compatibility logic.
@@ -41,6 +42,8 @@
 
 ### Required pre-release
 - `bash scripts/validation/pre-release-live-ollama.sh`
+
+The deterministic and live release gates must remain aligned: if docs claim a production domain, both gates must enumerate it.
 
 ## Non-goals for this wave
 - No schema version changes.

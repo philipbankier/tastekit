@@ -1,0 +1,66 @@
+checks:
+  - check_id: variety
+    condition: Calendar has varied topics and formats, not repetitive
+    type: taste
+  - check_id: coverage
+    condition: All target platforms are represented in the calendar
+    type: format
+description: "Plan a week of content: research trends, map to themes, schedule posts."
+escalations:
+  - approval_ref: guardrails.approval_rules.resource_usage
+    escalation_id: high-volume
+    trigger: Posts per week exceeds 10
+id: content-calendar
+inputs:
+  - description: Topic area
+    name: niche
+    required: true
+    type: string
+  - description: Target platforms (comma-separated)
+    name: platforms
+    required: true
+    type: string
+  - description: "Posts per week (default: 5)"
+    name: posts_per_week
+    required: false
+    type: number
+name: Content Calendar Planning
+schema_version: playbook.v1
+steps:
+  - outputs:
+      - trend_data
+    params_template:
+      niche: "{{niche}}"
+      platform: "{{platforms}}"
+      timeframe: past week
+    step_id: research-trends
+    tool_ref: skill:research-trends
+    type: tool
+  - outputs:
+      - theme_plan
+    params_template:
+      instruction: Map trends to daily themes for {{posts_per_week || 5}} posts across {{platforms}}
+      research: "{{trend_data}}"
+    step_id: plan-themes
+    type: think
+  - outputs:
+      - approved_plan
+    params_template:
+      message: Review the proposed content calendar. Approve or adjust.
+      plan: "{{theme_plan}}"
+    step_id: review-plan
+    type: approval_gate
+  - outputs:
+      - calendar_file
+    params_template:
+      content: "{{approved_plan}}"
+      format: content_calendar_md
+    step_id: write-calendar
+    type: write
+stop_conditions:
+  - condition: No research data available
+    reason: Cannot plan without trend data
+triggers:
+  - type: manual
+  - schedule: 0 9 * * 1
+    type: cron

@@ -1,6 +1,6 @@
 # Minimal Agent Example
 
-The quickest way to get a TasteKit taste profile. Uses the `quick` depth for a ~5 minute interview.
+The quickest way to get a TasteKit taste profile. Uses the `quick` depth for the fastest useful interview.
 
 ## Setup
 
@@ -8,8 +8,8 @@ The quickest way to get a TasteKit taste profile. Uses the `quick` depth for a ~
 # From the tastekit root directory
 cd examples/minimal-agent
 
-# Initialize with defaults
-tastekit init --domain content-agent --depth quick
+# Initialize with a shipped v1 domain
+tastekit init --domain general-agent --depth quick
 
 # Run the short interview
 tastekit onboard
@@ -26,16 +26,14 @@ After compilation, your `.tastekit/` directory contains:
 .tastekit/
 ├── tastekit.yaml
 ├── session.json
-├── artifacts/
-│   ├── constitution.v1.json    # 5-7 principles, basic tone
-│   ├── guardrails.v1.yaml      # Default permissions
-│   └── memory.v1.yaml          # Default retention policy
+├── constitution.v1.json    # Principles, tone, tradeoffs, taboos
+├── guardrails.v1.yaml      # Default permissions
+├── memory.v1.yaml          # Default retention policy
 └── skills/
-    ├── manifest.v1.yaml
-    └── research-trends/SKILL.md
+    └── manifest.v1.yaml
 ```
 
-The `quick` depth covers only the 5 essential dimensions, producing a lean profile that's enough to get started.
+The `quick` depth covers only the essential dimensions, producing a lean profile that's enough to get started.
 
 ## Export
 
@@ -57,14 +55,18 @@ Here's what a minimal `constitution.v1.json` looks like after a quick interview:
   "generator_version": "0.5.0",
   "principles": [
     {
-      "id": "clarity-first",
+      "id": "clarity_first",
+      "priority": 1,
       "statement": "Prioritize clear, direct communication over elaborate phrasing",
-      "weight": 0.9
+      "rationale": "Concise answers make agent work easier to inspect.",
+      "applies_to": ["*"]
     },
     {
-      "id": "audience-aware",
+      "id": "audience_aware",
+      "priority": 2,
       "statement": "Always consider who will read the content and adapt accordingly",
-      "weight": 0.8
+      "rationale": "Audience context changes what a useful answer looks like.",
+      "applies_to": ["*"]
     }
   ],
   "tone": {
@@ -73,9 +75,17 @@ Here's what a minimal `constitution.v1.json` looks like after a quick interview:
     "formatting_rules": ["Use short paragraphs", "Prefer bullet points over walls of text"]
   },
   "tradeoffs": {
-    "autonomy_level": "suggest",
-    "speed_vs_quality": "balanced",
-    "creativity_vs_consistency": "creative"
+    "accuracy_vs_speed": 0.6,
+    "cost_sensitivity": 0.5,
+    "autonomy_level": 0.4
+  },
+  "evidence_policy": {
+    "require_citations_for": ["facts", "statistics"],
+    "uncertainty_language_rules": ["Say when confidence is low"]
+  },
+  "taboos": {
+    "never_do": ["Invent facts"],
+    "must_escalate": ["Irreversible actions"]
   }
 }
 ```

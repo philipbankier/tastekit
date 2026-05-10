@@ -30,6 +30,7 @@ Please describe the tests that you ran to verify your changes.
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] Tested with example projects
+- [ ] Six-domain release gate considered (`development`, `general`, `content`, `research`, `sales`, `support`)
 
 **Test Configuration**:
 * Node version:

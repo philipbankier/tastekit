@@ -50,6 +50,7 @@ function makeStructuredAnswers() {
       must_escalate: ['Security incidents'],
       source_dimensions: ['safety'],
     },
+    domain_specific: {},
   };
 }
 
@@ -119,6 +120,96 @@ describe('compileConstitution', () => {
     expect(result.trace_map!._domain_id).toBe('development-agent');
   });
 
+  it('preserves structured composition under the extension bag without adding top-level domain_specific', () => {
+    const session = makeSession({
+      structured_answers: {
+        ...makeStructuredAnswers(),
+        domain_specific: {
+          code_review: {
+            preferred_focus: 'Lead with correctness and regression risk.',
+            review_depth: 'thorough',
+          },
+          deployment_safety: ['Confirm production deploys before acting.'],
+        },
+      },
+      interview: {
+        transcript: [
+          {
+            turn_number: 1,
+            role: 'user',
+            content: 'Raw transcript should not be copied into the extension.',
+            timestamp: '2026-05-10T12:00:00.000Z',
+          },
+        ],
+        dimension_coverage: [
+          {
+            dimension_id: 'code_review',
+            status: 'covered',
+            confidence: 1.8,
+            confidence_threshold: 1.5,
+            signals: [
+              {
+                weight: 1,
+                source: 'explicit',
+                turn_number: 1,
+                excerpt: 'This raw excerpt should not be copied.',
+              },
+            ],
+            anti_signals: ['Do not bury risk behind praise.'],
+            summary: 'User wants risk-first code review.',
+            extracted_facts: ['Lead with correctness issues.', 'Keep summaries brief.'],
+            relevant_turns: [1, 2],
+          },
+          {
+            dimension_id: 'deployment_safety',
+            status: 'in_progress',
+            confidence: 0.7,
+            confidence_threshold: 1.5,
+            signals: [],
+            anti_signals: [],
+            summary: 'Production changes need confirmation.',
+            extracted_facts: ['Ask before deploying to prod.'],
+            relevant_turns: [3],
+          },
+        ],
+        is_complete: true,
+        turn_count: 3,
+      },
+    });
+
+    const result = compileConstitution(session, '1.0.0');
+
+    expect((result as Record<string, unknown>).domain_specific).toBeUndefined();
+    const composition = result.extensions?.['x-tastekit-composition'] as any;
+    expect(composition).toMatchObject({
+      schema_version: 'tastekit.composition.v1',
+      mode: 'quick',
+      domain_id: 'development-agent',
+      domain_specific: {
+        code_review: {
+          preferred_focus: 'Lead with correctness and regression risk.',
+          review_depth: 'thorough',
+        },
+        deployment_safety: ['Confirm production deploys before acting.'],
+      },
+    });
+    expect(composition.dimensions.code_review).toEqual({
+      dimension_id: 'code_review',
+      status: 'covered',
+      summary: 'User wants risk-first code review.',
+      facts: ['Lead with correctness issues.', 'Keep summaries brief.'],
+      anti_signals: ['Do not bury risk behind praise.'],
+      confidence: 1.8,
+      confidence_threshold: 1.5,
+      source_turns: [1, 2],
+    });
+    expect(JSON.stringify(composition)).not.toContain('Raw transcript should not be copied');
+    expect(JSON.stringify(composition)).not.toContain('This raw excerpt should not be copied');
+    expect(result.trace_map?._domain_specific).toEqual({
+      source_dimensions: ['code_review', 'deployment_safety'],
+    });
+  });
+
   it('falls back to legacy flat answers', () => {
     const session = makeSession({
       answers: {
@@ -143,13 +234,128 @@ describe('compileConstitution', () => {
     expect(result.tone.voice_keywords).toContain('direct');
   });
 
-  it('handles empty session answers gracefully', () => {
+  it('synthesizes a fallback principle when legacy session is empty (so artifact validates)', () => {
     const session = makeSession({ answers: {} });
     const result = compileConstitution(session, '1.0.0');
 
     expect(result.schema_version).toBe('constitution.v1');
-    expect(result.principles).toBeDefined();
-    expect(result.tone).toBeDefined();
-    expect(result.tradeoffs).toBeDefined();
+    expect(result.principles).toHaveLength(1);
+    expect(result.principles[0].id).toBe('apply_user_taste');
+    expect(result.principles[0].priority).toBe(1);
+    expect(result.principles[0].statement).toBeTruthy();
+  });
+
+  it('Bug 3 (legacy path): legacy compiler also uses slug IDs, not numeric', () => {
+    const session = makeSession({
+      answers: {
+        goals: {
+          primary_goal: 'Build great software',
+          key_principles: 'Test everything, Keep it simple',
+        },
+      },
+    });
+    const result = compileConstitution(session, '1.0.0');
+
+    for (const p of result.principles) {
+      expect(p.id).not.toMatch(/^principle_\d+$/);
+    }
+  });
+
+  it('normalizes LLM priorities to 1..N by array order (defends against extraction bugs)', () => {
+    const session = makeSession({
+      structured_answers: {
+        ...makeStructuredAnswers(),
+        principles: [
+          { statement: 'First', priority: 7, rationale: 'r1', applies_to: ['*'], source_dimension: 'd1' },
+          { statement: 'Second', priority: 7, rationale: 'r2', applies_to: ['*'], source_dimension: 'd2' },
+          { statement: 'Third', priority: 99, rationale: 'r3', applies_to: ['*'], source_dimension: 'd3' },
+        ],
+      },
+    });
+    const result = compileConstitution(session, '1.0.0');
+    expect(result.principles.map(p => p.priority)).toEqual([1, 2, 3]);
+  });
+
+  it('synthesizes a fallback principle when structured extraction returns no principles', () => {
+    const session = makeSession({
+      structured_answers: {
+        ...makeStructuredAnswers(),
+        principles: [],
+      },
+    });
+
+    const result = compileConstitution(session, '1.0.0');
+
+    expect(result.principles).toHaveLength(1);
+    expect(result.principles[0]).toMatchObject({
+      id: 'apply_user_taste',
+      priority: 1,
+      applies_to: ['*'],
+    });
+    expect(result.trace_map?.apply_user_taste).toEqual({
+      source_dimension: 'fallback_empty_principles',
+    });
+  });
+
+  it('Bug 3: principle IDs are slugs of statement, not numeric indices', () => {
+    const session = makeSession({
+      structured_answers: {
+        ...makeStructuredAnswers(),
+        principles: [
+          {
+            statement: 'Clarity over completeness',
+            priority: 1,
+            rationale: 'r1',
+            applies_to: ['*'],
+            source_dimension: 'd1',
+          },
+          {
+            statement: 'Show, don\'t tell',
+            priority: 2,
+            rationale: 'r2',
+            applies_to: ['*'],
+            source_dimension: 'd2',
+          },
+        ],
+      },
+    });
+    const result = compileConstitution(session, '1.0.0');
+
+    expect(result.principles[0].id).toBe('clarity_over_completeness');
+    expect(result.principles[1].id).toBe('show_don_t_tell');
+    expect(result.principles[0].id).not.toMatch(/^principle_\d+$/);
+  });
+
+  it('Bug 3: slug collisions get numeric suffix', () => {
+    const session = makeSession({
+      structured_answers: {
+        ...makeStructuredAnswers(),
+        principles: [
+          { statement: 'Be clear', priority: 1, rationale: 'r1', applies_to: ['*'], source_dimension: 'd1' },
+          { statement: 'be clear', priority: 2, rationale: 'r2', applies_to: ['*'], source_dimension: 'd2' },
+          { statement: 'BE CLEAR!', priority: 3, rationale: 'r3', applies_to: ['*'], source_dimension: 'd3' },
+        ],
+      },
+    });
+    const result = compileConstitution(session, '1.0.0');
+
+    expect(result.principles[0].id).toBe('be_clear');
+    expect(result.principles[1].id).toBe('be_clear_2');
+    expect(result.principles[2].id).toBe('be_clear_3');
+  });
+
+  it('Bug 3: non-alphanumeric statement falls back to a non-numeric ID (never `principle_N`)', () => {
+    const session = makeSession({
+      structured_answers: {
+        ...makeStructuredAnswers(),
+        principles: [
+          { statement: '???', priority: 1, rationale: 'r1', applies_to: ['*'], source_dimension: 'd1' },
+        ],
+      },
+    });
+    const result = compileConstitution(session, '1.0.0');
+
+    expect(result.principles[0].id).toBe('unnamed_principle_0');
+    expect(result.principles[0].id).not.toMatch(/^principle_\d+$/);
   });
 });

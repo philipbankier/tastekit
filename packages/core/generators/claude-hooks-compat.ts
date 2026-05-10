@@ -192,7 +192,10 @@ if [ -d "$DRIFT_DIR" ]; then
 fi
 
 # Check for constitution summary
-CONSTITUTION=".tastekit/self/constitution.v1.json"
+CONSTITUTION=".tastekit/constitution.v1.json"
+if [ ! -f "$CONSTITUTION" ]; then
+  CONSTITUTION=".tastekit/self/constitution.v1.json"
+fi
 if [ ! -f "$CONSTITUTION" ]; then
   CONSTITUTION=".tastekit/artifacts/constitution.v1.json"
 fi
@@ -226,7 +229,10 @@ fi
 CONTEXT=""
 
 # Re-inject top principles after compaction
-CONSTITUTION=".tastekit/self/constitution.v1.json"
+CONSTITUTION=".tastekit/constitution.v1.json"
+if [ ! -f "$CONSTITUTION" ]; then
+  CONSTITUTION=".tastekit/self/constitution.v1.json"
+fi
 if [ ! -f "$CONSTITUTION" ]; then
   CONSTITUTION=".tastekit/artifacts/constitution.v1.json"
 fi
@@ -265,7 +271,7 @@ INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null)
 
 # Warn if writing to compiled artifact paths
-if echo "$FILE_PATH" | grep -qE '^\\.tastekit/(self|artifacts)/'; then
+if echo "$FILE_PATH" | grep -qE '^\\.tastekit/(constitution\\.v1\\.json|guardrails\\.v1\\.yaml|memory\\.v1\\.yaml|skills/|playbooks/|self/|artifacts/)'; then
   echo "Warning: modifying compiled TasteKit artifact. Run \\\`tastekit compile\\\` to regenerate." >&2
 fi
 
@@ -295,10 +301,7 @@ if [ "$STOP_ACTIVE" = "true" ]; then
 fi
 
 # Log session activity marker for drift detection
-TRACES_DIR=".tastekit/ops/traces"
-if [ ! -d "$TRACES_DIR" ]; then
-  TRACES_DIR=".tastekit/traces"
-fi
+TRACES_DIR=".tastekit/traces"
 mkdir -p "$TRACES_DIR"
 
 echo "{\\"event\\":\\"session_end\\",\\"ts\\":\\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\\"}" >> "$TRACES_DIR/sessions.jsonl" 2>/dev/null || true

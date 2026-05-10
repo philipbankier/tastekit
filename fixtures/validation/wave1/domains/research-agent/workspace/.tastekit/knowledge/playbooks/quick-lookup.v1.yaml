@@ -1,0 +1,50 @@
+checks:
+  - check_id: source-quality
+    condition: Answer is supported by credible sources
+    type: facts
+  - check_id: completeness
+    condition: Answer addresses the original question fully
+    type: taste
+description: "Simple fact-finding: research a question, synthesize findings, present answer."
+escalations: []
+id: quick-lookup
+inputs:
+  - description: The question to research
+    name: question
+    required: true
+    type: string
+  - description: Preferred source types
+    name: source_preferences
+    required: false
+    type: string
+name: Quick Lookup
+schema_version: playbook.v1
+steps:
+  - outputs:
+      - research_findings
+    params_template:
+      max_sources: 5
+      scope: narrow
+      topic: "{{question}}"
+    step_id: research
+    tool_ref: skill:web-research
+    type: tool
+  - outputs:
+      - answer
+    params_template:
+      findings: "{{research_findings}}"
+      instruction: Synthesize findings into a concise answer
+    step_id: synthesize
+    type: think
+  - outputs:
+      - final_answer
+    params_template:
+      content: "{{answer}}"
+      format: research_summary
+    step_id: format-output
+    type: write
+stop_conditions:
+  - condition: No relevant sources found
+    reason: Cannot answer without credible sources
+triggers:
+  - type: manual

@@ -30,14 +30,15 @@ Legend:
 | `tastekit eval run` | evalpack run + report output | missing evalpack | U,I |
 | `tastekit eval replay` | replay pass/fail | missing trace/profile | U,I |
 | `tastekit completion` | bash/zsh/fish output | invalid shell selection handled by commander | I |
-| `tastekit simulate` | explicit not-implemented contract | non-zero exit assertion | I |
+| `tastekit simulate` | explicit planned v1.1 contract | exits zero with planned-feature message | I |
 
 ## Contract Paths Covered
 - `.tastekit/trust.v1.json`
 - `.tastekit/bindings.v1.json`
-- `.tastekit/ops/session.json`
-- `.tastekit/ops/traces/*.trace.v1.jsonl`
+- `.tastekit/session.json`
+- `.tastekit/traces/*.trace.v1.jsonl`
 
 ## Domain Coverage Notes
-- Deterministic integration tests include non-interactive `general-agent` init.
-- Compiler module tests validate `general-agent` dedicated skills and playbooks.
+- Deterministic release replay enumerates all six production domains: `development-agent`, `general-agent`, `content-agent`, `research-agent`, `sales-agent`, and `support-agent`.
+- The release replay asserts canonical `.tastekit/constitution.v1.json`, guardrails, memory, skills, playbooks, and exports for each domain fixture.
+- Unit and compiler tests remain responsible for domain-specific rubric and asset depth.

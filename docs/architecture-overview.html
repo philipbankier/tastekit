@@ -428,7 +428,7 @@ footer {
       <div class="card">
         <span class="badge badge-green">Core</span>
         <h3>Interview-Driven</h3>
-        <p>An LLM-powered interviewer adapts its questions based on your answers. It tracks 9–28 dimensions of your preferences across 3 depth tiers (5min / 15min / 30min).</p>
+        <p>An LLM-powered interviewer adapts its questions based on your answers. It tracks 9–31 dimensions of your preferences across Quick, Guided, and Full depth tiers.</p>
       </div>
       <div class="card">
         <span class="badge badge-blue">Core</span>
@@ -777,61 +777,25 @@ footer {
 <!-- ============ DOMAINS ============ -->
 <section style="background: rgba(52,211,153,0.02);">
   <div class="container">
-    <h2>6 Agent Domains</h2>
-    <p class="section-desc">Each domain has a specialized rubric with dimensions tailored to that agent type. Three depth tiers let you choose interview depth.</p>
+    <h2>2 Agent Domains</h2>
+    <p class="section-desc">Each shipped domain has a specialized rubric with dimensions tailored to that agent type. Three depth tiers let you choose interview depth.</p>
     <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
       <div class="domain-card">
         <h4>🛠 Development Agent</h4>
         <p style="color:var(--text-dim);font-size:0.88rem;">Engineering identity, code quality, testing, naming, commits, type safety, error handling, CI/CD</p>
         <div class="domain-dims">
-          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 9</span>
-          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 20</span>
-          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 28</span>
-        </div>
-      </div>
-      <div class="domain-card">
-        <h4>📝 Content Agent</h4>
-        <p style="color:var(--text-dim);font-size:0.88rem;">Brand voice, audience, editorial standards, publishing cadence, sourcing, fact-checking</p>
-        <div class="domain-dims">
-          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 7</span>
-          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 14</span>
-          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 23</span>
-        </div>
-      </div>
-      <div class="domain-card">
-        <h4>🔬 Research Agent</h4>
-        <p style="color:var(--text-dim);font-size:0.88rem;">Research scope, methodology, source evaluation, synthesis, citation standards</p>
-        <div class="domain-dims">
-          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 7</span>
-          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 14</span>
-          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 25</span>
-        </div>
-      </div>
-      <div class="domain-card">
-        <h4>💼 Sales Agent</h4>
-        <p style="color:var(--text-dim);font-size:0.88rem;">Sales philosophy, buyer personas, objection handling, closing style, pipeline management</p>
-        <div class="domain-dims">
-          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 7</span>
-          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 14</span>
-          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 25</span>
-        </div>
-      </div>
-      <div class="domain-card">
-        <h4>🎧 Support Agent</h4>
-        <p style="color:var(--text-dim);font-size:0.88rem;">Support philosophy, escalation criteria, empathy, SLA targets, ticket handling</p>
-        <div class="domain-dims">
-          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 7</span>
-          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 14</span>
-          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 25</span>
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Full Taste Composition</span>
         </div>
       </div>
       <div class="domain-card">
         <h4>🌐 General Agent</h4>
         <p style="color:var(--text-dim);font-size:0.88rem;">Mission scope, decision style, autonomy, communication, evidence rigor, risk escalation</p>
         <div class="domain-dims">
-          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick: 6</span>
-          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided: 12</span>
-          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Operator: 18</span>
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Full Taste Composition</span>
         </div>
       </div>
     </div>
@@ -904,11 +868,11 @@ footer {
     <h2>System Architecture</h2>
     <p class="section-desc">5 packages, 9 artifact types, 4 adapters. The core compiles artifacts. Adapters export them. Drift detection closes the loop.</p>
     <div class="schema-tree" style="font-size:0.78rem;line-height:2;">
-<span class="key">@tastekit/core</span> <span class="comment">— Schemas, compiler, interview, drift, eval, generators</span>
+<span class="key">@actrun_ai/tastekit-core</span> <span class="comment">— Schemas, compiler, interview, drift, eval, generators</span>
 ├── <span class="key">schemas/</span> <span class="comment">— 9 Zod schemas (constitution, guardrails, memory, skills, bindings, trust, playbook, evalpack, workspace)</span>
 ├── <span class="key">compiler/</span> <span class="comment">— 5-step pipeline with derivation state + resume</span>
 ├── <span class="key">interview/</span> <span class="comment">— LLM interviewer engine with confidence tracking + cascades</span>
-├── <span class="key">domains/</span> <span class="comment">— 6 domain rubrics with 9–28 dimensions each</span>
+├── <span class="key">domains/</span> <span class="comment">— domain rubrics with 9–31 dimensions after universal merge</span>
 ├── <span class="key">drift/</span> <span class="comment">— 7 signal types, proposals, consolidation (Jaccard ≥0.6)</span>
 ├── <span class="key">skills/</span> <span class="comment">— graph analyzer, constraints, versioner, tracker, linter, packer</span>
 ├── <span class="key">generators/</span> <span class="comment">— CLAUDE.md, SOUL.md, AGENTS.md, hooks (5 scripts)</span>
@@ -916,9 +880,9 @@ footer {
 ├── <span class="key">mcp/</span> <span class="comment">— MCP client wrapping official SDK</span>
 └── <span class="key">trust/</span> <span class="comment">— Fingerprint pinning, audit</span>
 
-<span class="key">@tastekit/cli</span> <span class="comment">— 12 commands, inquirer prompts, ora spinners</span>
-<span class="key">@tastekit/adapters</span> <span class="comment">— Claude Code (v2.0), OpenClaw (v2.0), Manus, ActRun Autopilots (v2.0)</span>
-<span class="key">@tastekit/voice</span> <span class="comment">— ElevenLabs Scribe/TTS + Whisper.cpp/Piper local fallbacks</span>
+<span class="key">@actrun_ai/tastekit-cli</span> <span class="comment">— 12 commands, inquirer prompts, ora spinners</span>
+<span class="key">@actrun_ai/tastekit-adapters</span> <span class="comment">— Claude Code (v2.0), OpenClaw (v2.0), Manus, ActRun Autopilots (v2.0)</span>
+<span class="key">@actrun_ai/tastekit-voice</span> <span class="comment">— ElevenLabs Scribe/TTS + Whisper.cpp/Piper local fallbacks</span>
 
 <span class="key">Data Flow:</span>
   User → <span style="color:var(--accent)">Interview</span> → Session → <span style="color:var(--cyan)">Compiler</span> → Artifacts → <span style="color:var(--green)">Adapters</span> → Runtime

@@ -1,0 +1,61 @@
+checks:
+  - check_id: voice-match
+    condition: Post matches constitution voice_keywords and avoids forbidden_phrases
+    type: taste
+  - check_id: platform-fit
+    condition: Post fits platform character limits and format requirements
+    type: format
+description: "Quick workflow: research optional, generate options, user picks, publish."
+escalations:
+  - approval_ref: guardrails.approval_rules.content_review
+    escalation_id: sensitive-topic
+    trigger: Topic involves controversy, politics, or sensitive subjects
+id: simple-post
+inputs:
+  - description: Topic or subject for the post
+    name: topic
+    required: true
+    type: string
+  - description: Target platform (twitter, linkedin, etc.)
+    name: platform
+    required: true
+    type: string
+  - description: Override default voice tone
+    name: tone_override
+    required: false
+    type: string
+name: Simple Post Creation
+schema_version: playbook.v1
+steps:
+  - outputs:
+      - context_summary
+    step_id: understand-context
+    type: think
+  - outputs:
+      - post_options
+    params_template:
+      num_options: 3
+      platform: "{{platform}}"
+      topic: "{{topic}}"
+    step_id: generate-options
+    tool_ref: skill:generate-post-options
+    type: tool
+  - outputs:
+      - selected_post
+    params_template:
+      message: Choose a post option or request modifications.
+      options: "{{post_options}}"
+    step_id: user-selects
+    type: approval_gate
+  - outputs:
+      - final_post
+    params_template:
+      content: "{{selected_post}}"
+      format: "{{platform}}_post"
+    step_id: finalize
+    type: write
+stop_conditions:
+  - condition: User cancels or rejects all options
+    reason: User does not want to proceed with any variation
+triggers:
+  - type: manual

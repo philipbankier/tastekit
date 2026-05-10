@@ -56,8 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Guardrails compiler no longer a stub — fully wires interview answers and domain context
-- Memory compiler no longer a stub — generates domain-specific memory policies
+- Guardrails compiler fully wires interview answers and domain context
+- Memory compiler generates domain-specific memory policies
 - ESLint lint paths corrected for packages with source at root (not in `src/`)
 
 ## [0.5.0] - 2026-02-14
@@ -81,7 +81,7 @@ This release introduces a major architectural shift to domain-focused agent buil
 - **Brand Archetypes**: Professional, casual, edgy, humorous, educational, inspirational, technical
 - **Workflow Modes**: Simple (topic → options), Assisted (research → propose), Autopilot (autonomous)
 
-#### Domain Stubs (Community Contribution Ready)
+#### Domain Scaffolding (Community Contribution Ready)
 - **Research Agent**: Information gathering, analysis, and synthesis
 - **Sales Agent**: Lead generation, qualification, and deal management
 - **Support Agent**: Customer support and user assistance
@@ -109,10 +109,10 @@ packages/core/domains/
 │   ├── questions.ts        # Specialized onboarding
 │   ├── skills/             # Pre-built skills
 │   └── playbooks/          # Example workflows
-├── research-agent/         # Stub
-├── sales-agent/            # Stub
-├── support-agent/          # Stub
-└── development-agent/      # Stub
+├── research-agent/
+├── sales-agent/
+├── support-agent/
+└── development-agent/
 ```
 
 Each domain is self-contained and can be developed independently by the community.

@@ -3,7 +3,17 @@
   "generated_at": "2026-02-20T20:27:24.006Z",
   "generator_version": "0.5.0",
   "user_scope": "single_user",
-  "principles": [],
+  "principles": [
+    {
+      "id": "apply_user_taste",
+      "priority": 1,
+      "statement": "Apply the user's general taste and preferences when no specific principle applies.",
+      "rationale": "Placeholder fixture principle. Real constitutions have user-derived principles.",
+      "applies_to": [
+        "*"
+      ]
+    }
+  ],
   "tone": {
     "voice_keywords": [],
     "forbidden_phrases": [],

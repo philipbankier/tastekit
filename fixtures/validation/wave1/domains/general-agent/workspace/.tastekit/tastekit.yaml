@@ -1,0 +1,9 @@
+version: 1.0.0
+project_name: wave1-general-agent
+created_at: 2026-05-10T00:00:00.000Z
+domain_id: general-agent
+onboarding:
+  depth: guided
+  completed: true
+llm_provider:
+  provider: ollama

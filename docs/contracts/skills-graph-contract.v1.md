@@ -1,7 +1,7 @@
 # Skills Graph Contract v1
 
 ## Source Artifact
-- Canonical source: `knowledge/skills/manifest.v1.yaml`
+- Canonical source: `skills/manifest.v1.yaml`
 - Schema: `skills_manifest.v1`
 
 ## Graph Relationship Fields

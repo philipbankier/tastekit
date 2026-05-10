@@ -39,6 +39,13 @@ function makeSession(domainId: string): SessionState {
   };
 }
 
+function makeGeneralSessionWithPacks(capabilityPacks: string[] = ['development', 'content']): SessionState {
+  return {
+    ...makeSession('general-agent'),
+    capability_packs: capabilityPacks,
+  };
+}
+
 let tempDir: string;
 
 beforeEach(() => {
@@ -80,6 +87,97 @@ describe('compileSkills', () => {
     const manifestPath = join(tempDir, '.tastekit', 'skills', 'manifest.v1.yaml');
     const manifest = parseYAML(readFileSync(manifestPath, 'utf-8'));
     expect(manifest.skills.length).toBeGreaterThan(0);
+  });
+
+  it('generates manifest for content-agent domain', async () => {
+    const artifacts = await compileSkills({
+      workspacePath: join(tempDir, '.tastekit'),
+      session: makeSession('content-agent'),
+      constitution: makeConstitution(),
+    });
+
+    expect(artifacts).toContain('skills/manifest.v1.yaml');
+    const manifestPath = join(tempDir, '.tastekit', 'skills', 'manifest.v1.yaml');
+    const manifest = parseYAML(readFileSync(manifestPath, 'utf-8'));
+    const ids = manifest.skills.map((skill: { skill_id: string }) => skill.skill_id);
+
+    expect(SkillsManifestV1Schema.safeParse(manifest).success).toBe(true);
+    expect(ids).toContain('content-voice-brief');
+    expect(ids).toContain('content-draft-options');
+
+    const voiceBrief = manifest.skills.find((skill: { skill_id: string }) => skill.skill_id === 'content-voice-brief');
+    expect(voiceBrief).toMatchObject({
+      tags: ['content', 'voice', 'brief'],
+      risk_level: 'low',
+      required_tools: ['file-system'],
+      feeds_into: ['content-draft-options'],
+      pipeline_phase: 'capture',
+      context_model: 'inherit',
+    });
+
+    const draftOptions = manifest.skills.find((skill: { skill_id: string }) => skill.skill_id === 'content-draft-options');
+    expect(draftOptions).toMatchObject({
+      tags: ['content', 'drafting', 'adaptation'],
+      risk_level: 'med',
+      required_tools: ['file-system'],
+      prerequisites: ['content-voice-brief'],
+      pipeline_phase: 'process',
+      context_model: 'inherit',
+    });
+  });
+
+  it('adds requested development and content capability packs to general-agent', async () => {
+    await compileSkills({
+      workspacePath: join(tempDir, '.tastekit'),
+      session: makeGeneralSessionWithPacks(),
+      constitution: makeConstitution(),
+    });
+
+    const manifestPath = join(tempDir, '.tastekit', 'skills', 'manifest.v1.yaml');
+    const manifest = parseYAML(readFileSync(manifestPath, 'utf-8'));
+    const ids = manifest.skills.map((skill: { skill_id: string }) => skill.skill_id);
+
+    expect(ids).toContain('context-synthesis');
+    expect(ids).toContain('task-orchestration');
+    expect(ids).toContain('debugging-issues');
+    expect(ids).toContain('writing-tests');
+    expect(ids).toContain('content-voice-brief');
+    expect(ids).toContain('content-draft-options');
+  });
+
+  it('adds content capability pack skills and files to general-agent', async () => {
+    await compileSkills({
+      workspacePath: join(tempDir, '.tastekit'),
+      session: makeGeneralSessionWithPacks(['content']),
+      constitution: makeConstitution(),
+    });
+
+    const manifestPath = join(tempDir, '.tastekit', 'skills', 'manifest.v1.yaml');
+    const manifest = parseYAML(readFileSync(manifestPath, 'utf-8'));
+    const ids = manifest.skills.map((skill: { skill_id: string }) => skill.skill_id);
+
+    expect(ids).toContain('context-synthesis');
+    expect(ids).toContain('task-orchestration');
+    expect(ids).toContain('content-voice-brief');
+    expect(ids).toContain('content-draft-options');
+    expect(ids).not.toContain('debugging-issues');
+    expect(existsSync(join(tempDir, '.tastekit', 'skills', 'content-draft-options', 'SKILL.md'))).toBe(true);
+  });
+
+  it('writes content-agent skill files with agent skill frontmatter and concrete procedures', async () => {
+    await compileSkills({
+      workspacePath: join(tempDir, '.tastekit'),
+      session: makeSession('content-agent'),
+      constitution: makeConstitution(),
+    });
+
+    const voiceBriefPath = join(tempDir, '.tastekit', 'skills', 'content-voice-brief', 'SKILL.md');
+    const draftOptionsPath = join(tempDir, '.tastekit', 'skills', 'content-draft-options', 'SKILL.md');
+
+    expect(readFileSync(voiceBriefPath, 'utf-8')).toContain('name: content-voice-brief');
+    const draftOptions = readFileSync(draftOptionsPath, 'utf-8');
+    expect(draftOptions).toContain('name: content-draft-options');
+    expect(draftOptions).toContain('Never publish, schedule, or send content externally');
   });
 
   it('writes SKILL.md files for each domain skill', async () => {

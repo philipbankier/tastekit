@@ -1,0 +1,28 @@
+- Connecting to LLM...
+✔ Connected to ollama
+Resuming previous session...
+
+TasteKit Onboarding Interview
+
+Domain: research-agent | Depth: guided | LLM: ollama
+Type /save to save and quit, /skip to skip a topic
+
+? You:[8G[9G[2K[G? You: /[9G[10G[2K[G? You: /s[10G[11G[2K[G? You: /sk[11G[12G[2K[G? You: /ski[12G[13G[2K[G? You: /skip[13G[8G[2K[G? You: /skip[13G[2K[G? You: /skip[13G
+[?25h
+  Got it — you’re prioritizing outcome over process for now. That’s totally fine.
+
+Let’s shift gears:  
+**What’s your ideal tone or voice for the agent’s output?**  
+(Think of it as: if you were describing your ideal research partner’s writing style — what adjectives would you use? Would you want it to be formal, punchy, conversational, or something else?)
+
+? You:[8G[9G[2K[G? You: /[9G[10G[2K[G? You: /s[10G[11G[2K[G? You: /sa[11G[12G[2K[G? You: /sav[12G[13G[2K[G? You: /save[13G[8G[2K[G? You: /save[13G[2K[G? You: /save[13G
+[?25h
+  Session saved. Run with --resume to continue later.
+
+
+Onboarding complete!
+  Dimensions covered: 1/19
+  Principles extracted: 0
+  Session saved to: .tastekit/ops/session.json
+
+  Run tastekit compile to generate your taste artifacts

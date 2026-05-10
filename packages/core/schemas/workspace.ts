@@ -15,6 +15,9 @@ export const WorkspaceConfigSchema = z.object({
   /** Selected domain (e.g., 'general-agent', 'development-agent') */
   domain_id: z.string().optional(),
 
+  /** Optional domain capability packs for broad agents, e.g. general-agent + development/content */
+  capability_packs: z.array(z.string()).optional(),
+
   /** LLM provider configuration for onboarding */
   llm_provider: LLMProviderConfigSchema.optional(),
 
@@ -126,6 +129,9 @@ export const SessionStateSchema = z.object({
 
   /** Domain selected during init */
   domain_id: z.string().optional(),
+
+  /** Optional domain capability packs selected during init */
+  capability_packs: z.array(z.string()).optional(),
 
   /** LLM provider used for interview */
   llm_provider: z.object({

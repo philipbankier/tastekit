@@ -1,0 +1,37 @@
+schema_version: skills_manifest.v1
+skills:
+  - compatible_runtimes:
+      - claude-code
+      - openclaw
+      - manus
+    context_model: inherit
+    description: Analyze what content is performing well in your niche
+    feeds_into:
+      - generate-post-options
+    name: Research Trends
+    pipeline_phase: capture
+    required_tools:
+      - web-search
+    risk_level: low
+    skill_id: research-trends
+    tags:
+      - research
+      - trends
+      - content-strategy
+  - compatible_runtimes:
+      - claude-code
+      - openclaw
+      - manus
+    context_model: inherit
+    description: Create 3-5 variations of a post for user selection
+    name: Generate Post Options
+    pipeline_phase: process
+    prerequisites:
+      - research-trends
+    required_tools: []
+    risk_level: low
+    skill_id: generate-post-options
+    tags:
+      - content-creation
+      - social-media
+      - writing

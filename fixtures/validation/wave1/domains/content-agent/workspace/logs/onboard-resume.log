@@ -1,0 +1,30 @@
+- Connecting to LLM...
+✔ Connected to ollama
+Resuming previous session...
+
+TasteKit Onboarding Interview
+
+Domain: content-agent | Depth: guided | LLM: ollama
+Type /save to save and quit, /skip to skip a topic
+
+? You:[8G[9G[2K[G? You: /[9G[10G[2K[G? You: /s[10G[11G[2K[G? You: /sk[11G[12G[2K[G? You: /ski[12G[13G[2K[G? You: /skip[13G[8G[2K[G? You: /skip[13G[2K[G? You: /skip[13G
+[?25h
+  Got it — we’ll skip this for now and come back to it if needed.  
+
+Since you’re focused on OSS updates and devlogs, let’s talk about the **tone and voice** you want your agent to use.  
+
+How would you describe the voice you want your content to have? (Think of 3–5 adjectives — e.g., clear, technical, friendly, precise, approachable.)  
+
+Also, is there any tone you’d *never* want the agent to use — like overly casual, overly salesy, or too jargon-heavy?
+
+? You:[8G[9G[2K[G? You: /[9G[10G[2K[G? You: /s[10G[11G[2K[G? You: /sa[11G[12G[2K[G? You: /sav[12G[13G[2K[G? You: /save[13G[8G[2K[G? You: /save[13G[2K[G? You: /save[13G
+[?25h
+  Session saved. Run with --resume to continue later.
+
+
+Onboarding complete!
+  Dimensions covered: 1/18
+  Principles extracted: 0
+  Session saved to: .tastekit/ops/session.json
+
+  Run tastekit compile to generate your taste artifacts

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { OpenClawAdapter } from '../openclaw/index.js';
 import { cleanupFixture, createProfileFixture, type Layout } from './helpers.js';
@@ -45,6 +45,35 @@ for (const layout of ['v1', 'v2'] as Layout[]) {
         const config = JSON.parse(readFileSync(join(outDir, 'openclaw.config.json'), 'utf-8'));
         expect(config.profile.principles).toHaveLength(1);
         expect(config.safety.taboos.never_do).toContain('Never fabricate citations');
+      } finally {
+        cleanupFixture(rootDir);
+      }
+    });
+
+    it('preserves manual SOUL.md and AGENTS.md content outside TasteKit managed regions', async () => {
+      const { rootDir, profilePath } = createProfileFixture(layout);
+      const outDir = join(rootDir, 'export-openclaw');
+
+      try {
+        mkdirSync(outDir, { recursive: true });
+        writeFileSync(join(outDir, 'SOUL.md'), '# Manual Soul\n\nKeep soul notes.\n', 'utf-8');
+        writeFileSync(join(outDir, 'AGENTS.md'), '# Manual Agents\n\nKeep agent notes.\n', 'utf-8');
+
+        const adapter = new OpenClawAdapter();
+        await adapter.export(profilePath, outDir, {
+          includeSkills: true,
+          includePlaybooks: true,
+        });
+
+        const soul = readFileSync(join(outDir, 'SOUL.md'), 'utf-8');
+        expect(soul).toContain('# Manual Soul');
+        expect(soul).toContain('Keep soul notes.');
+        expect(soul.match(/BEGIN TASTEKIT MANAGED REGION/g)).toHaveLength(1);
+
+        const agents = readFileSync(join(outDir, 'AGENTS.md'), 'utf-8');
+        expect(agents).toContain('# Manual Agents');
+        expect(agents).toContain('Keep agent notes.');
+        expect(agents.match(/BEGIN TASTEKIT MANAGED REGION/g)).toHaveLength(1);
       } finally {
         cleanupFixture(rootDir);
       }

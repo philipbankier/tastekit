@@ -13,10 +13,32 @@ import { resolveSessionPath } from '@actrun_ai/tastekit-core/utils';
 import { detail, hint, handleError } from '../ui.js';
 
 interface OnboardOptions {
-  depth?: 'quick' | 'guided' | 'operator';
+  depth?: 'quick' | 'guided' | 'operator' | 'full' | 'full-taste-composition';
   resume?: boolean;
   provider?: string;
   voice?: boolean;
+}
+
+type CanonicalOnboardingDepth = 'quick' | 'guided' | 'operator';
+type OnboardingDepthInput = CanonicalOnboardingDepth | 'full' | 'full-taste-composition';
+
+const DEPTH_CHOICES: OnboardingDepthInput[] = ['quick', 'guided', 'operator', 'full', 'full-taste-composition'];
+
+function normalizeOnboardingDepth(depth: string): CanonicalOnboardingDepth {
+  return depth === 'full' || depth === 'full-taste-composition'
+    ? 'operator'
+    : depth as CanonicalOnboardingDepth;
+}
+
+function formatDepthLabel(depth: CanonicalOnboardingDepth): string {
+  switch (depth) {
+    case 'quick':
+      return 'Quick';
+    case 'guided':
+      return 'Guided';
+    case 'operator':
+      return 'Full Taste Composition';
+  }
 }
 
 export function resolveOnboardProviderConfig(
@@ -45,7 +67,7 @@ export function resolveOnboardProviderConfig(
 
 export const onboardCommand = new Command('onboard')
   .description('Run the LLM-driven onboarding interview')
-  .addOption(createOption('--depth <type>', 'Override depth').choices(['quick', 'guided', 'operator']))
+  .addOption(createOption('--depth <type>', 'Override depth').choices(DEPTH_CHOICES))
   .option('--resume', 'Resume from previous session')
   .option('--provider <name>', 'Override LLM provider: anthropic, openai, ollama')
   .option('--voice', 'Enable voice mode (requires @actrun_ai/tastekit-voice and sox)')
@@ -67,7 +89,7 @@ export const onboardCommand = new Command('onboard')
 
     // Load config
     const config: WorkspaceConfig = YAML.parse(readFileSync(configPath, 'utf-8'));
-    const depth = (options.depth ?? config.onboarding?.depth ?? 'guided') as 'quick' | 'guided' | 'operator';
+    const depth = normalizeOnboardingDepth(options.depth ?? config.onboarding?.depth ?? 'guided');
     const domainId = config.domain_id;
 
     if (!domainId) {
@@ -112,6 +134,7 @@ export const onboardCommand = new Command('onboard')
       }
 
       session.domain_id = domainId;
+      session.capability_packs = config.capability_packs;
       session.llm_provider = { name: llm.name };
 
       // Set up voice mode if requested
@@ -128,7 +151,7 @@ export const onboardCommand = new Command('onboard')
       }
 
       console.log(chalk.bold.cyan('\nTasteKit Onboarding Interview\n'));
-      console.log(chalk.gray(`Domain: ${domainId} | Depth: ${depth} | LLM: ${llm.name}${voiceIO ? ' | Voice: ON' : ''}`));
+      console.log(chalk.gray(`Domain: ${domainId} | Depth: ${formatDepthLabel(depth)} | LLM: ${llm.name}${voiceIO ? ' | Voice: ON' : ''}`));
       if (!voiceIO) {
         console.log(chalk.gray('Type /save to save and quit, /skip to skip a topic\n'));
       } else {

@@ -25,7 +25,8 @@ const GLOBAL_OPTIONS = ['--json', '--verbose', '--help', '--version'];
 
 const EXPORT_TARGETS = ['claude-code', 'manus', 'openclaw', 'autopilots', 'agents-md', 'agent-file'];
 const IMPORT_TARGETS = ['claude-code', 'manus', 'openclaw', 'autopilots', 'soul-md', 'agent-file'];
-const DEPTHS = ['quick', 'guided', 'operator'];
+const DEPTHS = ['quick', 'guided', 'operator', 'full', 'full-taste-composition'];
+const CAPABILITY_PACKS = ['development', 'content'];
 
 function bashCompletion(): string {
   const subCommandCases = Object.entries(SUBCOMMANDS)
@@ -66,8 +67,10 @@ ${subCommandCases}
       init)
         if [[ "$prev" == "--depth" ]]; then
           COMPREPLY=($(compgen -W "${DEPTHS.join(' ')}" -- "$cur"))
+        elif [[ "$prev" == "--capability" ]]; then
+          COMPREPLY=($(compgen -W "${CAPABILITY_PACKS.join(' ')}" -- "$cur"))
         else
-          COMPREPLY=($(compgen -W "--domain --depth" -- "$cur"))
+          COMPREPLY=($(compgen -W "--domain --depth --capability" -- "$cur"))
         fi
         ;;
       onboard)
@@ -128,7 +131,7 @@ _tastekit() {
 ${subcmdLines}
         export) _arguments '--target[Target adapter]:target:(${EXPORT_TARGETS.join(' ')})' '--out[Output directory]:directory:_directories' ;;
         import) _arguments '--target[Source format]:target:(${IMPORT_TARGETS.join(' ')})' '--source[Source path]:path:_files' ;;
-        init) _arguments '--domain[Domain ID]:domain:' '--depth[Onboarding depth]:depth:(${DEPTHS.join(' ')})' ;;
+        init) _arguments '--domain[Domain ID]:domain:' '--depth[Onboarding depth]:depth:(${DEPTHS.join(' ')})' '--capability[Capability pack]:capability:(${CAPABILITY_PACKS.join(' ')})' ;;
         onboard) _arguments '--depth[Override depth]:depth:(${DEPTHS.join(' ')})' '--resume[Resume session]' '--provider[LLM provider]:provider:(anthropic openai ollama)' ;;
       esac
       ;;
@@ -181,6 +184,12 @@ function fishCompletion(): string {
   lines.push('# Global options');
   lines.push("complete -c tastekit -l json -d 'Output in JSON format'");
   lines.push("complete -c tastekit -l verbose -d 'Enable verbose logging'");
+
+  lines.push('');
+  lines.push('# Depth options');
+  lines.push("complete -c tastekit -n '__fish_seen_subcommand_from init; and __fish_seen_argument -l depth' -a '" + DEPTHS.join(' ') + "'");
+  lines.push("complete -c tastekit -n '__fish_seen_subcommand_from init; and __fish_seen_argument -l capability' -a '" + CAPABILITY_PACKS.join(' ') + "'");
+  lines.push("complete -c tastekit -n '__fish_seen_subcommand_from onboard; and __fish_seen_argument -l depth' -a '" + DEPTHS.join(' ') + "'");
 
   return lines.join('\n') + '\n';
 }

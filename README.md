@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)](https://www.typescriptlang.org/)
-[![CI](https://github.com/philipbankier/tastekit/actions/workflows/ci.yml/badge.svg)](https://github.com/philipbankier/tastekit/actions/workflows/ci.yml)
+[![CI](https://github.com/tastekit/tastekit/actions/workflows/ci.yml/badge.svg)](https://github.com/tastekit/tastekit/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@actrun_ai/tastekit-cli.svg)](https://www.npmjs.com/package/@actrun_ai/tastekit-cli)
 
 **Compile your taste into portable agent artifacts.**
@@ -44,7 +44,7 @@ npx @actrun_ai/tastekit-cli init
 ### Development Setup
 
 ```bash
-git clone https://github.com/philipbankier/tastekit.git
+git clone https://github.com/tastekit/tastekit.git
 cd tastekit
 pnpm install
 pnpm build
@@ -148,18 +148,18 @@ After running `tastekit compile`, TasteKit supports both legacy flat (`v1`) and 
 
 ## Agent Domains
 
-TasteKit ships with 6 fully implemented domains, each with specialized rubrics, interview dimensions, skills, and playbooks:
+TasteKit ships six production domains, each with specialized rubrics, interview dimensions, skills, playbooks, and validation fixtures:
 
-| Domain | Rubric Dimensions | Built-in Skills | Playbooks |
-|:---|:---:|:---:|:---:|
-| General Agent | 18 | 2 | 2 |
-| Content Agent | 16 | 2 | 3 |
-| Development Agent | 24 | 2 | 2 |
-| Research Agent | 18 | 2 | 2 |
-| Sales Agent | 18 | 2 | 2 |
-| Support Agent | 18 | 2 | 2 |
+| Domain | Focus |
+|:---|:---|
+| General Agent | Mixed technical and non-technical work, planning, synthesis, and decision support |
+| Development Agent | Code review, debugging, testing, refactoring, and engineering documentation |
+| Content Agent | Brand voice, editorial drafting, channel adaptation, and publishing boundaries |
+| Research Agent | Source discovery, evidence grading, synthesis, and competitive analysis |
+| Sales Agent | Account research, qualification, buyer-facing follow-up, and deal-risk escalation |
+| Support Agent | Troubleshooting, customer communication, privacy-safe assistance, and escalation |
 
-Each domain includes quick (5 min), guided (15 min), and operator (30 min) interview depths.
+Each domain supports Quick, Guided, and Full Taste Composition depths. General Agent can also opt into `development` and `content` capability packs when one broad agent needs task-specific workflows. Release validation gates enumerate all six domains in deterministic replay and pre-release live Ollama smoke checks.
 
 ## Project Structure
 

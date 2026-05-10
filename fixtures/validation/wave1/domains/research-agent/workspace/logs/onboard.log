@@ -1,0 +1,50 @@
+- Connecting to LLM...
+✔ Connected to ollama
+
+TasteKit Onboarding Interview
+
+Domain: research-agent | Depth: guided | LLM: ollama
+Type /save to save and quit, /skip to skip a topic
+
+
+  Hey — thanks for taking the time to think through how you’d like your research agent to work. I’m going to ask you a few questions to get a sense of your style, goals, and preferences — so it can operate the way you’d naturally want it to.
+
+Let’s start with the big one:  
+**What’s the main problem you’re trying to solve with this agent? What would success look like for you?**
+
+(Think of it like: if you had a research partner who knew your priorities, what would they deliver?)
+
+? You:[8G[9G[2K[G? You: P[9G[10G[2K[G? You: Pr[10G[11G[2K[G? You: Pro[11G[12G[2K[G? You: Prod[12G[13G[2K[G? You: Produ[13G[14G[2K[G? You: Produc[14G[15G[2K[G? You: Produce[15G[16G[2K[G? You: Produce[16G[17G[2K[G? You: Produce c[17G[18G[2K[G? You: Produce co[18G[19G[2K[G? You: Produce con[19G[20G[2K[G? You: Produce conc[20G[21G[2K[G? You: Produce conci[21G[22G[2K[G? You: Produce concis[22G[23G[2K[G? You: Produce concise[23G[24G[2K[G? You: Produce concise,[24G[25G[2K[G? You: Produce concise,[25G[26G[2K[G? You: Produce concise, s[26G[27G[2K[G? You: Produce concise, so[27G[28G[2K[G? You: Produce concise, sou[28G[29G[2K[G? You: Produce concise, sour[29G[30G[2K[G? You: Produce concise, sourc[30G[31G[2K[G? You: Produce concise, source[31G[32G[2K[G? You: Produce concise, source-[32G[33G[2K[G? You: Produce concise, source-g[33G[34G[2K[G? You: Produce concise, source-gr[34G[35G[2K[G? You: Produce concise, source-gro[35G[36G[2K[G? You: Produce concise, source-grou[36G[37G[2K[G? You: Produce concise, source-groun[37G[38G[2K[G? You: Produce concise, source-ground[38G[39G[2K[G? You: Produce concise, source-grounde[39G[40G[2K[G? You: Produce concise, source-grounded[40G[41G[2K[G? You: Produce concise, source-grounded[41G[42G[2K[G? You: Produce concise, source-grounded r[42G[43G[2K[G? You: Produce concise, source-grounded re[43G[44G[2K[G? You: Produce concise, source-grounded res[44G[45G[2K[G? You: Produce concise, source-grounded rese[45G[46G[2K[G? You: Produce concise, source-grounded resea[46G[47G[2K[G? You: Produce concise, source-grounded resear[47G[48G[2K[G? You: Produce concise, source-grounded researc[48G[49G[2K[G? You: Produce concise, source-grounded research[49G[50G[2K[G? You: Produce concise, source-grounded research[50G[51G[2K[G? You: Produce concise, source-grounded research s[51G[52G[2K[G? You: Produce concise, source-grounded research su[52G[53G[2K[G? You: Produce concise, source-grounded research sum[53G[54G[2K[G? You: Produce concise, source-grounded research summ[54G[55G[2K[G? You: Produce concise, source-grounded research summa[55G[56G[2K[G? You: Produce concise, source-grounded research summar[56G[57G[2K[G? You: Produce concise, source-grounded research summari[57G[58G[2K[G? You: Produce concise, source-grounded research summarie[58G[59G[2K[G? You: Produce concise, source-grounded research summaries[59G[60G[2K[G? You: Produce concise, source-grounded research summaries[60G[61G[2K[G? You: Produce concise, source-grounded research summaries w[61G[62G[2K[G? You: Produce concise, source-grounded research summaries wi[62G[63G[2K[G? You: Produce concise, source-grounded research summaries wit[63G[64G[2K[G? You: Produce concise, source-grounded research summaries with[64G[65G[2K[G? You: Produce concise, source-grounded research summaries with[65G[66G[2K[G? You: Produce concise, source-grounded research summaries with c[66G[67G[2K[G? You: Produce concise, source-grounded research summaries with cl[67G[68G[2K[G? You: Produce concise, source-grounded research summaries with cle[68G[69G[2K[G? You: Produce concise, source-grounded research summaries with clea[69G[70G[2K[G? You: Produce concise, source-grounded research summaries with clear[70G[71G[2K[G? You: Produce concise, source-grounded research summaries with clear[71G[72G[2K[G? You: Produce concise, source-grounded research summaries with clear r[72G[73G[2K[G? You: Produce concise, source-grounded research summaries with clear re[73G[74G[2K[G? You: Produce concise, source-grounded research summaries with clear rec[74G[75G[2K[G? You: Produce concise, source-grounded research summaries with clear reco[75G[76G[2K[G? You: Produce concise, source-grounded research summaries with clear recom[76G[77G[2K[G? You: Produce concise, source-grounded research summaries with clear recomm[77G[78G[2K[G? You: Produce concise, source-grounded research summaries with clear recomme[78G[79G[2K[G? You: Produce concise, source-grounded research summaries with clear recommen[79G[80G[2K[G? You: Produce concise, source-grounded research summaries with clear recommend[80G[81G[2K[G? You: Produce concise, source-grounded research summaries with clear recommenda
+[1A[81G[82G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendat[1A[82G[83G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendati[1A[83G[84G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendatio[1A[84G[85G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendation[1A[85G[86G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations[1A[86G[87G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations[1A[87G[88G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations a[1A[88G[89G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations an[1A[89G[90G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and[1A[90G[91G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and[1A[91G[92G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and l[1A[92G[93G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and li[1A[93G[94G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and lin[1A[94G[95G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and link[1A[95G[96G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and links[1A[96G[97G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and links.[1A[97G[8G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and links.[1A[97G[1B[2K[1A[2K[G? You: Produce concise, source-grounded research summaries with clear
+recommendations and links.[1A[97G[1B
+[?25h
+  Thanks for that — that’s a great starting point. You’re clearly looking for something practical and actionable, not just theory. To make sure the agent nails your style, I’d love to know: when you’re researching something, what’s your go-to method? Do you start with a question, dive into sources, and then synthesize — or do you often build hypotheses first and test them?
+
+? You:[8G[9G[2K[G? You: /[9G[10G[2K[G? You: /s[10G[11G[2K[G? You: /sa[11G[12G[2K[G? You: /sav[12G[13G[2K[G? You: /save[13G[8G[2K[G? You: /save[13G[2K[G? You: /save[13G
+[?25h
+  Session saved. Run with --resume to continue later.
+
+
+Onboarding complete!
+  Dimensions covered: 1/19
+  Principles extracted: 0
+  Session saved to: .tastekit/ops/session.json
+
+  Run tastekit compile to generate your taste artifacts

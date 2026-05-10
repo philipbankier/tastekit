@@ -12,7 +12,7 @@ import { readFileSync, writeFileSync, cpSync, existsSync, mkdirSync, chmodSync }
 import { join } from 'path';
 import { createRequire } from 'node:module';
 import { resolveArtifactPath, resolveBindingsPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
-import { generateClaudeMd, generateHooks, type GeneratorContext } from '@actrun_ai/tastekit-core/generators';
+import { generateClaudeMd, generateHooks, mergeManagedRegion, type GeneratorContext } from '@actrun_ai/tastekit-core/generators';
 
 const require = createRequire(import.meta.url);
 
@@ -44,7 +44,9 @@ export class ClaudeCodeAdapter implements TasteKitAdapter {
 
     // 1. Generate CLAUDE.md
     const claudeMd = generateClaudeMd(ctx);
-    writeFileSync(join(outDir, 'CLAUDE.md'), claudeMd);
+    const claudePath = join(outDir, 'CLAUDE.md');
+    const existingClaude = existsSync(claudePath) ? readFileSync(claudePath, 'utf-8') : undefined;
+    writeFileSync(claudePath, mergeManagedRegion(existingClaude, claudeMd));
 
     // 2. Generate hook scripts (context-aware for guardrail enforcement)
     const { scripts, settings } = generateHooks(ctx);

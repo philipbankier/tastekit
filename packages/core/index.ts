@@ -19,3 +19,4 @@ export * as evalModule from './eval/index.js';
 export * as domains from './domains/index.js';
 export * as llm from './llm/index.js';
 export * as generators from './generators/index.js';
+export * as demo from './demo/index.js';

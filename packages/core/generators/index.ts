@@ -5,6 +5,7 @@
  */
 
 export * from './types.js';
+export * from './managed-region.js';
 export * from './claude-md-generator.js';
 export * from './claude-hooks-compat.js';
 export * from './soul-md-generator.js';

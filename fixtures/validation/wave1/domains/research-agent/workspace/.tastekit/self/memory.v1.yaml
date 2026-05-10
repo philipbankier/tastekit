@@ -1,0 +1,33 @@
+retention_policy:
+  prune_strategy: least_salient
+  ttl_days: 90
+runtime_target: generic
+schema_version: memory.v1
+stores:
+  - config: {}
+    store_id: default
+    type: runtime_managed
+write_policy:
+  consolidation_schedule: 0 0 2 * * *
+  pii_handling:
+    detect: true
+    redact: false
+    store_separately: true
+  revisit_triggers:
+    - user_correction
+    - principle_violation
+    - repeated_failure
+  salience_rules:
+    - pattern: preference|like|dislike|prefer
+      reason: User preferences are highly salient
+      rule_id: user_preferences
+      score: 0.9
+    - pattern: actually|correction|mistake
+      reason: Corrections are critical to remember
+      rule_id: corrections
+      score: 0.95
+    - pattern: good|bad|better|worse
+      reason: Feedback helps improve future responses
+      rule_id: feedback
+      score: 0.8
+  update_mode: consolidate
