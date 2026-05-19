@@ -1,0 +1,57 @@
+approvals:
+  - action: require_approval
+    channel: cli
+    rule_id: approve_writes_and_deletes
+    when: action.ops contains "write" || action.ops contains "delete"
+  - action: require_approval
+    channel: cli
+    rule_id: approve_high_risk
+    when: action.risk_score > 0.9
+  - action: require_approval
+    channel: cli
+    rule_id: escalate_shipping_changes_to_production_0
+    when: action.tags contains "Shipping changes to production"
+  - action: require_approval
+    channel: cli
+    rule_id: escalate_publishing_external_or_customer_facing_c_1
+    when: action.tags contains "Publishing external or customer-facing claims"
+  - action: require_approval
+    channel: cli
+    rule_id: escalate_legal_medical_or_financial_statements_2
+    when: action.tags contains "Legal, medical, or financial statements"
+  - action: require_approval
+    channel: cli
+    rule_id: escalate_handling_user_data_or_credentials_3
+    when: action.tags contains "Handling user data or credentials"
+  - action: require_approval
+    channel: cli
+    rule_id: escalate_any_irreversible_action_with_asymmetric__4
+    when: action.tags contains "Any irreversible action with asymmetric downside"
+  - action: require_approval
+    channel: cli
+    rule_id: escalate_requests_that_contradict_previously_stat_5
+    when: action.tags contains "Requests that contradict previously stated preferences"
+permissions:
+  - ops:
+      - read
+    resources:
+      - "*"
+    scope_id: general_read
+    tool_ref: "*:*"
+  - ops:
+      - write
+    resources:
+      - "*"
+    scope_id: general_write
+    tool_ref: "*:*"
+rate_limits:
+  - limit: 100
+    tool_ref: "*:*"
+    window: 1h
+  - limit: 10
+    tool_ref: "*:delete"
+    window: 1h
+  - limit: 25
+    tool_ref: "*:execute"
+    window: 1h
+schema_version: guardrails.v1

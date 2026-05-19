@@ -8,6 +8,8 @@ echo "[pr-gate] starting deterministic gate"
 cd "$ROOT_DIR"
 
 bash "$ROOT_DIR/scripts/validation/wave1-check.sh"
+pnpm test:live-e2e:unit
+node "$ROOT_DIR/scripts/validation/mock-live-full-composition-e2e.mjs"
 bash "$ROOT_DIR/scripts/validation/contract-conformance.sh"
 
 END_TS="$(date +%s)"

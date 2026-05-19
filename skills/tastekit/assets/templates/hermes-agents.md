@@ -8,4 +8,6 @@ Use `.tastekit/constitution.v1.json` as the canonical TasteKit profile.
 
 {{taboos}}
 
+{{metacognition}}
+
 <!-- END TASTEKIT MANAGED REGION -->

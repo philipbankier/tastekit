@@ -1,6 +1,6 @@
 {
   "name": "@actrun_ai/tastekit-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "TasteKit CLI - command-line interface for taste compilation and management",
   "type": "module",
   "license": "MIT",

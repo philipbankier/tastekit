@@ -1,0 +1,39 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": ".tastekit/hooks/session-orient.sh"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "type": "command",
+        "command": ".tastekit/hooks/tastekit-guard.sh",
+        "matcher": "Bash|Edit|Write"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": ".tastekit/hooks/artifact-validate.sh",
+        "matcher": "Write"
+      }
+    ],
+    "PostCompact": [
+      {
+        "type": "command",
+        "command": ".tastekit/hooks/post-compact.sh"
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": ".tastekit/hooks/session-capture.sh"
+      }
+    ]
+  },
+  "permissions": {
+    "defaultMode": "default"
+  }
+}

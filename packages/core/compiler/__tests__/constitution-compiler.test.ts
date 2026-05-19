@@ -210,6 +210,89 @@ describe('compileConstitution', () => {
     });
   });
 
+  it('preserves sanitized metacognitive state under the extension bag', () => {
+    const session = makeSession({
+      depth: 'operator',
+      structured_answers: makeStructuredAnswers(),
+      interview: {
+        transcript: [
+          {
+            turn_number: 1,
+            role: 'user',
+            content: 'This raw metacognitive transcript should not be copied.',
+            timestamp: '2026-05-10T12:00:00.000Z',
+          },
+        ],
+        dimension_coverage: [],
+        is_complete: true,
+        turn_count: 12,
+        metacognition: {
+          schema_version: 'tastekit.metacognition.v1',
+          depth: 'operator',
+          public_depth_label: 'Full Taste Composition',
+          domain_id: 'development-agent',
+          coverage_summary: {
+            critical: { total: 1, covered: 1, confirmed: 1, inferred: 0 },
+            important: { total: 1, covered: 0, confirmed: 0, inferred: 1 },
+            nice_to_have: { total: 0, covered: 0, confirmed: 0, inferred: 0 },
+            inferable: { total: 0, covered: 0, confirmed: 0, inferred: 0 },
+            total_dimensions: 2,
+            covered_dimensions: 1,
+          },
+          unresolved_assumptions: [
+            {
+              id: 'inferred-style',
+              dimension_id: 'style',
+              summary: 'Likely prefers concise progress updates.',
+              source: 'inferred',
+              turn_number: 4,
+            },
+          ],
+          conflicts: [],
+          confirmation_checkpoints: [
+            {
+              id: 'draft-1',
+              turn_number: 10,
+              type: 'draft',
+              dimension_ids: ['core'],
+              accepted: true,
+              summary: 'Draft accepted.',
+            },
+          ],
+          fatigue_events: [
+            {
+              turn_number: 8,
+              signal: 'terse replies',
+              action: 'summarize',
+            },
+          ],
+          policy_decisions: [
+            {
+              turn_number: 9,
+              action: 'draft',
+              target_dimension_ids: ['core', 'style'],
+              reason_codes: ['full_draft_checkpoint_required'],
+            },
+          ],
+          confirmed_dimension_ids: ['core'],
+        },
+      },
+    });
+
+    const result = compileConstitution(session, '1.1.0');
+    const metacognition = result.extensions?.['x-tastekit-metacognition'] as any;
+
+    expect(metacognition).toMatchObject({
+      schema_version: 'tastekit.metacognition.v1',
+      depth: 'operator',
+      public_depth_label: 'Full Taste Composition',
+      domain_id: 'development-agent',
+    });
+    expect(metacognition.unresolved_assumptions[0].summary).toBe('Likely prefers concise progress updates.');
+    expect(metacognition.confirmation_checkpoints[0].accepted).toBe(true);
+    expect(JSON.stringify(metacognition)).not.toContain('This raw metacognitive transcript should not be copied');
+  });
+
   it('falls back to legacy flat answers', () => {
     const session = makeSession({
       answers: {

@@ -1,0 +1,27 @@
+{
+  "proposal_id": "drift_1779056190968_cg8fgr1z6",
+  "created_at": "2026-05-17T22:16:30.968Z",
+  "signal_type": "principle_violation",
+  "frequency": 3,
+  "rationale": "Multiple errors detected (3 occurrences). Review and update guardrails or principles.",
+  "proposed_changes": {
+    "guardrails": {
+      "add_approval": {
+        "rule_id": "auto-detected-violation",
+        "when": "Similar error pattern detected",
+        "action": "require_approval"
+      }
+    }
+  },
+  "risk_rating": "low",
+  "evidence": {
+    "occurrences": 3,
+    "context": {
+      "errors": [
+        "unsupported public claim",
+        "irreversible action without approval",
+        "over-explained low-stakes update"
+      ]
+    }
+  }
+}

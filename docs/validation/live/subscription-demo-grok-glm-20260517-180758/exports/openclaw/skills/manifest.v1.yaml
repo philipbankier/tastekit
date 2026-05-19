@@ -1,0 +1,41 @@
+schema_version: skills_manifest.v1
+skills:
+  - compatible_runtimes:
+      - claude-code
+      - openclaw
+      - manus
+      - autopilots
+    context_model: inherit
+    description: Collects and normalizes fragmented context into an actionable brief with assumptions and confidence levels. Use when inputs are scattered across multiple sources, requirements are ambiguous, or you need source-backed context before executing a task.
+    feeds_into:
+      - task-orchestration
+    name: Context Synthesis
+    pipeline_phase: capture
+    required_tools:
+      - file-system
+      - web-search
+    risk_level: low
+    skill_id: context-synthesis
+    tags:
+      - general
+      - context
+      - analysis
+  - compatible_runtimes:
+      - claude-code
+      - openclaw
+      - manus
+      - autopilots
+    context_model: inherit
+    description: Plans and executes multi-step tasks with explicit checkpoints, constraints, and escalation points. Use when handling complex requests that combine planning and execution, multi-step workflows with dependencies, or when the user asks to plan, orchestrate, or manage a task.
+    name: Task Orchestration
+    pipeline_phase: process
+    prerequisites:
+      - context-synthesis
+    required_tools:
+      - file-system
+    risk_level: low
+    skill_id: task-orchestration
+    tags:
+      - general
+      - planning
+      - execution

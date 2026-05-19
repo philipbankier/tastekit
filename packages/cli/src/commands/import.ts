@@ -5,8 +5,7 @@ import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { detail, hint, handleError } from '../ui.js';
 import { ConstitutionV1Schema, type ConstitutionV1 } from '@actrun_ai/tastekit-core/schemas';
-
-const CLI_GENERATOR_VERSION = '1.0.0';
+import { getCliPackageVersion } from '../version.js';
 
 function principleIdFromStatement(statement: string, index: number, used: Set<string>): string {
   const slug = statement.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40);
@@ -331,7 +330,7 @@ function finalizeImportedConstitution(input: {
   return {
     schema_version: 'constitution.v1',
     generated_at: new Date().toISOString(),
-    generator_version: CLI_GENERATOR_VERSION,
+    generator_version: getCliPackageVersion(),
     user_scope: 'single_user',
     principles,
     tone: {

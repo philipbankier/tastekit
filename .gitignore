@@ -13,6 +13,8 @@ coverage/
 .env
 .env.local
 .env.*.local
+tastekit-live.env
+docs/validation/live/tastekit-live.env
 
 # IDE
 .vscode/
@@ -37,6 +39,13 @@ Thumbs.db
 
 # E2E run outputs (regenerated; not source of truth — see examples/constitutions/ for filled examples)
 examples/*/output/
+
+# Live validation run outputs; prompt/rubric source files remain tracked.
+docs/validation/live/full-composition-*/
+docs/validation/live/subscription-demo-*/
+docs/validation/live/subscription-fallback-*/
+!docs/validation/live/subscription-demo-grok-glm-20260517-180758/
+!docs/validation/live/subscription-demo-grok-glm-20260517-180758/**
 
 # Logs
 *.log

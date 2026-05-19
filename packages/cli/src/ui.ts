@@ -8,6 +8,7 @@
 import chalk from 'chalk';
 import type { Command } from 'commander';
 import type { Ora } from 'ora';
+import { writeSync } from 'fs';
 
 // ---------------------------------------------------------------------------
 // Global options
@@ -143,7 +144,7 @@ export function table(columns: Column[], rows: string[][]): void {
  * Print data as formatted JSON and exit.
  */
 export function jsonOutput(data: unknown): never {
-  console.log(JSON.stringify(data, null, 2));
+  writeSync(process.stdout.fd, `${JSON.stringify(data, null, 2)}\n`);
   process.exit(0);
 }
 

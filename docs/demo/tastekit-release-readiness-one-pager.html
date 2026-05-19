@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TasteKit v1.1 Release Readiness One-Pager</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f5ee;
+      --paper: #fffdf8;
+      --ink: #172026;
+      --muted: #65717a;
+      --line: #d9ddd6;
+      --line-strong: #aab3ad;
+      --green: #176f4d;
+      --green-soft: #dbf2e6;
+      --blue: #2454c6;
+      --blue-soft: #e1e9ff;
+      --teal: #0d756e;
+      --teal-soft: #d9f3ef;
+      --amber: #9a5b12;
+      --amber-soft: #fff1cf;
+      --red: #ae2433;
+      --red-soft: #ffe2e6;
+      --purple: #6745b9;
+      --purple-soft: #eee8ff;
+      --slate-soft: #edf0ef;
+      --shadow: 0 18px 40px rgba(33, 40, 45, .08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.35;
+    }
+
+    main {
+      width: min(1320px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 22px 0 34px;
+    }
+
+    a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+    h1, h2, h3, p { margin: 0; }
+    code { font-family: "SFMono-Regular", Consolas, monospace; font-size: .92em; }
+
+    .sheet {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(380px, .75fr);
+      gap: 24px;
+      padding: 28px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(36, 84, 198, .08), rgba(23, 111, 77, .06)),
+        var(--paper);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 11px;
+      color: var(--green);
+      background: var(--green-soft);
+    }
+
+    h1 {
+      margin-top: 14px;
+      max-width: 820px;
+      font-size: clamp(36px, 5vw, 70px);
+      line-height: .96;
+      letter-spacing: 0;
+      font-weight: 900;
+    }
+
+    .dek {
+      margin-top: 14px;
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.62);
+      color: #34424a;
+      font-size: 12px;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .status-card {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      min-height: 86px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(255,255,255,.8);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 31px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .green { color: var(--green); }
+    .blue { color: var(--blue); }
+    .teal { color: var(--teal); }
+    .purple { color: var(--purple); }
+    .amber { color: var(--amber); }
+    .red { color: var(--red); }
+
+    .caveat {
+      padding: 10px 12px;
+      border: 1px solid #f2d28d;
+      border-radius: 9px;
+      background: var(--amber-soft);
+      color: #70420d;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(330px, .92fr);
+      gap: 16px;
+      padding: 18px;
+    }
+
+    .panel {
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fffefa;
+    }
+
+    .panel h2 {
+      margin-bottom: 5px;
+      color: #4f5e66;
+      font-size: 12px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .panel-note {
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .flow-step {
+      position: relative;
+      min-height: 122px;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fbfbf7;
+    }
+
+    .flow-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: -8px;
+      top: 48%;
+      width: 9px;
+      height: 2px;
+      background: var(--line-strong);
+    }
+
+    .num {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .flow-step h3 {
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.15;
+    }
+
+    .flow-step p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .depth {
+      display: grid;
+      gap: 8px;
+    }
+
+    .depth-row {
+      display: grid;
+      grid-template-columns: 98px 1fr 78px;
+      gap: 9px;
+      align-items: center;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfbf7;
+    }
+
+    .depth-row b { font-size: 12px; }
+    .depth-row small { color: var(--muted); font-size: 11px; }
+    .bar {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--slate-soft);
+    }
+
+    .fill { height: 100%; border-radius: inherit; }
+    .fill.quick { width: 30%; background: var(--teal); }
+    .fill.guided { width: 64%; background: var(--blue); }
+    .fill.full { width: 100%; background: var(--purple); }
+
+    .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .domain {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfbf7;
+    }
+
+    .domain b { display: block; font-size: 12px; }
+    .domain span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .domain .mini { margin-top: 8px; height: 6px; border-radius: 999px; background: var(--blue-soft); overflow: hidden; }
+    .domain .mini i { display: block; height: 100%; background: var(--blue); border-radius: inherit; }
+
+    .coverage {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .ring-wrap { display: grid; place-items: center; }
+    .ring {
+      width: 164px;
+      height: 164px;
+      border-radius: 50%;
+      background:
+        conic-gradient(var(--green) 0 100%, var(--slate-soft) 0);
+      display: grid;
+      place-items: center;
+    }
+
+    .ring-inner {
+      width: 118px;
+      height: 118px;
+      border-radius: 50%;
+      background: var(--paper);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 1px solid var(--line);
+    }
+
+    .ring-inner strong { display: block; font-size: 28px; line-height: 1; }
+    .ring-inner span { display: block; margin-top: 5px; color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+
+    .coverage-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .coverage-row {
+      display: grid;
+      grid-template-columns: 88px 1fr 74px;
+      gap: 9px;
+      align-items: center;
+      color: #253039;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .coverage-row .bar { height: 9px; }
+
+    .evidence-wall {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .check {
+      min-height: 76px;
+      padding: 10px;
+      border: 1px solid #b8dcc9;
+      border-radius: 8px;
+      background: var(--green-soft);
+      color: #17482f;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .check small {
+      display: block;
+      margin-top: 5px;
+      color: #3e7056;
+      font-weight: 650;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .risk {
+      padding: 11px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      min-height: 86px;
+      background: #fbfbf7;
+    }
+
+    .risk.high { border-color: #f0b5bd; background: var(--red-soft); }
+    .risk.med { border-color: #efd28e; background: var(--amber-soft); }
+    .risk.low { border-color: #b7dcca; background: var(--green-soft); }
+    .risk b { display: block; font-size: 12px; }
+    .risk span { display: block; margin-top: 6px; color: #536068; font-size: 11px; }
+
+    .timeline {
+      display: grid;
+      gap: 8px;
+    }
+
+    .phase {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfbf7;
+    }
+
+    .phase i {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: var(--slate-soft);
+      color: #47525a;
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .phase b { display: block; font-size: 12px; }
+    .phase span { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .phase em { color: var(--blue); font-style: normal; font-size: 11px; font-weight: 850; text-transform: uppercase; }
+
+    .bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      padding: 0 18px 18px;
+    }
+
+    .map {
+      min-height: 238px;
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: radial-gradient(circle at 50% 50%, var(--teal-soft), #fffefa 52%);
+      overflow: hidden;
+    }
+
+    .node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      padding: 8px 10px;
+      min-width: 92px;
+      min-height: 40px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      font-size: 11px;
+      font-weight: 850;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(23,32,38,.06);
+    }
+
+    .node.center {
+      left: 50%;
+      top: 50%;
+      width: 126px;
+      min-height: 62px;
+      transform: translate(-50%, -50%);
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+      font-size: 13px;
+    }
+
+    .n1 { left: 7%; top: 12%; }
+    .n2 { right: 7%; top: 14%; }
+    .n3 { left: 4%; bottom: 16%; }
+    .n4 { right: 4%; bottom: 16%; }
+    .n5 { left: 35%; top: 4%; }
+    .n6 { left: 35%; bottom: 4%; }
+
+    .question-list {
+      display: grid;
+      gap: 7px;
+    }
+
+    .question {
+      padding: 9px 10px;
+      border-left: 4px solid var(--blue);
+      border-radius: 6px;
+      background: #fbfbf7;
+      color: #303b42;
+      font-size: 12px;
+      font-weight: 720;
+    }
+
+    @media (max-width: 980px) {
+      .hero, .body, .bottom, .split, .coverage { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .flow-step::after { display: none; }
+      .evidence-wall, .domain-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      main { width: min(100vw - 18px, 1320px); padding: 9px 0 18px; }
+      .hero, .body, .bottom { padding: 14px; }
+      .score-grid, .flow, .domain-grid, .evidence-wall, .risk-grid { grid-template-columns: 1fr; }
+      .depth-row, .coverage-row, .phase { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      main { width: 100%; padding: 0; }
+      .sheet { box-shadow: none; border-radius: 0; }
+      a { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <article class="sheet">
+    <section class="hero">
+      <div>
+        <div class="badge">TasteKit v1.1 release readiness</div>
+        <h1>From human taste to durable agent runtime files.</h1>
+        <p class="dek">The release target is an agent-native onboarding flow that captures nuanced operating preferences, validates them, and exports practical runtime guidance without losing user edits or pretending a demo is official release evidence.</p>
+        <div class="hero-links">
+          <a class="pill" href="../testing/release-verification.md">Release checklist</a>
+          <a class="pill" href="../validation/live/README.md">Live E2E docs</a>
+          <a class="pill" href="../validation/live/subscription-demo-grok-glm-20260517-180758/report.md">Passing demo report</a>
+          <a class="pill" href="../validation/live/subscription-demo-grok-glm-20260517-180758/demo.md">Demo walkthrough</a>
+        </div>
+      </div>
+
+      <div class="status-card">
+        <div class="score-grid">
+          <div class="metric"><strong class="green">PASS</strong><span>Latest live demo</span></div>
+          <div class="metric"><strong class="purple">4.78</strong><span>Judge average / 5</span></div>
+          <div class="metric"><strong class="blue">30</strong><span>Live interview turns</span></div>
+          <div class="metric"><strong class="teal">24/24</strong><span>Merged dimensions covered</span></div>
+        </div>
+        <div class="caveat">Important caveat: the passing run is subscription-backed review evidence using Grok 4.3 plus GLM-5.1. Official release evidence still requires the strict GPT-5.5 plus GLM-5.1 route.</div>
+      </div>
+    </section>
+
+    <section class="body">
+      <div class="panel">
+        <h2>System Map</h2>
+        <p class="panel-note">TasteKit is artifact-first. The CLI and native skill feed the same canonical workspace.</p>
+        <div class="flow">
+          <div class="flow-step"><span class="num">1</span><h3>Choose domain + depth</h3><p>Six domains. Quick, Guided, or Full Taste Composition.</p></div>
+          <div class="flow-step"><span class="num">2</span><h3>Agent-native interview</h3><p>Adaptive questions, confirmation, assumptions, conflicts, pacing.</p></div>
+          <div class="flow-step"><span class="num">3</span><h3>Persist session</h3><p>Canonical state in <code>.tastekit/session.json</code>.</p></div>
+          <div class="flow-step"><span class="num">4</span><h3>Compile artifacts</h3><p>Constitution, guardrails, memory, skills, playbooks.</p></div>
+          <div class="flow-step"><span class="num">5</span><h3>Export runtime files</h3><p>CLAUDE, SOUL, AGENTS, Manus, Agent File.</p></div>
+          <div class="flow-step"><span class="num">6</span><h3>Maintain over time</h3><p>Traces, trust, evals, drift proposals.</p></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Depth Ladder</h2>
+        <p class="panel-note">Guided is default. Full is a first-class path, not a hidden maximum.</p>
+        <div class="depth">
+          <div class="depth-row"><b>Quick</b><div class="bar"><div class="fill quick"></div></div><small>fast start</small></div>
+          <div class="depth-row"><b>Guided</b><div class="bar"><div class="fill guided"></div></div><small>default</small></div>
+          <div class="depth-row"><b>Full Taste Composition</b><div class="bar"><div class="fill full"></div></div><small>coverage-driven</small></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Six-Domain Scope</h2>
+        <p class="panel-note">All six must stay production-grade before release claims are made.</p>
+        <div class="domain-grid">
+          <div class="domain"><b>General</b><span>17 domain dims</span><div class="mini"><i style="width:68%"></i></div></div>
+          <div class="domain"><b>Development</b><span>24 domain dims</span><div class="mini"><i style="width:96%"></i></div></div>
+          <div class="domain"><b>Content</b><span>12 domain dims</span><div class="mini"><i style="width:48%"></i></div></div>
+          <div class="domain"><b>Research</b><span>18 domain dims</span><div class="mini"><i style="width:72%"></i></div></div>
+          <div class="domain"><b>Sales</b><span>18 domain dims</span><div class="mini"><i style="width:72%"></i></div></div>
+          <div class="domain"><b>Support</b><span>18 domain dims</span><div class="mini"><i style="width:72%"></i></div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Live Run Coverage</h2>
+        <p class="panel-note">Current passing demo: `general-agent`, Full Taste Composition, subscription-backed route.</p>
+        <div class="coverage">
+          <div class="ring-wrap">
+            <div class="ring"><div class="ring-inner"><div><strong>100%</strong><span>covered</span></div></div></div>
+          </div>
+          <div class="coverage-list">
+            <div class="coverage-row"><span>Critical</span><div class="bar"><div class="fill full" style="background:var(--green)"></div></div><span>8/8 confirmed</span></div>
+            <div class="coverage-row"><span>Important</span><div class="bar"><div class="fill full" style="background:var(--blue)"></div></div><span>14/14 confirmed</span></div>
+            <div class="coverage-row"><span>Nice</span><div class="bar"><div class="fill guided" style="background:var(--purple)"></div></div><span>1/2 confirmed</span></div>
+            <div class="coverage-row"><span>Conflicts</span><div class="bar"><div class="fill quick" style="width:0;background:var(--red)"></div></div><span>0 open</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Evidence Wall</h2>
+        <p class="panel-note">The passing demo exercised more than the interview.</p>
+        <div class="evidence-wall">
+          <div class="check">Provider preflight<small>Grok 4.3 and GLM-5.1 reachable</small></div>
+          <div class="check">Validator<small>constitution valid, issues=0</small></div>
+          <div class="check">Exports present<small>Claude, OpenClaw, Manus, AGENTS, Agent File</small></div>
+          <div class="check">Markdown safe<small>No raw transcript or hidden policy leakage</small></div>
+          <div class="check">Managed regions<small>One block after re-run</small></div>
+          <div class="check">Manual content<small>Preserved outside TasteKit blocks</small></div>
+          <div class="check">Trust + skills<small>Trust audit and skills graph passed</small></div>
+          <div class="check">Drift + eval<small>Detect, run, and replay passed</small></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Risks And Unknowns</h2>
+        <p class="panel-note">These are review prompts, not blockers by themselves.</p>
+        <div class="risk-grid">
+          <div class="risk high"><b>Official route still needed</b><span>Subscription demo is not accepted by the strict release assertion.</span></div>
+          <div class="risk med"><b>17 assumptions captured</b><span>Useful signal, but consequential assumptions need visible handling in real use.</span></div>
+          <div class="risk med"><b>Confirmation UX</b><span>Inference from run behavior: confirmations can feel piecewise in long sessions.</span></div>
+          <div class="risk low"><b>No conflicts in demo</b><span>The conflict path is tested deterministically; live conflict richness still deserves future examples.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom">
+      <div class="panel">
+        <h2>Extracted Taste Map</h2>
+        <p class="panel-note">The demo's central profile was not generic personality text. It produced practical operating instructions.</p>
+        <div class="map">
+          <div class="node center">Mode Awareness</div>
+          <div class="node n1">Targeted Critique</div>
+          <div class="node n2">Evidence Rigor</div>
+          <div class="node n3">Calibrated Autonomy</div>
+          <div class="node n4">Auditability</div>
+          <div class="node n5">Feedback Memory</div>
+          <div class="node n6">Cost / Speed Calibration</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Release Sequence</h2>
+        <p class="panel-note">Recommended order from current state to publishable package.</p>
+        <div class="timeline">
+          <div class="phase"><i>1</i><div><b>Docs + artifact review</b><span>Confirm public claims match shipped behavior.</span></div><em>now</em></div>
+          <div class="phase"><i>2</i><div><b>Deterministic gates</b><span>Tests, build, lint, skill sync, contracts, PR gate.</span></div><em>required</em></div>
+          <div class="phase"><i>3</i><div><b>Strict live E2E</b><span>GPT-5.5 interviewer/judge plus GLM-5.1 simulated human.</span></div><em>release</em></div>
+          <div class="phase"><i>4</i><div><b>Package dry-runs</b><span>Inspect files, bins, exports, versions, metadata.</span></div><em>release</em></div>
+          <div class="phase"><i>5</i><div><b>Publish + smoke</b><span>Publish packages, tag, then npx install smoke.</span></div><em>final</em></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Discussion Points</h2>
+        <p class="panel-note">Questions a human reviewer should decide before tagging.</p>
+        <div class="question-list">
+          <div class="question">Is official GPT-5.5 access ready for the strict release path?</div>
+          <div class="question">Are the live-run assumptions acceptable as transparent unresolved assumptions?</div>
+          <div class="question">Should confirmation UX be refined before release or recorded as a post-release polish item?</div>
+          <div class="question">Which evidence is appropriate for public launch docs versus internal release notes?</div>
+          <div class="question">Do package dry-runs include exactly the files a user needs?</div>
+        </div>
+      </div>
+    </section>
+  </article>
+</main>
+</body>
+</html>

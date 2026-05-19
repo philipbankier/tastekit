@@ -20,6 +20,7 @@ import { driftAwarenessBlock } from './blocks/drift-awareness.js';
 // Conditional blocks (included based on config)
 import { domainContextBlock } from './blocks/domain-context.js';
 import { tasteCompositionBlock } from './blocks/taste-composition.js';
+import { metacognitionBlock } from './blocks/metacognition.js';
 import { playbookIndexBlock } from './blocks/playbook-index.js';
 import { vocabularyBlock } from './blocks/vocabulary.js';
 import { evaluationCriteriaBlock } from './blocks/evaluation-criteria.js';
@@ -34,6 +35,7 @@ const BLOCKS: GeneratorBlock[] = [
   guardrailsBlock,
   domainContextBlock,
   tasteCompositionBlock,
+  metacognitionBlock,
   skillsIndexBlock,
   toolUsageBlock,
   memoryPolicyBlock,

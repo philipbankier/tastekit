@@ -118,9 +118,121 @@ describe('generateClaudeMd', () => {
     const result = generateClaudeMd(fullContext());
     expect(result).toContain('## Taste Composition');
     expect(result).toContain('code_review');
-    expect(result).toContain('User wants risk-first code review.');
-    expect(result).toContain('Lead with correctness and regression risk.');
+    expect(result).toContain('captured in constitution detail');
     expect(result).not.toContain('Raw transcript should stay out of markdown.');
+    expect(result).not.toContain('User wants risk-first code review.');
+    expect(result).not.toContain('Lead with correctness and regression risk.');
+  });
+
+  it('omits composition facts from runtime markdown', () => {
+    const ctx = fullContext();
+    const composition = ctx.constitution?.extensions?.['x-tastekit-composition'] as any;
+    composition.dimensions.code_review.facts = [
+      "Example: 'Hey, I'm not sure if you want me to challenge this plan or just execute on it — which mode?'",
+      'Prefer direct, low-friction clarification.',
+    ];
+
+    const result = generateClaudeMd(ctx);
+
+    expect(result).toContain('code_review');
+    expect(result).not.toContain('Facts:');
+    expect(result).not.toContain('User wants risk-first code review.');
+    expect(result).not.toContain('Prefer direct, low-friction clarification.');
+    expect(result).not.toContain("I'm not sure if you want me to challenge this plan or just execute on it");
+  });
+
+  it('omits long quoted interview content from summaries and domain-specific values', () => {
+    const ctx = fullContext();
+    const composition = ctx.constitution?.extensions?.['x-tastekit-composition'] as any;
+    composition.domain_specific.code_review = {
+      preferred_focus: 'Lead with correctness and regression risk.',
+      example: "Example: 'Hey, I'm not sure if you want me to challenge this plan or just execute on it — which mode?'",
+    };
+    composition.dimensions.code_review.summary = "User said: 'Hey, I'm not sure if you want me to challenge this plan or just execute on it — which mode?'";
+    composition.dimensions.code_review.facts = ['Prefer direct, low-friction clarification.'];
+
+    const result = generateClaudeMd(ctx);
+
+    expect(result).toContain('code_review');
+    expect(result).not.toContain('Facts:');
+    expect(result).not.toContain('Lead with correctness and regression risk.');
+    expect(result).not.toContain('Prefer direct, low-friction clarification.');
+    expect(result).not.toContain("I'm not sure if you want me to challenge this plan or just execute on it");
+  });
+
+  it('omits raw-ish paraphrased interview facts from runtime markdown', () => {
+    const ctx = fullContext();
+    const composition = ctx.constitution?.extensions?.['x-tastekit-composition'] as any;
+    composition.dimensions.code_review.summary = 'Prioritizes clear rules for when to challenge versus move fast.';
+    composition.dimensions.code_review.facts = [
+      'The stuff that matters most includes how it decides when to challenge me versus when to move fast and where the hard approval boundaries are.',
+      'Challenge intensity is calibrated by reversibility and blast radius.',
+    ];
+
+    const result = generateClaudeMd(ctx);
+
+    expect(result).toContain('code_review');
+    expect(result).not.toContain('Prioritizes clear rules for when to challenge versus move fast.');
+    expect(result).not.toContain('Facts:');
+    expect(result).not.toContain('Challenge intensity is calibrated by reversibility and blast radius.');
+    expect(result).not.toContain('how it decides when to challenge me versus when to move fast');
+  });
+
+  it('omits compact facts that can still match live transcript phrases', () => {
+    const ctx = fullContext();
+    const composition = ctx.constitution?.extensions?.['x-tastekit-composition'] as any;
+    composition.dimensions.code_review.summary = 'User wants crisp autonomy boundaries for reversible work.';
+    composition.dimensions.code_review.facts = [
+      'Framing should be agentic with crisp approval boundaries.',
+      'strong opinions and move fast just not on irreversible things without checking',
+    ];
+
+    const result = generateClaudeMd(ctx);
+
+    expect(result).toContain('code_review');
+    expect(result).not.toContain('User wants crisp autonomy boundaries for reversible work.');
+    expect(result).not.toContain('Facts:');
+    expect(result).not.toContain('strong opinions and move fast');
+    expect(result).not.toContain('Framing should be agentic');
+  });
+
+  it('omits domain-specific fact fields from runtime markdown', () => {
+    const ctx = fullContext();
+    const composition = ctx.constitution?.extensions?.['x-tastekit-composition'] as any;
+    composition.domain_specific.code_review = {
+      summary: 'Needs active challenge with final user control.',
+      artifact_shape: 'Prefers runnable examples over abstract recommendations.',
+      facts: [
+        'strong opinions and move fast just not on irreversible things without checking',
+      ],
+    };
+
+    const result = generateClaudeMd(ctx);
+
+    expect(result).toContain('code_review');
+    expect(result).not.toContain('Needs active challenge with final user control.');
+    expect(result).not.toContain('artifact_shape: Prefers runnable examples over abstract recommendations.');
+    expect(result).not.toContain('facts:');
+    expect(result).not.toContain('strong opinions and move fast');
+  });
+
+  it('omits long composition summaries that can match live transcript phrases', () => {
+    const ctx = fullContext();
+    const composition = ctx.constitution?.extensions?.['x-tastekit-composition'] as any;
+    composition.domain_specific.core_purpose = {
+      summary: 'General-purpose agent for substantive work on high-stakes operator workflows involving research, planning, drafting, and challenging assumptions.',
+    };
+    composition.dimensions.core_purpose = {
+      dimension_id: 'core_purpose',
+      status: 'covered',
+      summary: 'User needs a general-purpose agent for substantive work on high-stakes operator workflows involving research, planning, drafting, and challenging assumptions.',
+    };
+
+    const result = generateClaudeMd(ctx);
+
+    expect(result).toContain('core_purpose');
+    expect(result).not.toContain('User needs a general-purpose agent for substantive work');
+    expect(result).not.toContain('General-purpose agent for substantive work on high-stakes');
   });
 
   it('generates non-empty output with minimal context', () => {

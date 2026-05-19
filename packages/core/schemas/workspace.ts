@@ -94,6 +94,79 @@ export const InterviewMetaSchema = z.object({
   confirmation_count: z.number().default(0),
 });
 
+export const MetacognitiveActionSchema = z.enum([
+  'ask',
+  'infer',
+  'summarize',
+  'draft',
+  'confirm',
+  'resolve_conflict',
+  'stop',
+]);
+
+export const MetacognitivePrioritySchema = z.enum([
+  'critical',
+  'important',
+  'nice-to-have',
+  'inferable',
+]);
+
+export const MetacognitiveCoverageBucketSchema = z.object({
+  total: z.number().int().min(0),
+  covered: z.number().int().min(0),
+  confirmed: z.number().int().min(0),
+  inferred: z.number().int().min(0),
+});
+
+export const MetacognitiveStateSchema = z.object({
+  schema_version: z.literal('tastekit.metacognition.v1'),
+  depth: z.enum(['quick', 'guided', 'operator']),
+  public_depth_label: z.string(),
+  domain_id: z.string().optional(),
+  coverage_summary: z.object({
+    critical: MetacognitiveCoverageBucketSchema,
+    important: MetacognitiveCoverageBucketSchema,
+    nice_to_have: MetacognitiveCoverageBucketSchema,
+    inferable: MetacognitiveCoverageBucketSchema,
+    total_dimensions: z.number().int().min(0),
+    covered_dimensions: z.number().int().min(0),
+  }),
+  unresolved_assumptions: z.array(z.object({
+    id: z.string(),
+    dimension_id: z.string(),
+    summary: z.string(),
+    source: z.enum(['inferred', 'prior_file', 'user_finish_now', 'model_default']),
+    turn_number: z.number().int().min(0).optional(),
+  })).default([]),
+  conflicts: z.array(z.object({
+    id: z.string(),
+    dimension_id: z.string().optional(),
+    summary: z.string(),
+    status: z.enum(['unresolved', 'resolved', 'accepted_unresolved']),
+    source_turns: z.array(z.number().int().min(0)).default([]),
+  })).default([]),
+  confirmation_checkpoints: z.array(z.object({
+    id: z.string(),
+    turn_number: z.number().int().min(0),
+    type: z.enum(['cluster', 'draft', 'final']),
+    dimension_ids: z.array(z.string()).default([]),
+    accepted: z.boolean(),
+    summary: z.string().optional(),
+  })).default([]),
+  fatigue_events: z.array(z.object({
+    turn_number: z.number().int().min(0),
+    signal: z.string(),
+    action: z.enum(['summarize', 'draft', 'narrow_questions']),
+  })).default([]),
+  policy_decisions: z.array(z.object({
+    turn_number: z.number().int().min(0),
+    action: MetacognitiveActionSchema,
+    target_dimension_ids: z.array(z.string()).default([]),
+    reason_codes: z.array(z.string()).default([]),
+  })).default([]),
+  confirmed_dimension_ids: z.array(z.string()).default([]),
+});
+
 /**
  * Interview state (for resume support)
  */
@@ -103,6 +176,7 @@ export const InterviewStateSchema = z.object({
   is_complete: z.boolean(),
   turn_count: z.number(),
   interview_meta: InterviewMetaSchema.optional(),
+  metacognition: MetacognitiveStateSchema.optional(),
   structured_answers: z.any().optional(),
 });
 
@@ -153,3 +227,6 @@ export type DimensionCoverage = z.infer<typeof DimensionCoverageSchema>;
 export type InterviewState = z.infer<typeof InterviewStateSchema>;
 export type InterviewMeta = z.infer<typeof InterviewMetaSchema>;
 export type Signal = z.infer<typeof SignalSchema>;
+export type MetacognitiveState = z.infer<typeof MetacognitiveStateSchema>;
+export type MetacognitiveAction = z.infer<typeof MetacognitiveActionSchema>;
+export type MetacognitivePriority = z.infer<typeof MetacognitivePrioritySchema>;

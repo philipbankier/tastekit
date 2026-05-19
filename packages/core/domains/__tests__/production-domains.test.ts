@@ -87,8 +87,8 @@ describe('production domain registry', () => {
       expect(rubric!.dimensions.length, domainId).toBeGreaterThan(0);
 
       if (RECOVERED_DOMAIN_IDS.includes(domainId)) {
-        expect(domain!.version, domainId).toBe('1.0.0');
-        expect(rubric!.version, domainId).toBe('1.0.0');
+        expect(domain!.version, domainId).toBe('1.1.0');
+        expect(rubric!.version, domainId).toBe('1.1.0');
       }
     }
   });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cpSync, mkdirSync } from 'fs';
+import { cpSync, mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { cleanupWorkspace, fixturePath, makeTempWorkspace, runCli } from '../helpers/run-cli.js';
 
@@ -18,6 +18,9 @@ describe('tastekit compile', () => {
       expect(second.code).toBe(0);
       expect(first.stdout + first.stderr).toContain('Compilation complete');
       expect(second.stdout + second.stderr).toContain('Compilation complete');
+
+      const constitution = JSON.parse(readFileSync(join(workspace, '.tastekit', 'constitution.v1.json'), 'utf-8'));
+      expect(constitution.generator_version).toBe('1.1.0');
     } finally {
       cleanupWorkspace(root);
     }

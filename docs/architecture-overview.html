@@ -400,16 +400,16 @@ footer {
         <div class="stat-label">Artifact Types</div>
       </div>
       <div class="stat">
-        <div class="stat-value">32+</div>
-        <div class="stat-label">Compatible Runtimes</div>
+        <div class="stat-value">6</div>
+        <div class="stat-label">Export Surfaces</div>
       </div>
       <div class="stat">
         <div class="stat-value">7</div>
         <div class="stat-label">Drift Signals</div>
       </div>
       <div class="stat">
-        <div class="stat-value">388</div>
-        <div class="stat-label">Tests Passing</div>
+        <div class="stat-value">8</div>
+        <div class="stat-label">Gate Layers</div>
       </div>
       <div class="stat">
         <div class="stat-value">6</div>
@@ -423,12 +423,12 @@ footer {
 <section>
   <div class="container">
     <h2>What is TasteKit?</h2>
-    <p class="section-desc">TasteKit is a CLI tool + library that interviews you about your preferences, compiles them into structured artifacts, and exports them to any AI agent runtime. One interview. Every runtime. Your taste, everywhere.</p>
+    <p class="section-desc">TasteKit is a CLI, library, and native skill that interviews you about your preferences, compiles them into structured artifacts, and exports them to agent runtimes. One onboarding flow. Durable taste artifacts. Runtime-specific outputs.</p>
     <div class="card-grid">
       <div class="card">
         <span class="badge badge-green">Core</span>
         <h3>Interview-Driven</h3>
-        <p>An LLM-powered interviewer adapts its questions based on your answers. It tracks 9–31 dimensions of your preferences across Quick, Guided, and Full depth tiers.</p>
+        <p>An LLM-powered interviewer adapts its questions based on your answers. It tracks domain and universal dimensions across Quick, Guided, and Full Taste Composition depth tiers.</p>
       </div>
       <div class="card">
         <span class="badge badge-blue">Core</span>
@@ -443,17 +443,17 @@ footer {
       <div class="card">
         <span class="badge badge-green">Core</span>
         <h3>Portable Profiles</h3>
-        <p>Skills follow the Agent Skills open standard (agentskills.io) — compatible with 32+ runtimes: Claude Code, OpenClaw, OpenAI Codex, Gemini CLI, Cursor, VS Code Copilot, GitHub, Junie, Letta, ActRun Autopilots, and more.</p>
+        <p>Artifacts export to Claude Code, OpenClaw, Manus, Autopilots, AGENTS.md, and Agent File. Other runtimes can integrate through the same artifact contracts.</p>
       </div>
       <div class="card">
         <span class="badge badge-blue">Core</span>
         <h3>MCP-First Tools</h3>
-        <p>Wraps the official MCP SDK. Trust pinning with cryptographic fingerprints. Auditing catches silent tool changes. 17,665+ MCP servers available.</p>
+        <p>Uses MCP for tool discovery and binding. Trust pinning with cryptographic fingerprints lets audits catch silent tool changes.</p>
       </div>
       <div class="card">
         <span class="badge badge-green">New</span>
-        <h3>Agent Skills Spec</h3>
-        <p>Skills follow the Agent Skills open standard (agentskills.io). Progressive disclosure (3 levels), YAML frontmatter, references/ directory. Portable across all 32+ compatible runtimes.</p>
+        <h3>Native TasteKit Skill</h3>
+        <p>The bundled skill at skills/tastekit/ is a thin agent-native router with generated rubric references, runtime templates, and Full Taste Composition strategy.</p>
       </div>
     </div>
   </div>
@@ -682,7 +682,7 @@ footer {
 <section>
   <div class="container">
     <h2>How TasteKit Compares</h2>
-    <p class="section-desc">TasteKit generates Agent Skills-compliant output that works across 32+ runtimes. It's the only tool combining drift detection, portable profiles, and MCP-first tool integration.</p>
+    <p class="section-desc">TasteKit generates portable artifacts and runtime Markdown for tested export surfaces. Its differentiator is the combination of drift detection, native skill onboarding, portable profiles, and MCP-first tool integration.</p>
     <div style="overflow-x: auto;">
     <table class="compare-table">
       <thead>
@@ -706,7 +706,7 @@ footer {
         </tr>
         <tr>
           <td>Portable profiles</td>
-          <td><span class="check">✓ 32+ runtimes</span></td>
+          <td><span class="check">✓ tested export surfaces</span></td>
           <td><span class="partial">~ manual copy</span></td>
           <td><span class="partial">~ .af file</span></td>
           <td><span class="cross">✗ locked</span></td>
@@ -777,11 +777,11 @@ footer {
 <!-- ============ DOMAINS ============ -->
 <section style="background: rgba(52,211,153,0.02);">
   <div class="container">
-    <h2>2 Agent Domains</h2>
+    <h2>6 Agent Domains</h2>
     <p class="section-desc">Each shipped domain has a specialized rubric with dimensions tailored to that agent type. Three depth tiers let you choose interview depth.</p>
     <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
       <div class="domain-card">
-        <h4>🛠 Development Agent</h4>
+        <h4>Development Agent</h4>
         <p style="color:var(--text-dim);font-size:0.88rem;">Engineering identity, code quality, testing, naming, commits, type safety, error handling, CI/CD</p>
         <div class="domain-dims">
           <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick</span>
@@ -790,8 +790,44 @@ footer {
         </div>
       </div>
       <div class="domain-card">
-        <h4>🌐 General Agent</h4>
+        <h4>General Agent</h4>
         <p style="color:var(--text-dim);font-size:0.88rem;">Mission scope, decision style, autonomy, communication, evidence rigor, risk escalation</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Full Taste Composition</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <h4>Content Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Brand voice, audience, claims policy, channel strategy, workflow, publishing boundaries</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Full Taste Composition</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <h4>Research Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Research methodology, source quality, citations, uncertainty, synthesis, fact-checking rigor</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Full Taste Composition</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <h4>Sales Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Qualification, outreach tone, CRM boundaries, objection handling, pricing escalation</p>
+        <div class="domain-dims">
+          <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick</span>
+          <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided</span>
+          <span class="dim-tier" style="background:rgba(124,111,247,0.12);color:var(--accent);">Full Taste Composition</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <h4>Support Agent</h4>
+        <p style="color:var(--text-dim);font-size:0.88rem;">Troubleshooting, empathy, privacy, incident escalation, response drafting, handoff clarity</p>
         <div class="domain-dims">
           <span class="dim-tier" style="background:var(--green-dim);color:var(--green);">Quick</span>
           <span class="dim-tier" style="background:var(--blue-dim);color:var(--blue);">Guided</span>
@@ -846,7 +882,7 @@ footer {
     <h2>CLI Commands</h2>
     <p class="section-desc">12 commands covering the full lifecycle: init → interview → compile → export → monitor → maintain.</p>
     <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-      <div class="card"><h3><code>tastekit init</code></h3><p>Create workspace. Pick domain, depth, LLM provider. Creates .tastekit/ with three-space layout.</p></div>
+      <div class="card"><h3><code>tastekit init</code></h3><p>Create workspace. Pick domain, depth, and LLM provider. Creates canonical flat .tastekit/ v1 paths.</p></div>
       <div class="card"><h3><code>tastekit onboard</code></h3><p>LLM-driven interview. Adaptive questions, coverage tracking, /save to resume later. Voice mode optional.</p></div>
       <div class="card"><h3><code>tastekit compile</code></h3><p>Generate 5 artifact types from session. Supports --resume for interrupted compilations.</p></div>
       <div class="card"><h3><code>tastekit export</code></h3><p>Export to claude-code, openclaw, manus, autopilots, agents-md, or agent-file formats.</p></div>
@@ -894,7 +930,7 @@ footer {
 
 <footer>
   <div class="container">
-    <p>TasteKit v1.0.0 — 388 tests passing — MIT License</p>
+    <p>TasteKit v1.1.0 — MIT License</p>
     <p style="margin-top:8px;">Built with TypeScript. Compiles to JSON/YAML. Runs everywhere.</p>
   </div>
 </footer>

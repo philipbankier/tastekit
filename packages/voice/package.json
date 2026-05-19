@@ -1,6 +1,6 @@
 {
   "name": "@actrun_ai/tastekit-voice",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Voice I/O layer for TasteKit onboarding — ElevenLabs, Whisper, Piper",
   "type": "module",
   "license": "MIT",

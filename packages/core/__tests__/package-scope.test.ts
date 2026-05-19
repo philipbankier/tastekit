@@ -47,4 +47,21 @@ describe('npm package scope', () => {
 
     expect(offenders).toEqual([]);
   });
+
+  it('keeps all publishable package versions aligned for v1.1.0', () => {
+    const files = [join(repoRoot, 'package.json'), ...packageJsonPaths()];
+    const versions = Object.fromEntries(files.map(path => [
+      relative(repoRoot, path),
+      readJson(path).version,
+    ]));
+
+    expect(versions).toEqual({
+      'package.json': '1.1.0',
+      'packages/adapters/package.json': '1.1.0',
+      'packages/cli/package.json': '1.1.0',
+      'packages/core/package.json': '1.1.0',
+      'packages/validator/package.json': '1.1.0',
+      'packages/voice/package.json': '1.1.0',
+    });
+  });
 });

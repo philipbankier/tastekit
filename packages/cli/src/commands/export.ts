@@ -6,7 +6,8 @@ import { join } from 'path';
 import YAML from 'yaml';
 import { generateAgentsMd, mergeManagedRegion } from '@actrun_ai/tastekit-core/generators';
 import { resolveArtifactPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
-import { detail, hint, handleError } from '../ui.js';
+import { detail, handleError } from '../ui.js';
+import { getCliPackageVersion } from '../version.js';
 
 const ADAPTERS: Record<string, string> = {
   'claude-code': 'Claude Code',
@@ -78,7 +79,7 @@ export const exportCommand = new Command('export')
           ? parseYamlOrJson(configPath)
           : undefined;
         const agentsMd = generateAgentsMd({
-          generator_version: constitution.generator_version || '0.5.0',
+          generator_version: constitution.generator_version || getCliPackageVersion(),
           constitution,
           skills,
           domain_id: config?.domain_id,
@@ -276,7 +277,7 @@ function generateAgentFile(constitution: any, guardrails: any): any {
     name: 'tastekit-agent',
     agent_type: 'letta_v1_agent',
     system: systemLines.join('\n'),
-    description: `Agent generated from TasteKit constitution (v${constitution.generator_version || '0.5.0'})`,
+    description: `Agent generated from TasteKit constitution (v${constitution.generator_version || getCliPackageVersion()})`,
     block_ids: blocks.map(b => b.id),
     tool_ids: [],
     tool_rules: toolRules.length > 0 ? toolRules : undefined,
@@ -294,7 +295,7 @@ function generateAgentFile(constitution: any, guardrails: any): any {
     mcp_servers: [],
     metadata: {
       generator: 'tastekit',
-      generator_version: constitution.generator_version || '0.5.0',
+      generator_version: constitution.generator_version || getCliPackageVersion(),
       exported_at: new Date().toISOString(),
     },
     created_at: new Date().toISOString(),

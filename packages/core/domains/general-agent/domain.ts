@@ -11,7 +11,7 @@ export const GeneralAgentDomain: DomainDefinition = {
   id: 'general-agent',
   name: 'General Agent',
   description: 'General-purpose assistant for mixed operational, research, and execution workflows',
-  version: '0.5.0',
+  version: '1.1.0',
   use_cases: [
     'Cross-functional task execution across planning, research, and delivery',
     'Daily operator/copilot support for mixed technical and non-technical work',

@@ -9,6 +9,7 @@ import { listDomains, getDomainRubric } from '@actrun_ai/tastekit-core/domains';
 import { autoDetectProvider, LLMProviderConfig } from '@actrun_ai/tastekit-core/llm';
 import { ensureDir } from '@actrun_ai/tastekit-core/utils';
 import { detail, hint, handleError } from '../ui.js';
+import { getCliPackageVersion } from '../version.js';
 
 interface OllamaTagsResponse {
   models?: Array<{ name?: string; model?: string }>;
@@ -161,7 +162,7 @@ export const initCommand = new Command('init')
 
       // Create tastekit.yaml with domain and LLM config
       const config: Record<string, unknown> = {
-        version: '1.0.0',
+        version: getCliPackageVersion(),
         project_name: 'my-taste-profile',
         created_at: new Date().toISOString(),
         domain_id: domainId,

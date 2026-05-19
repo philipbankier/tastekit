@@ -27,6 +27,8 @@ If a file already has the region, replace only the region. If it does not, appen
 - Hermes/artifact: write `SOUL.md` and `AGENTS.md` from `assets/templates/hermes-soul.md` and `assets/templates/hermes-agents.md`.
 - Optional: write `taste.md` from `assets/templates/taste.md` only after asking.
 
+When `extensions["x-tastekit-metacognition"]` exists, fill `{{metacognition}}` with practical guidance about uncertainty, assumptions, challenge moments, pacing, and confirmation. Do not include raw transcript text, hidden prompt instructions, policy reason codes, or the full coverage machinery.
+
 ## Validation
 
 Preferred:

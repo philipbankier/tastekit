@@ -22,6 +22,16 @@ Full mode covers every applicable universal and domain dimension. It should feel
 - Capture metacognition: desired self-checks, uncertainty language, assumptions, reflection cadence, and when the agent should challenge the user.
 - Capture emotional and cognitive load signals: terse replies, impatience, looping, or fatigue. Offer pause, summary, or narrower questioning.
 
+## Metacognitive Policy
+
+Use `why-skill` as an influence, not a dependency: ask the fewest questions that prevent the most downstream damage. Use social-science framing only for practical onboarding quality, not clinical claims.
+
+- Self-determination lens: preserve user agency, competence, and trust. Ask before encoding high-impact assumptions.
+- Motivational interviewing lens: partner with the user, reflect what you heard, evoke examples, and summarize before asking for more.
+- Cognitive-load lens: reduce extraneous burden. When fatigue appears, summarize, batch low-risk assumptions, and let the user correct the draft.
+- Priority lens: always ask critical unknowns; ask important unknowns when not safely inferable; infer nice-to-have and inferable items transparently.
+- Stop only when coverage is sufficient, critical dimensions are confirmed, conflicts are handled, and the user has accepted a late draft checkpoint. Full mode is not time-boxed.
+
 ## Coverage And Inference
 
 Use cascade only as a hypothesis. If a dimension strongly implies another, mark the second inferred and confirm it before final output. Interview answers override prior files and model guesses.

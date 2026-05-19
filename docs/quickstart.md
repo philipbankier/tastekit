@@ -1,12 +1,12 @@
 # Quick Start Guide
 
-This guide walks you through the complete TasteKit workflow: initialize, interview, compile, and export.
+This guide walks you through the complete TasteKit workflow: initialize, interview, compile, export, and validate.
 
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) v18 or later
 - [pnpm](https://pnpm.io/) v8 or later
-- An LLM API key (Anthropic, OpenAI, or local Ollama) for the onboarding interview
+- An LLM provider for the onboarding interview. Anthropic, OpenAI-compatible providers, and local Ollama are supported by the CLI provider layer.
 
 ## 1. Installation
 
@@ -25,8 +25,8 @@ tastekit init
 
 The init command walks you through three choices:
 
-1. **Domain** — What type of agent are you building? (General or Development)
-2. **Depth** — How thorough should the interview be? (Quick, Guided, or Full Taste Composition)
+1. **Domain** — What type of agent are you building? General, Development, Content, Research, Sales, or Support.
+2. **Depth** — How thorough should the interview be? Quick, Guided, or Full Taste Composition.
 3. **LLM Provider** — Auto-detects from environment variables, or lets you choose manually
 
 This creates a `.tastekit/` directory with the workspace structure:
@@ -34,10 +34,12 @@ This creates a `.tastekit/` directory with the workspace structure:
 ```
 .tastekit/
 ├── tastekit.yaml          # Workspace configuration
+├── session.json           # Resumable onboarding state
 ├── constitution.v1.json   # Compiled principles, tone, tradeoffs, and taboos
 ├── guardrails.v1.yaml     # Compiled permissions and approval rules
 ├── memory.v1.yaml         # Compiled memory policy
 ├── skills/                # Skills library (after step 4)
+├── playbooks/             # Domain workflows
 └── traces/                # Agent trace logs
 ```
 
@@ -54,6 +56,14 @@ tastekit onboard
 ```
 
 The LLM-driven interviewer will have a conversation with you about your preferences, exploring dimensions specific to your chosen domain. It adapts based on your answers — if you give a brief response, it moves on; if you show nuance, it digs deeper.
+
+Depths:
+
+| Depth | Use When | Behavior |
+|:---|:---|:---|
+| Quick | You want the fastest useful starting profile | Hypothesis-driven; captures the essential operating contract |
+| Guided | You want the recommended first-run balance | Covers the important domain dimensions without trying to exhaust every edge case |
+| Full Taste Composition | You want maximum profile quality | Coverage-driven; confirms critical dimensions, handles assumptions/conflicts, and uses draft-as-question checkpoints |
 
 Special commands during the interview:
 - `/save` — Save progress and quit (resume later with `tastekit onboard --resume`)
@@ -78,6 +88,15 @@ The compiler reads your session and generates:
 | `skills/<id>/SKILL.md` | Progressive disclosure skill files |
 | `playbooks/*.yaml` | Domain-specific execution plans |
 
+`constitution.v1.json` also preserves richer onboarding data in extension fields:
+
+| Extension | Purpose |
+|:---|:---|
+| `x-tastekit-composition` | Dimension-level taste composition facts, summaries, confidence, and source-turn references |
+| `x-tastekit-metacognition` | Coverage summary, unresolved assumptions, conflicts, confirmation checkpoints, fatigue events, and policy decisions |
+
+Runtime Markdown files receive concise agent guidance only. Raw transcript text and hidden coverage machinery should stay out of `CLAUDE.md`, `SOUL.md`, and `AGENTS.md`.
+
 ## 5. Export for Your Runtime
 
 ```bash
@@ -98,6 +117,16 @@ tastekit export --target agent-file
 ```
 
 Each adapter translates TasteKit's universal artifacts into the format the target runtime understands.
+
+For Markdown targets, TasteKit writes a managed region:
+
+```md
+<!-- BEGIN TASTEKIT MANAGED REGION -->
+...
+<!-- END TASTEKIT MANAGED REGION -->
+```
+
+On re-run, only that region is replaced. Manual notes outside the block are preserved.
 
 ## 6. (Optional) Bind MCP Tools
 
@@ -142,4 +171,19 @@ Your TasteKit profile is compiled and ready to use. As your agent runs, it gener
 - **Import existing profiles**: `tastekit import --target soul-md --source SOUL.md` — bring in OpenClaw profiles
 - **Shell completion**: `eval "$(tastekit completion bash)"` — enable tab completion
 
-For machine-readable output, add `--json` to any command. For debug logging, add `--verbose`.
+For machine-readable output, add `--json` to any command. `tastekit eval run --format json` emits a compact pass/fail summary plus the saved report path; use `--format full-json` when you explicitly need raw scenario outputs in stdout. For debug logging, add `--verbose`.
+
+## Release Verification
+
+For development changes, run the deterministic gates first:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm test
+pnpm -r build
+pnpm lint
+node scripts/skill-bundle/sync.mjs --check
+bash scripts/validation/pr-gate.sh
+```
+
+For release confidence, add the live Full Taste Composition sequence described in `docs/validation/live/README.md`. The subscription-backed demo path is useful for review; the strict GPT-5.5 + GLM-5.1 path is the publishable release evidence path.

@@ -1,108 +1,112 @@
-# TasteKit v1.0 Launch Guide
+# TasteKit v1.1 Release Guide
 
-This document provides a comprehensive guide for launching TasteKit v1.0 as an open-source project. It covers the final review, repository setup, community engagement, and post-launch activities.
+TasteKit v1.1 is not considered released until deterministic gates, live Full Taste Composition evidence, package dry-runs, and public documentation review all pass from a clean standalone checkout.
 
-## 1. Final Project Review
+## Release Positioning
 
-Before going live, conduct a final review of the entire project to ensure quality and completeness.
+Public claims should stay within what the repo currently ships and verifies:
 
-### Code Review
+- Open-source CLI, library, and native skill under `@actrun_ai/*`.
+- Six production domains: General, Development, Content, Research, Sales, Support.
+- Quick, Guided, and Full Taste Composition onboarding.
+- Canonical `.tastekit/constitution.v1.json` with composition and metacognition extensions.
+- Runtime exports for Claude Code, OpenClaw, Manus, Autopilots, AGENTS.md, and Agent File.
+- Drift, eval, trust, tracing, and MCP binding surfaces.
 
-- **Functionality**: Verify that all CLI commands work as expected.
-- **Error Handling**: Ensure that errors are handled gracefully with clear messages.
-- **Code Style**: Run a linter and formatter (`pnpm lint`, `pnpm format`) to enforce consistency.
-- **Dependencies**: Check for and remove any unused dependencies.
-- **Secrets**: Confirm that no secrets or API keys are hardcoded in the source.
+Do not claim clinical/therapeutic psychology, autonomous production deployment, or official runtime integration beyond generated files and documented adapters.
 
-### Documentation Review
+## Pre-Launch Checklist
 
-- **Completeness**: Read through all documentation to ensure it is accurate and up-to-date.
-- **Clarity**: Check for typos, grammatical errors, and unclear explanations.
-- **Links**: Verify that all internal and external links are working correctly.
-- **Examples**: Ensure that all code examples in the documentation are correct and runnable.
+1. Start from a clean standalone checkout of `https://github.com/philipbankier/tastekit`.
+2. Confirm version and changelog are aligned for `1.1.0`.
+3. Run deterministic gates:
 
-### Repository Structure
+```bash
+corepack enable
+pnpm install --frozen-lockfile
+pnpm test
+pnpm -r build
+pnpm lint
+node scripts/skill-bundle/sync.mjs --check
+bash scripts/validation/contract-conformance.sh
+bash scripts/validation/pr-gate.sh
+```
 
-- **File Naming**: Ensure consistent and descriptive file and directory names.
-- **Standard Files**: Confirm the presence of `LICENSE`, `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `ROADMAP.md`.
-- **`.gitignore`**: Make sure that all generated files, build artifacts, and local configuration are ignored.
+4. Run live evidence:
 
-## 2. GitHub Repository Setup
+```bash
+bash scripts/validation/pre-release-live-ollama.sh
+pnpm test:live-e2e:release
+pnpm test:live-e2e:assert-latest
+```
 
-Properly configuring your GitHub repository is crucial for attracting contributors and managing the project effectively.
+5. Dry-run package contents:
 
-### Repository Metadata
+```bash
+pnpm --filter @actrun_ai/tastekit-core pack --dry-run
+pnpm --filter @actrun_ai/tastekit-cli pack --dry-run
+pnpm --filter @actrun_ai/tastekit-adapters pack --dry-run
+pnpm --filter @actrun_ai/tastekit-voice pack --dry-run
+pnpm --filter @actrun_ai/tastekit-validator pack --dry-run
+```
 
-- **Description**: Write a clear, one-sentence description of the project.
-- **Website**: Add a link to the project website or documentation.
-- **Topics**: Add relevant topics (e.g., `ai`, `agent`, `cli`, `typescript`, `mcp`, `taste-profile`).
+6. Review public docs:
+   - `README.md`
+   - `docs/quickstart.md`
+   - `docs/overview.md`
+   - `docs/domains.md`
+   - `docs/testing/release-verification.md`
+   - `docs/validation/live/README.md`
+   - `docs/demo/tastekit-release-readiness-one-pager.html`
 
-### Issue and Pull Request Templates
+7. Confirm no generated secrets or local env files are staged.
 
-- **Bug Report**: Ensure the `bug_report.md` template is in place to guide users in reporting issues.
-- **Feature Request**: Use the `feature_request.md` template to structure new ideas.
-- **Pull Request**: The `PULL_REQUEST_TEMPLATE.md` should guide contributors in submitting high-quality PRs.
+## Publish Sequence
 
-### Branch Protection
+Only publish after the checklist passes:
 
-- **`main` Branch**: Protect the `main` branch to require pull request reviews before merging.
-- **Status Checks**: Require CI checks to pass before merging.
+```bash
+pnpm --filter @actrun_ai/tastekit-core publish --access public
+pnpm --filter @actrun_ai/tastekit-adapters publish --access public
+pnpm --filter @actrun_ai/tastekit-voice publish --access public
+pnpm --filter @actrun_ai/tastekit-validator publish --access public
+pnpm --filter @actrun_ai/tastekit-cli publish --access public
+```
 
-### Community Features
+Publish the CLI last so users do not install a CLI that depends on unavailable package versions.
 
-- **Discussions**: Enable GitHub Discussions to provide a forum for community interaction.
-- **Wiki**: Consider using the wiki for more detailed, community-maintained documentation.
+Then tag and release:
 
-## 3. Pre-Launch Checklist
+```bash
+git tag v1.1.0
+git push origin v1.1.0
+```
 
-Follow these steps to prepare for the public announcement.
+Create the GitHub release from `CHANGELOG.md` and link only to evidence that passed in the release checkout.
 
-### Finalize Versioning
+## Post-Publish Smoke
 
-- **Tag the Release**: Create a `v1.0.0` tag in Git.
-- **Create Release on GitHub**: Draft a new release on GitHub, using the `CHANGELOG.md` content for the description.
+Run in a temp directory:
 
-### Prepare Communication Materials
+```bash
+npx @actrun_ai/tastekit-cli --help
+npx @actrun_ai/tastekit-cli init --domain general-agent --depth guided
+npx @actrun_ai/tastekit-cli compile
+npx @actrun_ai/tastekit-cli export --target agents-md --out .
+```
 
-- **Blog Post**: Write a blog post announcing the launch, explaining the project's vision, features, and how to get started.
-- **Social Media**: Prepare posts for Twitter, LinkedIn, and other relevant platforms.
-- **Community Channels**: Draft messages for relevant communities (e.g., Discord servers, subreddits).
+Also manually smoke the native `skills/tastekit/` path for Quick, Guided, and Full Taste Composition before public announcement.
 
-### Choose a Launch Platform
+## Launch Materials
 
-- **Hacker News**: A popular choice for developer-focused projects.
-- **Product Hunt**: Good for reaching a broader audience of tech enthusiasts.
-- **Specialized Communities**: Post in communities focused on AI, agents, or TypeScript.
+Use the visual one-pager for review discussions:
 
-## 4. Launch Day
+- `docs/demo/tastekit-release-readiness-one-pager.html`
 
-On launch day, execute your communication plan.
+For public launch copy, emphasize the verified value:
 
-- **Publish the Release**: Make the GitHub release public.
-- **Post to Launch Platform**: Submit your project to your chosen platform (e.g., Hacker News).
-- **Share on Social Media**: Post your prepared messages.
-- **Engage with the Community**: Be available to answer questions, respond to comments, and thank people for their feedback.
+- "Compile human taste into portable agent artifacts."
+- "Full Taste Composition captures operating principles, assumptions, confirmations, boundaries, and runtime guidance."
+- "Six production domains, deterministic release gates, and live E2E evidence."
 
-## 5. Post-Launch Activities
-
-The work doesn't stop after the launch. Sustaining momentum is key.
-
-### Community Management
-
-- **Triage Issues**: Regularly review and label new issues.
-- **Review Pull Requests**: Provide timely and constructive feedback on PRs.
-- **Foster Discussions**: Participate in and guide community discussions.
-
-### Development and Maintenance
-
-- **Follow the Roadmap**: Begin working on the features outlined in the `ROADMAP.md`.
-- **Release Regularly**: Ship updates, bug fixes, and new features to keep the community engaged.
-- **Update Documentation**: Keep the documentation in sync with the latest changes.
-
-### Promotion and Growth
-
-- **Write Tutorials**: Create in-depth tutorials on how to use TasteKit for specific use cases.
-- **Give Talks**: Present TasteKit at meetups and conferences.
-- **Build Integrations**: Work with other open-source projects to build integrations and adapters.
-
-By following this guide, you can ensure a successful launch for TasteKit v1.0 and build a thriving open-source community around it.
+Avoid unsupported claims such as "solves personality," "clinical-grade psychology," or "works natively inside every agent runtime."

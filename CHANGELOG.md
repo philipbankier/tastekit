@@ -5,6 +5,25 @@ All notable changes to TasteKit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-05-11
+
+### Added
+
+- Metacognitive onboarding policy for Quick, Guided, and Full Taste Composition.
+- `x-tastekit-metacognition` constitution extension with coverage summaries, assumptions, conflicts, confirmations, fatigue events, and policy decisions.
+- Runtime metacognition guidance in generated agent markdown without raw transcript leakage.
+
+### Changed
+
+- Full Taste Composition is coverage-driven instead of framed as a 15-25 exchange interview.
+- Native skill state now uses canonical `.tastekit/session.json`; legacy interview-state files are read-only migration context.
+- Compiler refreshes stale cached constitution `generator_version` while preserving enriched constitution content.
+- Package and shipped domain/rubric versions are aligned to `1.1.0`.
+
+### Fixed
+
+- Piper voice tests no longer race on timestamp-based temp WAV filenames.
+
 ## [1.0.0] - 2026-02-27
 
 ### Added
@@ -133,4 +152,5 @@ This internal prototype was never publicly released. It was superseded by v0.5.0
 
 The v0.1.0 prototype included all core modules (schemas, compiler, interview, skills, MCP, trust, tracing, drift, eval) but used a generic onboarding approach. Based on user feedback, we pivoted to a domain-focused architecture to make the tool immediately useful for specific use cases.
 
+[1.1.0]: https://github.com/philipbankier/tastekit/releases/tag/v1.1.0
 [1.0.0]: https://github.com/philipbankier/tastekit/releases/tag/v1.0.0

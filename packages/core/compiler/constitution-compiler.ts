@@ -24,6 +24,7 @@ interface TasteKitCompositionExtension {
 }
 
 const COMPOSITION_EXTENSION_KEY = 'x-tastekit-composition';
+const METACOGNITION_EXTENSION_KEY = 'x-tastekit-metacognition';
 
 /**
  * Constitution compiler
@@ -131,7 +132,7 @@ function compileFromStructuredAnswers(
   };
 
   // Build trace_map with dimension-level traceability
-  const trace_map: Record<string, any> = {
+  const trace_map: Record<string, unknown> = {
     _session_id: session.session_id,
     _llm_provider: session.llm_provider,
     _domain_id: session.domain_id,
@@ -156,6 +157,14 @@ function compileFromStructuredAnswers(
     };
   }
 
+  const extensions: Record<string, unknown> = {
+    [COMPOSITION_EXTENSION_KEY]: composition,
+  };
+  const metacognition = buildMetacognitionExtension(session);
+  if (metacognition) {
+    extensions[METACOGNITION_EXTENSION_KEY] = metacognition;
+  }
+
   return {
     schema_version: 'constitution.v1',
     generated_at: new Date().toISOString(),
@@ -167,9 +176,26 @@ function compileFromStructuredAnswers(
     evidence_policy,
     taboos,
     trace_map,
-    extensions: {
-      [COMPOSITION_EXTENSION_KEY]: composition,
-    },
+    extensions,
+  };
+}
+
+function buildMetacognitionExtension(session: SessionState): Record<string, unknown> | null {
+  const metacognition = session.interview?.metacognition;
+  if (!metacognition || metacognition.schema_version !== 'tastekit.metacognition.v1') return null;
+
+  return {
+    schema_version: 'tastekit.metacognition.v1',
+    depth: metacognition.depth,
+    public_depth_label: metacognition.public_depth_label,
+    ...(metacognition.domain_id ? { domain_id: metacognition.domain_id } : {}),
+    coverage_summary: toJsonSafeValue(metacognition.coverage_summary, new Set()),
+    unresolved_assumptions: toJsonSafeValue(metacognition.unresolved_assumptions, new Set()) ?? [],
+    conflicts: toJsonSafeValue(metacognition.conflicts, new Set()) ?? [],
+    confirmation_checkpoints: toJsonSafeValue(metacognition.confirmation_checkpoints, new Set()) ?? [],
+    fatigue_events: toJsonSafeValue(metacognition.fatigue_events, new Set()) ?? [],
+    policy_decisions: toJsonSafeValue(metacognition.policy_decisions, new Set()) ?? [],
+    confirmed_dimension_ids: toJsonSafeValue(metacognition.confirmed_dimension_ids, new Set()) ?? [],
   };
 }
 

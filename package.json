@@ -1,6 +1,6 @@
 {
   "name": "tastekit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "CLI-first taste onboarding + Skills + MCP + Drift + Trust + Tracing",
   "private": true,
   "type": "module",
@@ -15,10 +15,19 @@
   },
   "scripts": {
     "build": "pnpm -r build",
-    "test": "pnpm -r build && pnpm -r test",
+    "test": "pnpm -r build && pnpm -r test && pnpm test:live-e2e:unit",
     "demo:one-pager": "pnpm --filter @actrun_ai/tastekit-core build && node scripts/demo/render-one-pager.mjs",
     "test:pr-gate": "bash scripts/validation/pr-gate.sh",
     "test:pre-release-live": "bash scripts/validation/pre-release-live-ollama.sh",
+    "test:live-e2e:unit": "node --test scripts/validation/__tests__/*.test.mjs",
+    "test:live-e2e:preflight": "pnpm -r build && node scripts/validation/live-full-composition-e2e.mjs --preflight-only",
+    "test:live-e2e:diagnostics": "pnpm -r build && node scripts/validation/live-provider-diagnostics.mjs",
+    "test:live-e2e:mock": "pnpm -r build && node scripts/validation/mock-live-full-composition-e2e.mjs",
+    "test:live-e2e": "pnpm -r build && node scripts/validation/live-full-composition-e2e.mjs",
+    "test:live-e2e:assert-latest": "node scripts/validation/assert-live-e2e-release-evidence.mjs",
+    "test:live-e2e:release": "pnpm -r build && node scripts/validation/run-live-e2e-release-sequence.mjs",
+    "test:live-e2e:subscription-demo": "pnpm -r build && node scripts/validation/run-live-e2e-subscription-demo-sequence.mjs",
+    "configure:live-e2e": "node scripts/validation/configure-live-env.mjs",
     "lint": "pnpm -r lint",
     "clean": "pnpm -r clean"
   },
@@ -43,6 +52,7 @@
     "vitest": "^2.0.0"
   },
   "dependencies": {
-    "@actrun_ai/tastekit-adapters": "workspace:*"
+    "@actrun_ai/tastekit-adapters": "workspace:*",
+    "@actrun_ai/tastekit-core": "workspace:*"
   }
 }

@@ -233,6 +233,8 @@ describe('TasteKit native skill bundle', () => {
     expect(Buffer.byteLength(content, 'utf-8')).toBeLessThanOrEqual(5 * 1024);
     expect(content).toContain('Guided');
     expect(content).toContain('Full Taste Composition');
+    expect(content).toContain('.tastekit/session.json');
+    expect(content).not.toContain('.tastekit/interview-state.json');
     expect(content).toContain('references/rubrics/universal.md');
     for (const rubricFile of productionDomainRubricFiles) {
       expect(content).toContain(rubricFile.domainId);
@@ -255,6 +257,21 @@ describe('TasteKit native skill bundle', () => {
       .filter(path => !existsSync(join(skillRoot, path)));
 
     expect(missing).toEqual([]);
+  });
+
+  it('routes metacognitive runtime guidance through all markdown templates', () => {
+    for (const template of [
+      'assets/templates/claude-code.md',
+      'assets/templates/hermes-soul.md',
+      'assets/templates/hermes-agents.md',
+      'assets/templates/taste.md',
+    ]) {
+      expect(readFileSync(join(skillRoot, template), 'utf-8'), template).toContain('{{metacognition}}');
+    }
+
+    const runtimeOutput = readFileSync(join(skillRoot, 'references/runtime-output.md'), 'utf-8');
+    expect(runtimeOutput).toContain('x-tastekit-metacognition');
+    expect(runtimeOutput).toContain('Do not include raw transcript text');
   });
 
   it('keeps generated bundle files in sync without mutating in check mode', () => {

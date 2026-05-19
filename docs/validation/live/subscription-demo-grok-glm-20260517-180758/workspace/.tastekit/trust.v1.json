@@ -1,0 +1,9 @@
+{
+  "schema_version": "trust.v1",
+  "mcp_servers": [],
+  "skill_sources": [],
+  "update_policy": {
+    "allow_auto_updates": false,
+    "require_review": true
+  }
+}

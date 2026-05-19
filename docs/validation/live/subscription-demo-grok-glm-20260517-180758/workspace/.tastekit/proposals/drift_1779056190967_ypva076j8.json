@@ -1,0 +1,26 @@
+{
+  "proposal_id": "drift_1779056190967_ypva076j8",
+  "created_at": "2026-05-17T22:16:30.967Z",
+  "signal_type": "repeated_edit",
+  "frequency": 3,
+  "rationale": "User repeatedly rejected actions with reason: \"agreed too quickly with weak product idea\". This suggests a principle or preference that should be captured.",
+  "proposed_changes": {
+    "constitution": {
+      "add_principle": {
+        "statement": "Avoid: agreed too quickly with weak product idea",
+        "priority": 10,
+        "applies_to": [
+          "*"
+        ]
+      }
+    }
+  },
+  "risk_rating": "low",
+  "evidence": {
+    "reason": "agreed too quickly with weak product idea",
+    "occurrences": 3,
+    "context": {
+      "reason": "agreed too quickly with weak product idea"
+    }
+  }
+}
