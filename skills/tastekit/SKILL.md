@@ -17,7 +17,7 @@ TasteKit turns a user's preferences, principles, communication style, boundaries
 ## Route
 
 1. Find the workspace root with `git rev-parse --show-toplevel`; fall back to the current directory.
-2. If `.tastekit/interview-state.json` exists, offer to resume before asking new setup questions.
+2. If `.tastekit/session.json` exists, offer to resume before asking new setup questions. If a legacy interview-state file exists, read it only as migration context and continue writing `.tastekit/session.json`.
 3. Read existing `CLAUDE.md`, `AGENTS.md`, and `SOUL.md` when present. Treat them as hypotheses only; interview answers win.
 4. Ask one compact setup prompt: target (`Claude Code`, `Hermes/artifact`, or `both`), domain (`development-agent`, `general-agent`, `content-agent`, `research-agent`, `sales-agent`, or `support-agent`), optional general-agent capability packs (`development`, `content`, `research`, `sales`, `support`), and depth (`Quick`, `Guided`, or `Full Taste Composition`). Default to Guided and offer Full before starting.
 
@@ -41,7 +41,7 @@ TasteKit turns a user's preferences, principles, communication style, boundaries
 
 ## Output
 
-Track coverage, hypotheses, conflicts, explicit answers, and draft readiness in `.tastekit/interview-state.json`. At about 70% coverage, ask what is wrong, missing, or overfit. Distinguish `never_do` from `must_escalate`, and ask only for missing or contradictory details when validation fails.
+Track coverage, hypotheses, conflicts, explicit answers, metacognitive policy decisions, and draft readiness in `.tastekit/session.json`. At about 70% coverage, ask what is wrong, missing, or overfit. Distinguish `never_do` from `must_escalate`, and ask only for missing or contradictory details when validation fails.
 
 - Claude Code target: write or update `CLAUDE.md` and `.tastekit/constitution.v1.json`.
 - Hermes/artifact target: write or update `SOUL.md` and `AGENTS.md`, plus `.tastekit/constitution.v1.json`.

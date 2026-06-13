@@ -12,7 +12,7 @@ import { DomainRubric } from '../../interview/rubric.js';
  */
 export const DevelopmentAgentRubric: DomainRubric = {
   domain_id: 'development-agent',
-  version: '0.5.0',
+  version: '1.1.0',
   interview_goal: 'Understand the developer\'s engineering philosophy, code quality standards, workflow preferences, and collaboration style to configure an agent that writes code the way they would.',
   includes_universal: true,
 

@@ -24,6 +24,8 @@
 
 {{domain_specific}}
 
+{{metacognition}}
+
 Generated from `.tastekit/constitution.v1.json`. Edit outside this managed region for local-only notes.
 
 <!-- END TASTEKIT MANAGED REGION -->

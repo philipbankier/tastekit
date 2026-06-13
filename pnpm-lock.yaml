@@ -11,6 +11,9 @@ importers:
       '@actrun_ai/tastekit-adapters':
         specifier: workspace:*
         version: link:packages/adapters
+      '@actrun_ai/tastekit-core':
+        specifier: workspace:*
+        version: link:packages/core
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1

@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { SessionState } from '../schemas/workspace.js';
-import { ConstitutionV1Schema } from '../schemas/constitution.js';
+import { ConstitutionV1, ConstitutionV1Schema } from '../schemas/constitution.js';
 import { atomicWrite } from '../utils/filesystem.js';
 import { ensureDir, resolvePlaybooksPath, resolveSkillsPath } from '../utils/filesystem.js';
 import { stringifyYAML } from '../utils/yaml.js';
@@ -52,13 +52,26 @@ const ALL_STEPS = ['constitution', 'guardrails', 'memory', 'skills', 'playbooks'
  */
 const STEPS_DEPENDENT_ON_CONSTITUTION = ['constitution', 'skills', 'playbooks'];
 
-function isCachedConstitutionValid(constitutionPath: string): boolean {
+function readCachedConstitution(constitutionPath: string): ConstitutionV1 | null {
   try {
     const data = JSON.parse(readFileSync(constitutionPath, 'utf-8'));
-    return ConstitutionV1Schema.safeParse(data).success;
+    const parsed = ConstitutionV1Schema.safeParse(data);
+    return parsed.success ? parsed.data : null;
   } catch {
-    return false;
+    return null;
   }
+}
+
+function refreshCachedConstitutionVersion(constitutionPath: string, constitution: ConstitutionV1, generatorVersion: string): void {
+  if (constitution.generator_version === generatorVersion) return;
+  atomicWrite(
+    constitutionPath,
+    JSON.stringify({ ...constitution, generator_version: generatorVersion }, null, 2),
+  );
+}
+
+function shouldRegenerateStaleConstitution(session: SessionState): boolean {
+  return !!session.structured_answers && !!session.interview?.metacognition;
 }
 
 function mergeMarkdownArtifact(path: string, generated: string): string {
@@ -97,10 +110,25 @@ export async function compile(options: CompilationOptions): Promise<CompilationR
   // it, so downstream artifacts get regenerated against the new constitution.
   if (derivation.completed_steps.includes('constitution')) {
     const constitutionPath = join(workspacePath, 'constitution.v1.json');
-    if (!existsSync(constitutionPath) || !isCachedConstitutionValid(constitutionPath)) {
+    const cachedConstitution = existsSync(constitutionPath)
+      ? readCachedConstitution(constitutionPath)
+      : null;
+    if (!cachedConstitution) {
       derivation.completed_steps = derivation.completed_steps.filter(
         s => !STEPS_DEPENDENT_ON_CONSTITUTION.includes(s),
       );
+      writeDerivationState(workspacePath, derivation);
+    } else if (cachedConstitution.generator_version !== generatorVersion) {
+      if (shouldRegenerateStaleConstitution(session)) {
+        derivation.completed_steps = derivation.completed_steps.filter(
+          s => !STEPS_DEPENDENT_ON_CONSTITUTION.includes(s),
+        );
+      } else {
+        refreshCachedConstitutionVersion(constitutionPath, cachedConstitution, generatorVersion);
+        derivation.completed_steps = derivation.completed_steps.filter(
+          s => s === 'constitution' || !STEPS_DEPENDENT_ON_CONSTITUTION.includes(s),
+        );
+      }
       writeDerivationState(workspacePath, derivation);
     }
   }
@@ -136,7 +164,7 @@ export async function compile(options: CompilationOptions): Promise<CompilationR
       constitution = JSON.parse(readFileSync(constitutionPath, 'utf-8'));
       const soulMd = generateSoulMd({
         generator_version: generatorVersion,
-        constitution: constitution as any,
+        constitution: constitution as ConstitutionV1,
         domain_id: session.domain_id,
       });
       const soulPath = join(workspacePath, '..', 'SOUL.md');
@@ -155,7 +183,7 @@ export async function compile(options: CompilationOptions): Promise<CompilationR
       const { generateAgentsMd } = await import('../generators/agents-md-generator.js');
       const agentsMd = generateAgentsMd({
         generator_version: generatorVersion,
-        constitution: constitution as any,
+        constitution: constitution as ConstitutionV1,
         domain_id: session.domain_id,
       });
       const agentsPath = join(workspacePath, '..', 'AGENTS.md');

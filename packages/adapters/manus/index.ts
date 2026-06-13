@@ -11,7 +11,7 @@ import { resolveArtifactPath, resolveSkillsPath } from '@actrun_ai/tastekit-core
 
 export class ManusAdapter implements TasteKitAdapter {
   id = 'manus';
-  version = '1.0.0';
+  version = '1.1.0';
   
   async detect(target: string): Promise<boolean> {
     // Check if target has Manus skills directory

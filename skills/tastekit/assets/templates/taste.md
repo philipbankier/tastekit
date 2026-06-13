@@ -12,4 +12,6 @@
 
 {{tone}}
 
+{{metacognition}}
+
 <!-- END TASTEKIT MANAGED REGION -->

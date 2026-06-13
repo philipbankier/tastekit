@@ -1,182 +1,81 @@
 # TasteKit Roadmap
 
-This document outlines the planned development trajectory for TasteKit beyond the v1.0 release.
+This roadmap reflects the standalone TasteKit release direction. It is intentionally conservative: public claims should follow implemented and verified behavior, not aspirational architecture.
 
-## Current Status: v1.0 (Released)
+## Current Status: v1.1.0 Release Readiness
 
-The v1.0 release establishes the foundational architecture with all core modules implemented. The system is functional and ready for community contributions, with the MCP client implemented as a well-structured interface stub.
+The current priority is finishing v1.1.0 with no corner cutting:
 
-## Current Focus: Test Foundation Wave 0 (In Progress)
+- Six production domains remain green.
+- Native `skills/tastekit/` onboarding remains source-complete and generated from source rubrics.
+- Full Taste Composition remains coverage-driven and useful in real-world live runs.
+- Managed-region runtime exports preserve manual edits.
+- Validator, docs, package metadata, and release gates align with `@actrun_ai/*`.
+- Official live release evidence is produced before publishing.
 
-Before new feature expansion, TasteKit is hardening reliability with:
-- deterministic PR gating under ~10 minutes
-- command-surface integration coverage for all CLI commands/subcommands
-- v1/v2 layout compatibility regression checks
-- adapter compatibility tests across runtime targets
-- pre-release-only live Ollama smoke validation
+## Immediate Release Gates
 
-## Short-term Goals (v1.1 - v1.3)
+Required before publishing:
 
-### v1.1: MCP Protocol Implementation
+```bash
+pnpm install --frozen-lockfile
+pnpm test
+pnpm -r build
+pnpm lint
+node scripts/skill-bundle/sync.mjs --check
+bash scripts/validation/contract-conformance.sh
+bash scripts/validation/pr-gate.sh
+pnpm test:live-e2e:release
+```
 
-**Goal**: Replace the MCP client stub with a full protocol implementation.
+Also required:
 
-**Key Features**:
-- Complete JSON-RPC 2.0 message protocol implementation
-- Stdio transport layer for local MCP servers
-- HTTP/SSE transport layer for remote MCP servers
-- Connection lifecycle management (initialize, capabilities, shutdown)
-- Server capability discovery and version negotiation
-- Comprehensive error handling and retry logic
-- Reference MCP server implementation for testing
+- Dry-run packs for all publishable packages.
+- Review of `README.md`, `docs/quickstart.md`, `docs/overview.md`, `docs/domains.md`, and live evidence docs.
+- Post-publish `npx @actrun_ai/tastekit-cli` smoke checks.
 
-**Community Contribution Opportunities**:
-- Implement additional transport layers (WebSocket)
-- Create example MCP servers for common use cases
-- Build MCP server testing utilities
+## Near-Term Backlog
 
-### v1.2: Testing and Quality
+### v1.1.x: Release Stabilization
 
-**Goal**: Achieve comprehensive test coverage and production-grade reliability.
+- Fix any release-gate failures found by the strict live E2E route.
+- Improve sales/support fixture richness beyond seed sessions.
+- Keep docs and package metadata aligned with what is actually shipped.
+- Improve native skill install/update guidance after real user feedback.
 
-**Key Features**:
-- Unit tests for all core modules (target: 80%+ coverage)
-- Integration tests for CLI commands
-- End-to-end tests with real MCP servers
-- Performance benchmarks for compilation and tracing
-- Fuzzing tests for artifact validation
-- CI/CD pipeline with automated testing and releases
+### v1.2: Drift And Maintenance Depth
 
-**Community Contribution Opportunities**:
-- Write test cases for edge cases
-- Create test fixtures and mock data
-- Build testing documentation and guides
+- Complete `drift apply` support for additional proposal shapes such as modify/remove principle.
+- Expand trace-driven regression tests.
+- Improve human review UX for drift proposals.
+- Add more eval-pack examples tied to each production domain.
 
-### v1.3: Developer Experience
+### v1.3: Runtime And Skill Ergonomics
 
-**Goal**: Make TasteKit easier to use and extend.
+- Verify install-path conventions for Codex and other runtimes before adding a Codex-specific target.
+- Expand runtime templates only when a runtime has a stable, tested convention.
+- Improve skill-bundle publishing and manual smoke docs.
 
-**Key Features**:
-- Interactive TUI (Terminal UI) for onboarding
-- Rich CLI output with better formatting and colors
-- Artifact visualization tools (render constitution as diagram)
-- Skills marketplace/registry concept
-- VSCode extension for SKILL.md authoring
-- Improved error messages with actionable suggestions
-- Auto-completion for CLI commands
+## Medium-Term Themes
 
-**Community Contribution Opportunities**:
-- Design and build the VSCode extension
-- Create skill templates for common patterns
-- Improve documentation with video tutorials
+- More domain-specific skills and playbooks, especially where real usage shows repeated workflows.
+- Better MCP server compatibility coverage.
+- Better artifact visualization and profile diff tooling.
+- Optional local UI for reviewing profiles, traces, eval results, and drift proposals.
 
-## Medium-term Goals (v2.0)
+## Long-Term Research
 
-### v2.0: Runtime Integration and Ecosystem
+- Trace-driven taste extraction as a v2 direction.
+- Team/shared profile governance.
+- Bidirectional runtime sync where runtime APIs are stable enough.
+- Privacy-preserving profile sharing and profile composition.
 
-**Goal**: Deep integration with major agent runtimes and expansion of the adapter ecosystem.
+## Non-Goals For v1.1
 
-**Key Features**:
-- Native runtime integrations (not just export/import)
-- Real-time drift detection during agent execution
-- Live memory consolidation with runtime feedback
-- Bidirectional sync between TasteKit and runtimes
-- Skills hot-reloading in supported runtimes
-- Web-based dashboard for monitoring and management
-- Multi-user/team workspaces with shared artifacts
+- No `constitution.v2`.
+- No clinical, therapeutic, or diagnostic claims.
+- No forced hosted service.
+- No auto-publishing or auto-updating skills.
+- No broad runtime control claims beyond generated artifacts and tested adapter outputs.
 
-**New Adapters**:
-- LangChain/LangGraph adapter
-- AutoGPT adapter
-- CrewAI adapter
-- Custom runtime adapter SDK
-
-**Community Contribution Opportunities**:
-- Build adapters for additional runtimes
-- Create runtime-specific skills
-- Develop the web dashboard
-
-## Long-term Vision (v3.0+)
-
-### v3.0: AI-Native Features
-
-**Goal**: Leverage AI to make taste management more intelligent and automated.
-
-**Key Features**:
-- AI-assisted onboarding (natural conversation instead of forms)
-- Automatic drift proposal generation with LLM analysis
-- Smart skill generation from task descriptions
-- Intelligent guardrail suggestions based on tool usage patterns
-- Anomaly detection in traces using ML
-- Personalized skill recommendations
-- Natural language querying of artifacts and traces
-
-### v4.0: Enterprise and Scale
-
-**Goal**: Support for enterprise deployments and large-scale agent operations.
-
-**Key Features**:
-- Multi-tenant architecture
-- Role-based access control (RBAC)
-- Audit logging and compliance features
-- Centralized artifact management
-- Policy enforcement across agent fleets
-- Integration with enterprise identity providers
-- Advanced analytics and reporting
-- Cost tracking and optimization
-
-## Research Areas
-
-These are exploratory areas that may influence future versions:
-
-### Formal Verification
-- Mathematical proofs of artifact consistency
-- Formal specification of taste profiles
-- Automated verification of guardrail completeness
-
-### Distributed Taste
-- Federated learning for taste profiles
-- Privacy-preserving taste sharing
-- Collaborative taste refinement across organizations
-
-### Taste Transfer Learning
-- Learn from existing agent behaviors
-- Extract taste profiles from logs/traces
-- Cross-domain taste adaptation
-
-## Community Priorities
-
-The roadmap is flexible and responsive to community needs. We track community priorities through:
-
-- GitHub issue voting (👍 reactions)
-- Community surveys (quarterly)
-- RFC discussions in `community/RFC/`
-- Contributor feedback
-
-## How to Influence the Roadmap
-
-1. **Vote on Issues**: Add 👍 to issues you care about
-2. **Submit RFCs**: Propose major changes in `community/RFC/`
-3. **Join Discussions**: Participate in GitHub Discussions
-4. **Contribute**: PRs are the strongest signal of what matters
-
-## Release Cadence
-
-- **Patch releases** (v1.0.x): As needed for bug fixes
-- **Minor releases** (v1.x.0): Every 2-3 months
-- **Major releases** (vX.0.0): Annually or when breaking changes are necessary
-
-## Breaking Changes Policy
-
-We take backward compatibility seriously. Breaking changes will:
-
-- Only occur in major version releases
-- Be clearly documented in CHANGELOG.md
-- Include migration guides
-- Be discussed in RFCs before implementation
-- Provide deprecation warnings in advance when possible
-
----
-
-**Last Updated**: 2026-02-13  
-**Next Review**: 2026-05-13
+**Last updated:** 2026-05-19

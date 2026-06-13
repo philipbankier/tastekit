@@ -11,6 +11,7 @@ import { domainContextBlock } from '../blocks/domain-context.js';
 import { playbookIndexBlock } from '../blocks/playbook-index.js';
 import { vocabularyBlock } from '../blocks/vocabulary.js';
 import { evaluationCriteriaBlock } from '../blocks/evaluation-criteria.js';
+import { metacognitionBlock } from '../blocks/metacognition.js';
 
 function makeContext(): GeneratorContext {
   return {
@@ -55,6 +56,57 @@ function makeContext(): GeneratorContext {
       taboos: {
         never_do: ['Delete production data'],
         must_escalate: ['Schema migrations'],
+      },
+      extensions: {
+        'x-tastekit-metacognition': {
+          schema_version: 'tastekit.metacognition.v1',
+          depth: 'operator',
+          public_depth_label: 'Full Taste Composition',
+          coverage_summary: {
+            critical: { total: 1, covered: 1, confirmed: 1, inferred: 0 },
+            important: { total: 1, covered: 0, confirmed: 0, inferred: 1 },
+            nice_to_have: { total: 0, covered: 0, confirmed: 0, inferred: 0 },
+            inferable: { total: 0, covered: 0, confirmed: 0, inferred: 0 },
+            total_dimensions: 2,
+            covered_dimensions: 1,
+          },
+          unresolved_assumptions: [
+            {
+              id: 'inferred-style',
+              dimension_id: 'style',
+              summary: 'Likely prefers concise progress updates.',
+              source: 'inferred',
+              turn_number: 4,
+            },
+          ],
+          conflicts: [],
+          confirmation_checkpoints: [
+            {
+              id: 'draft-1',
+              turn_number: 10,
+              type: 'draft',
+              dimension_ids: ['core'],
+              accepted: true,
+              summary: 'Draft accepted.',
+            },
+          ],
+          fatigue_events: [
+            {
+              turn_number: 8,
+              signal: 'raw transcript should never show here',
+              action: 'summarize',
+            },
+          ],
+          policy_decisions: [
+            {
+              turn_number: 9,
+              action: 'draft',
+              target_dimension_ids: ['core', 'style'],
+              reason_codes: ['full_draft_checkpoint_required'],
+            },
+          ],
+          confirmed_dimension_ids: ['core'],
+        },
       },
     } as any,
     guardrails: {
@@ -226,5 +278,18 @@ describe('generator blocks', () => {
 
     expect(withEvalpack).toContain('## Evaluation Criteria');
     expect(withoutEvalpack).toBeNull();
+  });
+
+  it('renders metacognitive guidance without hidden machinery or transcript-like detail', () => {
+    const output = metacognitionBlock(makeContext());
+
+    expect(output).toContain('## Metacognitive Operating Style');
+    expect(output).toContain('Full Taste Composition');
+    expect(output).toContain('Likely prefers concise progress updates.');
+    expect(output).not.toContain('(style)');
+    expect(output).toContain('Confirm assumptions before acting on them.');
+    expect(output).not.toContain('policy_decisions');
+    expect(output).not.toContain('full_draft_checkpoint_required');
+    expect(output).not.toContain('raw transcript should never show here');
   });
 });

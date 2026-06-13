@@ -1,0 +1,76 @@
+checks:
+  - check_id: goal-alignment
+    condition: Execution result directly addresses the user goal and operating principles
+    type: taste
+  - check_id: risk-compliance
+    condition: No taboo or high-risk action was executed without required escalation
+    type: safety
+  - check_id: evidence-quality
+    condition: Claims in the final output reflect context synthesis confidence and citation expectations
+    type: facts
+description: Synthesize context, orchestrate execution, and close with a concise delivery summary.
+escalations:
+  - approval_ref: guardrails.approval_rules.approve_high_risk
+    escalation_id: high-risk-action
+    trigger: Execution requires destructive, irreversible, legal, or financial actions
+id: general-task-execution
+inputs:
+  - description: Desired outcome to achieve
+    name: goal
+    required: true
+    type: string
+  - description: Relevant files/notes/links to ground the task
+    name: context_sources
+    required: false
+    type: string
+  - description: Policy, timeline, budget, or tooling constraints
+    name: constraints
+    required: false
+    type: string
+name: General Task Execution
+schema_version: playbook.v1
+steps:
+  - outputs:
+      - context_brief
+    params_template:
+      question: "{{goal}}"
+      sources: "{{context_sources}}"
+    step_id: synthesize-context
+    tool_ref: skill:context-synthesis
+    type: tool
+  - outputs:
+      - execution_plan
+    params_template:
+      constraints: "{{constraints}}"
+      context: "{{context_brief}}"
+      goal: "{{goal}}"
+    step_id: plan-work
+    type: think
+  - outputs:
+      - execution_result
+    params_template:
+      constraints: "{{constraints}}"
+      context_snapshot: "{{context_brief}}"
+      goal: "{{goal}}"
+    step_id: execute-work
+    tool_ref: skill:task-orchestration
+    type: tool
+  - outputs:
+      - approved_result
+    params_template:
+      message: Review execution summary before final delivery.
+      summary: "{{execution_result}}"
+    step_id: approval-checkpoint
+    type: approval_gate
+  - outputs:
+      - final_output
+    params_template:
+      content: "{{approved_result}}"
+      format: operator_summary
+    step_id: finalize
+    type: write
+stop_conditions:
+  - condition: Critical context gaps remain unresolved after synthesis
+    reason: Cannot continue safely without additional user input
+triggers:
+  - type: manual

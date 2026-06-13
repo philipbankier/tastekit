@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { existsSync, readFileSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { EvalRunner } from '@actrun_ai/tastekit-core/eval';
+import { EvalReport, EvalRunner } from '@actrun_ai/tastekit-core/eval';
 import { Replay } from '@actrun_ai/tastekit-core/eval';
 import { resolveArtifactPath } from '@actrun_ai/tastekit-core/utils';
 import { getGlobalOptions, detail, hint, handleError, jsonOutput, verbose } from '../ui.js';
@@ -11,7 +11,7 @@ import { getGlobalOptions, detail, hint, handleError, jsonOutput, verbose } from
 const evalRunCommand = new Command('run')
   .description('Run evaluation pack')
   .option('--pack <path>', 'Path to evaluation pack YAML/JSON file')
-  .option('--format <type>', 'Output format: json or summary', 'summary')
+  .option('--format <type>', 'Output format: summary, json, or full-json', 'summary')
   .action(async (options, cmd) => {
     const globals = getGlobalOptions(cmd);
     const workspacePath = process.cwd();
@@ -53,9 +53,21 @@ const evalRunCommand = new Command('run')
       const runner = new EvalRunner();
       const report = await runner.runEvalPack(evalPack);
 
+      const reportsDir = join(workspacePath, '.tastekit', 'eval-reports');
+      mkdirSync(reportsDir, { recursive: true });
+      const reportPath = join(reportsDir, `${safeReportFilenamePrefix(report.evalpack_id)}_${Date.now()}.json`);
+      writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf-8');
+
+      if (options.format === 'full-json') {
+        spinner.stop();
+        jsonOutput({ ...report, report_path: reportPath });
+        return;
+      }
+
       if (options.format === 'json' || globals.json) {
         spinner.stop();
-        jsonOutput(report);
+        jsonOutput(compactEvalReport(report, reportPath));
+        return;
       }
 
       // Summary format
@@ -84,11 +96,6 @@ const evalRunCommand = new Command('run')
       detail('Scenarios', String(report.results.length));
       detail('Passed', `${report.results.filter((r: any) => r.passed).length}/${report.results.length}`);
 
-      // Save report
-      const reportsDir = join(workspacePath, '.tastekit', 'eval-reports');
-      mkdirSync(reportsDir, { recursive: true });
-      const reportPath = join(reportsDir, `${report.evalpack_id}_${Date.now()}.json`);
-      writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf-8');
       detail('Report', reportPath);
     } catch (error) {
       handleError(error, spinner);
@@ -138,6 +145,12 @@ const evalReplayCommand = new Command('replay')
       const replay = new Replay();
       const result = replay.replayTrace(tracePath, constitution);
 
+      if (globals.json) {
+        spinner.stop();
+        jsonOutput(result);
+        return;
+      }
+
       if (result.passed) {
         spinner.succeed(chalk.green('Replay passed. No violations found.'));
       } else {
@@ -147,10 +160,6 @@ const evalReplayCommand = new Command('replay')
         for (const v of result.violations) {
           console.log(chalk.red(`  ${v.violation_type}: ${v.reason}`));
         }
-      }
-
-      if (globals.json) {
-        jsonOutput(result);
       }
 
       console.log('');
@@ -165,3 +174,37 @@ export const evalCommand = new Command('eval')
   .description('Run evaluations')
   .addCommand(evalRunCommand)
   .addCommand(evalReplayCommand);
+
+function compactEvalReport(report: EvalReport, reportPath: string) {
+  return {
+    evalpack_id: report.evalpack_id,
+    timestamp: report.timestamp,
+    overall_score: report.overall_score,
+    passed: report.passed,
+    report_path: reportPath,
+    results: report.results.map(result => ({
+      scenario_id: result.scenario_id,
+      passed: result.passed,
+      score: result.score,
+      judgments: result.judgments,
+      output_keys: outputKeys(result.outputs),
+    })),
+  };
+}
+
+function outputKeys(outputs: unknown): string[] {
+  if (!outputs || typeof outputs !== 'object' || Array.isArray(outputs)) {
+    return [];
+  }
+  return Object.keys(outputs).sort();
+}
+
+function safeReportFilenamePrefix(evalpackId: string): string {
+  const slug = evalpackId
+    .replace(/[\\/]+/g, '-')
+    .replace(/[^a-zA-Z0-9._-]+/g, '-')
+    .replace(/^\.+/, '')
+    .replace(/-+/g, '-')
+    .replace(/^[.-]+|[.-]+$/g, '');
+  return slug || 'evalpack';
+}

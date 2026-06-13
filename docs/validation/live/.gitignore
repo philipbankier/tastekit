@@ -1,2 +1,4 @@
 pre-release-live-*.md
+latest-run.json
+tastekit-live.env
 !.gitignore

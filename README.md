@@ -7,22 +7,27 @@
 
 **Compile your taste into portable agent artifacts.**
 
-TasteKit is an open-source CLI tool and library that captures a user's preferences, principles, and personality through an LLM-driven interview, then compiles them into portable, versioned artifacts. These artifacts work across any agent runtime — Claude Code, OpenClaw, Manus, Autopilots, and more.
+TasteKit is an open-source CLI, library, and native agent skill for capturing how a person wants an AI agent to reason, challenge, research, plan, write, and act. It runs an adaptive onboarding interview, compiles the result into versioned artifacts, and exports those artifacts to agent runtimes including Claude Code, OpenClaw, Manus, Autopilots, AGENTS.md, and Agent File.
 
 ## Why TasteKit?
 
-AI agents are powerful, but they don't know *you*. TasteKit solves this by creating a persistent, portable taste profile that any agent can load. Instead of repeating your preferences in every system prompt, compile them once and export everywhere:
+AI agents are powerful, but they usually start from generic instructions. TasteKit turns a user's taste, operating principles, boundaries, and domain preferences into durable runtime context. Instead of repeating the same preferences in every system prompt, compile them once and export everywhere:
 
-- **One interview, many runtimes** — Your taste works in Claude Code, OpenClaw, Manus, and Autopilots
+- **One interview, many runtimes** — Your taste works in Claude Code, OpenClaw, Manus, Autopilots, AGENTS.md, and Agent File
+- **Agent-native onboarding** — Use the CLI or drop in the `skills/tastekit/` skill and let a capable agent guide the setup
+- **Depth control** — Choose Quick, Guided, or Full Taste Composition; Guided is the default, Full is coverage-driven rather than time-boxed
 - **Drift detection** — Know when an agent's behavior drifts from your preferences over time (no other OSS tool does this)
 - **Trust & provenance** — Pin MCP server fingerprints to prevent silent tool changes
 - **Domain expertise** — Pre-built rubrics, skills, and playbooks for 6 agent domains
 
 ## Features
 
-- **LLM-driven onboarding** — Adaptive interview that explores your preferences across domain-specific dimensions, not static forms
+- **LLM-driven onboarding** — Adaptive interview that explores preferences across domain-specific dimensions, confirmation loops, assumptions, conflicts, and metacognitive pacing
+- **Native skill bundle** — `skills/tastekit/` provides a thin-router agent skill with generated rubric references and runtime templates
 - **6 agent domains** — General, Content, Development, Research, Sales, and Support agents with specialized rubrics and skills
+- **Taste composition extensions** — Rich interview output is preserved in `constitution.v1.json` under `x-tastekit-composition` and `x-tastekit-metacognition`
 - **Artifact-first compilation** — Everything compiles into JSON/YAML files; adapters map files to runtime format
+- **Managed-region runtime files** — Re-runs update only the TasteKit-managed block in `CLAUDE.md`, `SOUL.md`, and `AGENTS.md`
 - **Skills with progressive disclosure** — SKILL.md files with three tiers: minimal context (always loaded), on-invoke, and on-demand
 - **MCP-first tool binding** — Discover, inspect, and bind tools via Model Context Protocol
 - **Trust & provenance** — Pin MCP server fingerprints and skill sources; audit for violations
@@ -83,8 +88,10 @@ TasteKit uses a layered test stack:
 - Core unit tests
 - Adapter compatibility tests
 - CLI integration tests
+- Native skill bundle checks
 - Deterministic fixture replay gates (`v1` + `v2` workspace layouts)
-- Pre-release live Ollama smoke checks
+- Subscription-backed live demo evidence for product review
+- Strict GPT-5.5 + GLM-5.1 live release evidence before publishing
 
 Run the deterministic PR gate locally:
 
@@ -92,16 +99,21 @@ Run the deterministic PR gate locally:
 bash scripts/validation/pr-gate.sh
 ```
 
-Run the pre-release live gate (Ollama required):
+Run the strict live release evidence sequence when official provider keys are available:
 
 ```bash
-bash scripts/validation/pre-release-live-ollama.sh
+pnpm test:live-e2e:release
 ```
 
 Testing docs:
 - `docs/testing/strategy.md`
 - `docs/testing/command-matrix.md`
 - `docs/testing/layout-compatibility.md`
+- `docs/testing/release-verification.md`
+- `docs/validation/live/README.md`
+
+Review artifact:
+- `docs/demo/tastekit-release-readiness-one-pager.html`
 
 ## CLI Commands
 
@@ -123,28 +135,28 @@ All commands support `--json` for machine-readable output and `--verbose` for de
 
 ## Generated Artifacts
 
-After running `tastekit compile`, TasteKit supports both legacy flat (`v1`) and three-space (`v2`) layouts:
+After running `tastekit compile`, TasteKit writes the v1 release layout directly under `.tastekit/`. Older split layouts are still read for compatibility, but new writes target the canonical flat paths.
 
 ```
 .tastekit/
-├── self/
-│   ├── constitution.v1.json    # Principles, tone, tradeoffs, taboos
-│   ├── guardrails.v1.yaml      # Permissions, approvals, rate limits
-│   └── memory.v1.yaml          # Write policy, retention, consolidation
-├── knowledge/
-│   ├── skills/
-│   │   ├── manifest.v1.yaml    # Skills index with metadata
-│   │   └── <skill-id>/SKILL.md # Progressive disclosure skill files
-│   └── playbooks/              # Domain-specific execution plans
-├── ops/
-│   ├── traces/                 # JSONL trace files from agent runs
-│   ├── drift/                  # Drift proposals
-│   ├── derivation.v1.yaml      # Compile resume state
-│   └── session.json            # Onboarding interview state
-├── artifacts/                  # Legacy compatibility (v1)
-├── skills/                     # Legacy compatibility (v1)
-└── traces/                     # Legacy compatibility (v1)
+├── tastekit.yaml              # Workspace configuration
+├── session.json               # Resumable onboarding state
+├── constitution.v1.json       # Principles, tone, tradeoffs, trace map, extensions
+├── guardrails.v1.yaml         # Permissions, approvals, rate limits
+├── memory.v1.yaml             # Write policy, retention, consolidation
+├── bindings.v1.json           # MCP tool bindings
+├── trust.v1.json              # Pinned MCP and skill provenance
+├── derivation.v1.yaml         # Compile resume state
+├── skills/
+│   ├── manifest.v1.yaml       # Skills index with metadata
+│   └── <skill-id>/SKILL.md    # Progressive disclosure skill files
+├── playbooks/                 # Domain-specific execution plans
+├── traces/                    # JSONL trace files from agent runs
+├── evals/                     # Evaluation packs and results
+└── drift/                     # Drift proposals
 ```
+
+Runtime exports use managed regions in Markdown files so hand-written content outside TasteKit blocks is preserved on re-run.
 
 ## Agent Domains
 
@@ -159,7 +171,7 @@ TasteKit ships six production domains, each with specialized rubrics, interview 
 | Sales Agent | Account research, qualification, buyer-facing follow-up, and deal-risk escalation |
 | Support Agent | Troubleshooting, customer communication, privacy-safe assistance, and escalation |
 
-Each domain supports Quick, Guided, and Full Taste Composition depths. General Agent can also opt into `development` and `content` capability packs when one broad agent needs task-specific workflows. Release validation gates enumerate all six domains in deterministic replay and pre-release live Ollama smoke checks.
+Each domain supports Quick, Guided, and Full Taste Composition depths. General Agent can also opt into `development`, `content`, `research`, `sales`, and `support` capability packs when one broad agent needs task-specific workflows. Release validation gates enumerate all six domains in deterministic replay; strict live release evidence is currently centered on Full Taste Composition for `general-agent`.
 
 ## Project Structure
 

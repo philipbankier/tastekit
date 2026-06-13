@@ -8,6 +8,7 @@
 import type { GeneratorContext } from './types.js';
 import { renderManagedRegion } from './managed-region.js';
 import { tasteCompositionBlock } from './blocks/taste-composition.js';
+import { metacognitionBlock } from './blocks/metacognition.js';
 
 export function generateAgentsMd(ctx: GeneratorContext): string {
   const lines: string[] = [];
@@ -109,6 +110,12 @@ export function generateAgentsMd(ctx: GeneratorContext): string {
   const tasteComposition = tasteCompositionBlock(ctx);
   if (tasteComposition) {
     lines.push(tasteComposition);
+    lines.push('');
+  }
+
+  const metacognition = metacognitionBlock(ctx);
+  if (metacognition) {
+    lines.push(metacognition);
     lines.push('');
   }
 

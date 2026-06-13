@@ -1,0 +1,72 @@
+checks:
+  - check_id: traceability
+    condition: Recommendation and actions are traceable to synthesized context and confidence markers
+    type: facts
+  - check_id: format-quality
+    condition: Delivery packet clearly separates facts, assumptions, risks, and next actions
+    type: format
+description: Gather context, choose an execution path, and deliver an evidence-backed recommendation or action plan.
+escalations:
+  - approval_ref: guardrails.approval_rules.approve_high_risk
+    escalation_id: policy-or-risk-blocker
+    trigger: Recommended path conflicts with trust/guardrail policy or crosses high-risk thresholds
+id: research-then-act
+inputs:
+  - description: Decision or task question to resolve
+    name: question
+    required: true
+    type: string
+  - description: Optional initial sources to bootstrap synthesis
+    name: sources
+    required: false
+    type: string
+  - description: Optional timing constraint for recommendation
+    name: decision_deadline
+    required: false
+    type: string
+name: Research Then Act
+schema_version: playbook.v1
+steps:
+  - outputs:
+      - brief
+      - confidence_map
+      - open_questions
+    params_template:
+      question: "{{question}}"
+      sources: "{{sources}}"
+    step_id: capture-context
+    tool_ref: skill:context-synthesis
+    type: tool
+  - outputs:
+      - recommended_path
+    params_template:
+      brief: "{{brief}}"
+      confidence_map: "{{confidence_map}}"
+      deadline: "{{decision_deadline}}"
+      instruction: Select a recommended path with two alternatives and explicit tradeoffs.
+    step_id: select-path
+    type: think
+  - outputs:
+      - path_result
+    params_template:
+      constraints: "{{decision_deadline}}"
+      context_snapshot: "{{brief}}"
+      goal: "{{question}}"
+    step_id: execute-path
+    tool_ref: skill:task-orchestration
+    type: tool
+  - outputs:
+      - delivery_packet
+    params_template:
+      content: "{{path_result}}"
+      include:
+        - recommended_path
+        - confidence_map
+        - open_questions
+    step_id: deliver
+    type: write
+stop_conditions:
+  - condition: No viable path can be recommended from available evidence
+    reason: Insufficient confidence to proceed responsibly
+triggers:
+  - type: manual

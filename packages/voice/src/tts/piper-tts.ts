@@ -1,4 +1,5 @@
 import { execFile } from 'child_process';
+import { randomUUID } from 'crypto';
 import { readFileSync, unlinkSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -28,7 +29,7 @@ export class PiperTTS implements TTSProvider {
   }
 
   async synthesize(text: string): Promise<AsyncIterable<Buffer>> {
-    const tempPath = join(tmpdir(), `tastekit-tts-${Date.now()}.wav`);
+    const tempPath = join(tmpdir(), `tastekit-tts-${randomUUID()}.wav`);
 
     await this.runPiper(text, tempPath);
 

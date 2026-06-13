@@ -7,6 +7,7 @@ import { compile, canResume } from '@actrun_ai/tastekit-core/compiler';
 import { loadSession } from '@actrun_ai/tastekit-core/interview';
 import { resolveSessionPath } from '@actrun_ai/tastekit-core/utils';
 import { getGlobalOptions, nextSteps, handleError, jsonOutput } from '../ui.js';
+import { getCliPackageVersion } from '../version.js';
 
 export const compileCommand = new Command('compile')
   .description('Compile taste artifacts from onboarding session')
@@ -36,7 +37,7 @@ export const compileCommand = new Command('compile')
       const result = await compile({
         workspacePath,
         session,
-        generatorVersion: '0.5.0',
+        generatorVersion: getCliPackageVersion(),
         resume: shouldResume,
       });
 

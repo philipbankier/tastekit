@@ -8,7 +8,7 @@ Legend:
 | Command | Success Path | Failure Path | Coverage |
 |---|---|---|---|
 | `tastekit init` | workspace + config created (including `general-agent`) | reject existing workspace | I,E |
-| `tastekit onboard` | covered indirectly in live checks | missing workspace/config/provider | I (error), pre-release live |
+| `tastekit onboard` | resume, aliases, and Full Taste Composition covered through live harness and targeted integration/unit tests | missing workspace/config/provider | I (error), live E2E |
 | `tastekit compile` | compile + resume path | missing session/workspace | U,I,E |
 | `tastekit export` | all adapters + agents-md + agent-file | missing artifacts/invalid target | I,E |
 | `tastekit import` | soul-md + agent-file import | missing source/invalid json | I,E |
@@ -42,3 +42,15 @@ Legend:
 - Deterministic release replay enumerates all six production domains: `development-agent`, `general-agent`, `content-agent`, `research-agent`, `sales-agent`, and `support-agent`.
 - The release replay asserts canonical `.tastekit/constitution.v1.json`, guardrails, memory, skills, playbooks, and exports for each domain fixture.
 - Unit and compiler tests remain responsible for domain-specific rubric and asset depth.
+
+## Release Evidence Commands
+
+These commands are outside the ordinary command/subcommand matrix because they validate the product as a whole:
+
+| Command | Purpose | Gate |
+|---|---|---|
+| `node scripts/skill-bundle/sync.mjs --check` | Confirms native skill schema/rubric references are generated from source and in sync | PR + release |
+| `bash scripts/validation/pr-gate.sh` | Replays six-domain release fixtures and adapter exports | PR + release |
+| `pnpm test:live-e2e:mock` | Runs the live harness shape through a local mock provider before spending live credits | Developer confidence |
+| `pnpm test:live-e2e:subscription-demo` | Runs a subscription-backed real LLM demo for review | Product review evidence |
+| `pnpm test:live-e2e:release` | Runs strict GPT-5.5 + GLM-5.1 release evidence assertion | Required before publish |

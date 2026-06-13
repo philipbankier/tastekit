@@ -165,7 +165,10 @@ describe('generateAgentsMd', () => {
     const result = generateAgentsMd(fullContext());
     expect(result).toContain('## Taste Composition');
     expect(result).toContain('Full Taste Composition');
-    expect(result).toContain('User wants risk-first code review.');
+    expect(result).toContain('code_review');
+    expect(result).toContain('captured in constitution detail');
+    expect(result).not.toContain('User wants risk-first code review.');
+    expect(result).not.toContain('Lead with correctness issues.');
   });
 
   it('omits sections for empty constitution', () => {

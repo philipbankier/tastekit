@@ -1,0 +1,33 @@
+{
+  "proposal_id": "drift_1779056190968_orpo9kwmu",
+  "created_at": "2026-05-17T22:16:30.968Z",
+  "signal_type": "assertion_mismatch",
+  "frequency": 3,
+  "rationale": "Principles were violated 3 times (principles: evidence_policy, autonomy_boundaries, communication_style). Either the principles are wrong or enforcement is broken.",
+  "proposed_changes": {
+    "constitution": {
+      "modify_principle": {
+        "id": "evidence_policy",
+        "changes": {
+          "rationale": "Review: this principle is being violated in practice"
+        }
+      }
+    }
+  },
+  "risk_rating": "low",
+  "evidence": {
+    "occurrences": 3,
+    "context": {
+      "affected_principles": [
+        "evidence_policy",
+        "autonomy_boundaries",
+        "communication_style"
+      ],
+      "sample_errors": [
+        "unsupported public claim",
+        "irreversible action without approval",
+        "over-explained low-stakes update"
+      ]
+    }
+  }
+}

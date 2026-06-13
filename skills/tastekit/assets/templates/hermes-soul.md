@@ -12,4 +12,6 @@
 
 {{taboos}}
 
+{{metacognition}}
+
 <!-- END TASTEKIT MANAGED REGION -->

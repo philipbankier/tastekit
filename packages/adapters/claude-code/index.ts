@@ -84,7 +84,7 @@ export class ClaudeCodeAdapter implements TasteKitAdapter {
 
   private buildContext(profilePath: string): GeneratorContext {
     const ctx: GeneratorContext = {
-      generator_version: '0.5.0',
+      generator_version: '1.1.0',
     };
 
     // Constitution

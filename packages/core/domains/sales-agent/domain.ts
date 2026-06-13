@@ -10,7 +10,7 @@ export const SalesAgentDomain: DomainDefinition = {
   id: 'sales-agent',
   name: 'Sales Agent',
   description: 'Lead generation, qualification, and deal management',
-  version: '1.0.0',
+  version: '1.1.0',
   use_cases: [
     'Lead qualification and outreach',
     'CRM management and follow-ups',

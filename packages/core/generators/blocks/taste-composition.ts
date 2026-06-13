@@ -6,13 +6,10 @@ import type { GeneratorBlock, GeneratorContext } from '../types.js';
 const COMPOSITION_EXTENSION_KEY = 'x-tastekit-composition';
 const MAX_DOMAIN_ITEMS = 8;
 const MAX_DIMENSION_ITEMS = 8;
-const MAX_FACTS = 2;
 
 interface CompositionDimension {
   dimension_id?: unknown;
   status?: unknown;
-  summary?: unknown;
-  facts?: unknown;
 }
 
 interface CompositionExtension {
@@ -77,10 +74,7 @@ function domainSpecificLines(value: unknown): string[] {
 
   return Object.entries(value)
     .slice(0, MAX_DOMAIN_ITEMS)
-    .flatMap(([key, child]) => {
-      const summary = summarizeValue(child);
-      return summary ? [`- **${key}**: ${summary}`] : [];
-    });
+    .map(([key]) => `- **${key}**: captured in constitution detail`);
 }
 
 function dimensionLines(value: unknown): string[] {
@@ -93,51 +87,8 @@ function dimensionLines(value: unknown): string[] {
       const dimension = child as CompositionDimension;
       const label = typeof dimension.dimension_id === 'string' ? dimension.dimension_id : key;
       const status = typeof dimension.status === 'string' ? ` (${dimension.status})` : '';
-      const pieces: string[] = [];
-
-      if (typeof dimension.summary === 'string' && dimension.summary.trim()) {
-        pieces.push(dimension.summary.trim());
-      }
-
-      if (Array.isArray(dimension.facts)) {
-        const facts = dimension.facts
-          .filter((fact): fact is string => typeof fact === 'string' && fact.trim().length > 0)
-          .slice(0, MAX_FACTS);
-        if (facts.length > 0) {
-          pieces.push(`Facts: ${facts.join('; ')}`);
-        }
-      }
-
-      return pieces.length > 0 ? [`- **${label}**${status}: ${pieces.join(' ')}`] : [];
+      return [`- **${label}**${status}: captured in constitution detail`];
     });
-}
-
-function summarizeValue(value: unknown): string | null {
-  if (typeof value === 'string') return value.trim() || null;
-  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
-  if (Array.isArray(value)) {
-    const items = value
-      .map(item => summarizeValue(item))
-      .filter((item): item is string => !!item)
-      .slice(0, 3);
-    return items.length > 0 ? items.join('; ') : null;
-  }
-  if (isRecord(value)) {
-    const pieces = Object.entries(value)
-      .filter(([key]) => !shouldSuppressKey(key))
-      .map(([key, child]) => {
-        const summary = summarizeValue(child);
-        return summary ? `${key}: ${summary}` : null;
-      })
-      .filter((item): item is string => !!item)
-      .slice(0, 3);
-    return pieces.length > 0 ? pieces.join('; ') : null;
-  }
-  return null;
-}
-
-function shouldSuppressKey(key: string): boolean {
-  return /raw|transcript|source/i.test(key);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

@@ -1,0 +1,11 @@
+version: "1.1.0"
+project_name: live-full-composition-e2e
+created_at: "2026-05-17T22:08:02.494Z"
+domain_id: general-agent
+onboarding:
+  depth: operator
+  completed: false
+  session_path: session.json
+llm_provider:
+  provider: openai
+  model: grok-4.3

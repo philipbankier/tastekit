@@ -4,7 +4,7 @@ This file provides guidance for coding agents working on the TasteKit codebase.
 
 ## Project Overview
 
-TasteKit is a CLI-first tool for compiling user taste profiles into portable artifacts with Skills, MCP integration, trust management, tracing, and drift maintenance.
+TasteKit is a CLI, library, and native skill for compiling user taste profiles into portable artifacts with Skills, MCP integration, trust management, tracing, evals, and drift maintenance.
 
 ## Key Principles
 
@@ -15,6 +15,7 @@ TasteKit is a CLI-first tool for compiling user taste profiles into portable art
 5. **Trust-by-default**: Pin MCP servers and skill sources. Never auto-enable new tools.
 6. **Trace-first**: All operations produce machine-readable traces.
 7. **Maintenance is core**: Drift detection and staleness checks are v1 features, not future work.
+8. **Human-agency-first onboarding**: Full Taste Composition can infer and compress, but consequential assumptions must remain visible and resumable.
 
 ## What NOT to Assume
 
@@ -41,15 +42,23 @@ All artifacts use versioned schemas (e.g., `constitution.v1`, `guardrails.v1`). 
 
 ## Testing Requirements
 
-All code must pass these acceptance tests:
+All release-relevant work should keep these gates green:
 
-1. Schema validation for all example profiles
-2. MCP bind test with mocked server (no silent tool changes)
-3. Skills lint passes for bundled examples
-4. Simulate generates trace + draft output without side effects
-5. Drift detect produces proposals from synthetic traces
-6. Export/import round-trip preserves core rules
-7. Trust audit flags changed MCP fingerprints
+1. `pnpm test`
+2. `pnpm -r build`
+3. `pnpm lint`
+4. `node scripts/skill-bundle/sync.mjs --check`
+5. `bash scripts/validation/contract-conformance.sh`
+6. `bash scripts/validation/pr-gate.sh`
+
+Before publishing, also run the live release evidence path:
+
+```bash
+pnpm test:live-e2e:release
+pnpm test:live-e2e:assert-latest
+```
+
+The subscription-backed live demo path is useful review evidence, but it is not official release evidence.
 
 ## Security Requirements
 
@@ -98,3 +107,12 @@ Align with these specifications:
 ## Questions?
 
 Refer to the specification document or open an RFC in `community/RFC/`.
+
+Current high-signal docs:
+
+- `docs/overview.md`
+- `docs/quickstart.md`
+- `docs/domains.md`
+- `docs/testing/release-verification.md`
+- `docs/validation/live/README.md`
+- `docs/demo/tastekit-release-readiness-one-pager.html`
