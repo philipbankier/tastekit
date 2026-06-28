@@ -8,7 +8,7 @@
       "pattern": "^mailto:"
     },
     {
-      "pattern": "^https://www\\.npmjs\\.com/package/@actrun_ai/tastekit-cli$"
+      "pattern": "^https://www\\.npmjs\\.com/package/@actrun_ai/tastekit-[a-z-]+$"
     },
     {
       "pattern": "^https://spec\\.modelcontextprotocol\\.io/?$"
