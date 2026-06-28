@@ -1,7 +1,7 @@
 {
   "name": "@actrun_ai/tastekit-voice",
-  "version": "1.1.0",
-  "description": "Voice I/O layer for TasteKit onboarding — ElevenLabs, Whisper, Piper",
+  "version": "0.2.0",
+  "description": "Pre-1.0 voice I/O layer for TasteKit onboarding",
   "type": "module",
   "license": "MIT",
   "author": "TasteKit Contributors",
@@ -14,7 +14,9 @@
     "access": "public"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -41,5 +43,17 @@
     "@types/ws": "^8.5.0",
     "typescript": "^5.6.0",
     "vitest": "^2.0.0"
-  }
+  },
+  "keywords": [
+    "ai-agent",
+    "agent",
+    "skills",
+    "agent-skills",
+    "agents-md",
+    "mcp",
+    "taste",
+    "onboarding",
+    "llm",
+    "open-source"
+  ]
 }

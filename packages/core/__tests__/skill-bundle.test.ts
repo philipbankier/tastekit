@@ -195,7 +195,7 @@ function expectDimensionFields(content: string, dimension: RubricDimension) {
 }
 
 describe('TasteKit native skill bundle', () => {
-  it('expects universal plus all six production domain rubric references', () => {
+  it('expects universal plus all six first-class domain rubric references', () => {
     expect(productionDomainRubricFiles.map(file => file.domainId)).toEqual([
       'development-agent',
       'general-agent',

@@ -2,16 +2,16 @@
 
 This roadmap reflects the standalone TasteKit release direction. It is intentionally conservative: public claims should follow implemented and verified behavior, not aspirational architecture.
 
-## Current Status: v1.1.0 Release Readiness
+## Current Status: 0.2.0 Pre-1.0 Release Readiness
 
-The current priority is finishing v1.1.0 with no corner cutting:
+The current priority is finishing 0.2.0 with no corner cutting while keeping the project honestly pre-1.0:
 
-- Six production domains remain green.
+- Six first-class domains remain green.
 - Native `skills/tastekit/` onboarding remains source-complete and generated from source rubrics.
 - Full Taste Composition remains coverage-driven and useful in real-world live runs.
 - Managed-region runtime exports preserve manual edits.
 - Validator, docs, package metadata, and release gates align with `@actrun_ai/*`.
-- Official live release evidence is produced before publishing.
+- Official live evidence is produced or explicitly waived before publishing.
 
 ## Immediate Release Gates
 
@@ -36,7 +36,7 @@ Also required:
 
 ## Near-Term Backlog
 
-### v1.1.x: Release Stabilization
+### 0.2.x: Release Stabilization
 
 - Fix any release-gate failures found by the strict live E2E route.
 - Improve sales/support fixture richness beyond seed sessions.
@@ -48,7 +48,7 @@ Also required:
 - Complete `drift apply` support for additional proposal shapes such as modify/remove principle.
 - Expand trace-driven regression tests.
 - Improve human review UX for drift proposals.
-- Add more eval-pack examples tied to each production domain.
+- Add more eval-pack examples tied to each domain.
 
 ### v1.3: Runtime And Skill Ergonomics
 
@@ -70,7 +70,7 @@ Also required:
 - Bidirectional runtime sync where runtime APIs are stable enough.
 - Privacy-preserving profile sharing and profile composition.
 
-## Non-Goals For v1.1
+## Non-Goals For 0.2.x
 
 - No `constitution.v2`.
 - No clinical, therapeutic, or diagnostic claims.

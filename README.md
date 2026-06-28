@@ -9,6 +9,8 @@
 
 TasteKit is an open-source CLI, library, and native agent skill for capturing how a person wants an AI agent to reason, challenge, research, plan, write, and act. It runs an adaptive onboarding interview, compiles the result into versioned artifacts, and exports those artifacts to agent runtimes including Claude Code, OpenClaw, Manus, Autopilots, AGENTS.md, and Agent File.
 
+TasteKit is currently **pre-1.0**. The `0.2.x` line is intended for early adopters and OSS review, not for users who need a battle-tested stable contract.
+
 ## Why TasteKit?
 
 AI agents are powerful, but they usually start from generic instructions. TasteKit turns a user's taste, operating principles, boundaries, and domain preferences into durable runtime context. Instead of repeating the same preferences in every system prompt, compile them once and export everywhere:
@@ -19,6 +21,7 @@ AI agents are powerful, but they usually start from generic instructions. TasteK
 - **Drift detection** — Know when an agent's behavior drifts from your preferences over time (no other OSS tool does this)
 - **Trust & provenance** — Pin MCP server fingerprints to prevent silent tool changes
 - **Domain expertise** — Pre-built rubrics, skills, and playbooks for 6 agent domains
+- **Broad compatibility** — Direct adapters plus AGENTS.md and Agent File compatibility reach the broader 32+ agent/runtime ecosystem
 
 ## Features
 
@@ -91,7 +94,7 @@ TasteKit uses a layered test stack:
 - Native skill bundle checks
 - Deterministic fixture replay gates (`v1` + `v2` workspace layouts)
 - Subscription-backed live demo evidence for product review
-- Strict GPT-5.5 + GLM-5.1 live release evidence before publishing
+- Strict GPT-5.5 + GLM-5.1 live evidence as a manual pre-release evidence gate
 
 Run the deterministic PR gate locally:
 
@@ -99,7 +102,7 @@ Run the deterministic PR gate locally:
 bash scripts/validation/pr-gate.sh
 ```
 
-Run the strict live release evidence sequence when official provider keys are available:
+Run the strict live evidence sequence when official provider keys are available:
 
 ```bash
 pnpm test:live-e2e:release
@@ -160,7 +163,7 @@ Runtime exports use managed regions in Markdown files so hand-written content ou
 
 ## Agent Domains
 
-TasteKit ships six production domains, each with specialized rubrics, interview dimensions, skills, playbooks, and validation fixtures:
+TasteKit includes six first-class domains, each with specialized rubrics, interview dimensions, skills, playbooks, and validation fixtures:
 
 | Domain | Focus |
 |:---|:---|
@@ -171,7 +174,15 @@ TasteKit ships six production domains, each with specialized rubrics, interview 
 | Sales Agent | Account research, qualification, buyer-facing follow-up, and deal-risk escalation |
 | Support Agent | Troubleshooting, customer communication, privacy-safe assistance, and escalation |
 
-Each domain supports Quick, Guided, and Full Taste Composition depths. General Agent can also opt into `development`, `content`, `research`, `sales`, and `support` capability packs when one broad agent needs task-specific workflows. Release validation gates enumerate all six domains in deterministic replay; strict live release evidence is currently centered on Full Taste Composition for `general-agent`.
+Each domain supports Quick, Guided, and Full Taste Composition depths. General Agent can also opt into `development`, `content`, `research`, `sales`, and `support` capability packs when one broad agent needs task-specific workflows. Deterministic validation gates enumerate all six domains; strict live evidence is currently centered on Full Taste Composition for `general-agent`.
+
+### What "32+ Compatible Runtimes" Means
+
+TasteKit does not ship 32 dedicated adapters. The compatibility claim is the combination of:
+
+- Direct runtime adapters: Claude Code, OpenClaw, Manus, and Autopilots.
+- Generic exports: AGENTS.md and Agent File.
+- The broader AGENTS.md ecosystem: agents and coding tools that read AGENTS.md can consume TasteKit's generated operating contract without a dedicated adapter.
 
 ## Project Structure
 

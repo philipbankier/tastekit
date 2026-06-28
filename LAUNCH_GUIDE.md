@@ -1,13 +1,13 @@
-# TasteKit v1.1 Release Guide
+# TasteKit 0.2.0 Release Guide
 
-TasteKit v1.1 is not considered released until deterministic gates, live Full Taste Composition evidence, package dry-runs, and public documentation review all pass from a clean standalone checkout.
+TasteKit 0.2.0 is a pre-1.0 OSS release candidate. It is not considered released until deterministic gates, package dry-runs, public documentation review, and the live-evidence decision all pass from a clean standalone checkout.
 
 ## Release Positioning
 
 Public claims should stay within what the repo currently ships and verifies:
 
 - Open-source CLI, library, and native skill under `@actrun_ai/*`.
-- Six production domains: General, Development, Content, Research, Sales, Support.
+- Six first-class domains: General, Development, Content, Research, Sales, Support.
 - Quick, Guided, and Full Taste Composition onboarding.
 - Canonical `.tastekit/constitution.v1.json` with composition and metacognition extensions.
 - Runtime exports for Claude Code, OpenClaw, Manus, Autopilots, AGENTS.md, and Agent File.
@@ -18,7 +18,7 @@ Do not claim clinical/therapeutic psychology, autonomous production deployment, 
 ## Pre-Launch Checklist
 
 1. Start from a clean standalone checkout of `https://github.com/philipbankier/tastekit`.
-2. Confirm version and changelog are aligned for `1.1.0`.
+2. Confirm version and changelog are aligned for `0.2.0`.
 3. Run deterministic gates:
 
 ```bash
@@ -32,7 +32,7 @@ bash scripts/validation/contract-conformance.sh
 bash scripts/validation/pr-gate.sh
 ```
 
-4. Run live evidence:
+4. Run live evidence when official provider keys are available, or record an explicit release waiver:
 
 ```bash
 bash scripts/validation/pre-release-live-ollama.sh
@@ -78,11 +78,18 @@ Publish the CLI last so users do not install a CLI that depends on unavailable p
 Then tag and release:
 
 ```bash
-git tag v1.1.0
-git push origin v1.1.0
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
 Create the GitHub release from `CHANGELOG.md` and link only to evidence that passed in the release checkout.
+
+Because `1.0.0` was published before this pre-1.0 correction, the release operator should also deprecate the old npm version and point `latest` at `0.2.0` after publish:
+
+```bash
+npm deprecate @actrun_ai/tastekit-cli@1.0.0 "Superseded by the pre-1.0 0.2.x line; 1.0.0 was published before stable readiness."
+npm dist-tag add @actrun_ai/tastekit-cli@0.2.0 latest
+```
 
 ## Post-Publish Smoke
 
@@ -107,6 +114,6 @@ For public launch copy, emphasize the verified value:
 
 - "Compile human taste into portable agent artifacts."
 - "Full Taste Composition captures operating principles, assumptions, confirmations, boundaries, and runtime guidance."
-- "Six production domains, deterministic release gates, and live E2E evidence."
+- "Six first-class domains, deterministic release gates, and live E2E evidence."
 
 Avoid unsupported claims such as "solves personality," "clinical-grade psychology," or "works natively inside every agent runtime."

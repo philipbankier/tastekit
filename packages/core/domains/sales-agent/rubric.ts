@@ -23,7 +23,7 @@ function withDefaultDimensionFields(dimension: DomainDimensionInput): RubricDime
  */
 export const SalesAgentRubric: DomainRubric = {
   domain_id: 'sales-agent',
-  version: '1.1.0',
+  version: '0.2.0',
   interview_goal: 'Understand the user\'s sales philosophy, communication style, deal management preferences, and customer relationship approach to configure an agent that sells the way they would.',
   includes_universal: true,
 

@@ -23,7 +23,7 @@ function withDefaultDimensionFields(dimension: DomainDimensionInput): RubricDime
  */
 export const SupportAgentRubric: DomainRubric = {
   domain_id: 'support-agent',
-  version: '1.1.0',
+  version: '0.2.0',
   interview_goal: 'Understand the user\'s support philosophy, communication tone, escalation preferences, and quality standards to configure an agent that helps customers the way they would.',
   includes_universal: true,
 

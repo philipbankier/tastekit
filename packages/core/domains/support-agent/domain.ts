@@ -10,7 +10,7 @@ export const SupportAgentDomain: DomainDefinition = {
   id: 'support-agent',
   name: 'Support Agent',
   description: 'Customer support, troubleshooting, and user assistance',
-  version: '1.1.0',
+  version: '0.2.0',
   use_cases: [
     'Customer support ticket triage and response',
     'Knowledge base management',

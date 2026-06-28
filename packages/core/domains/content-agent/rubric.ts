@@ -8,7 +8,7 @@ import { DomainRubric } from '../../interview/rubric.js';
  */
 export const ContentAgentRubric: DomainRubric = {
   domain_id: 'content-agent',
-  version: '1.1.0',
+  version: '0.2.0',
   interview_goal: 'Capture how the user wants an agent to create, adapt, review, and safely publish content while preserving voice, audience fit, and evidence discipline.',
   includes_universal: true,
   dimensions: [

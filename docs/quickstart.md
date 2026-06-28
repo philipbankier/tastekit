@@ -186,4 +186,4 @@ node scripts/skill-bundle/sync.mjs --check
 bash scripts/validation/pr-gate.sh
 ```
 
-For release confidence, add the live Full Taste Composition sequence described in `docs/validation/live/README.md`. The subscription-backed demo path is useful for review; the strict GPT-5.5 + GLM-5.1 path is the publishable release evidence path.
+For release confidence, add the live Full Taste Composition sequence described in `docs/validation/live/README.md`. The subscription-backed demo path is useful for review; the strict GPT-5.5 + GLM-5.1 path is the official live-evidence path when provider keys are available.

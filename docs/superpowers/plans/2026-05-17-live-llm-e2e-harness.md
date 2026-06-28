@@ -1353,7 +1353,7 @@ async function runLiveE2E(ctx) {
   mkdirSync(join(tastekitDir, 'traces'), { recursive: true });
 
   const config = {
-    version: '1.1.0',
+    version: '0.2.0',
     project_name: 'live-full-composition-e2e',
     created_at: new Date().toISOString(),
     domain_id: options.domain,
@@ -1588,7 +1588,7 @@ async function runArtifactLifecycle(ctx) {
   const compileResult = await compile({
     workspacePath: tastekitDir,
     session,
-    generatorVersion: '1.1.0',
+    generatorVersion: '0.2.0',
     resume: false,
   });
   events.write('artifact', { kind: 'compile', result: compileResult });
@@ -1681,7 +1681,7 @@ async function assertManagedRegionRerun({ workspaceDir, tastekitDir, session, ev
   const rerun = await compile({
     workspacePath: tastekitDir,
     session,
-    generatorVersion: '1.1.0',
+    generatorVersion: '0.2.0',
     resume: false,
   });
   events.write('artifact', { kind: 'compile-rerun', result: rerun });

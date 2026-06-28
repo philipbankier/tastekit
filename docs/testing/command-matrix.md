@@ -30,7 +30,7 @@ Legend:
 | `tastekit eval run` | evalpack run + report output | missing evalpack | U,I |
 | `tastekit eval replay` | replay pass/fail | missing trace/profile | U,I |
 | `tastekit completion` | bash/zsh/fish output | invalid shell selection handled by commander | I |
-| `tastekit simulate` | explicit planned v1.1 contract | exits zero with planned-feature message | I |
+| `tastekit simulate` | explicit planned pre-1.0 contract | exits zero with planned-feature message | I |
 
 ## Contract Paths Covered
 - `.tastekit/trust.v1.json`
@@ -39,7 +39,7 @@ Legend:
 - `.tastekit/traces/*.trace.v1.jsonl`
 
 ## Domain Coverage Notes
-- Deterministic release replay enumerates all six production domains: `development-agent`, `general-agent`, `content-agent`, `research-agent`, `sales-agent`, and `support-agent`.
+- Deterministic release replay enumerates all six first-class domains: `development-agent`, `general-agent`, `content-agent`, `research-agent`, `sales-agent`, and `support-agent`.
 - The release replay asserts canonical `.tastekit/constitution.v1.json`, guardrails, memory, skills, playbooks, and exports for each domain fixture.
 - Unit and compiler tests remain responsible for domain-specific rubric and asset depth.
 
@@ -53,4 +53,4 @@ These commands are outside the ordinary command/subcommand matrix because they v
 | `bash scripts/validation/pr-gate.sh` | Replays six-domain release fixtures and adapter exports | PR + release |
 | `pnpm test:live-e2e:mock` | Runs the live harness shape through a local mock provider before spending live credits | Developer confidence |
 | `pnpm test:live-e2e:subscription-demo` | Runs a subscription-backed real LLM demo for review | Product review evidence |
-| `pnpm test:live-e2e:release` | Runs strict GPT-5.5 + GLM-5.1 release evidence assertion | Required before publish |
+| `pnpm test:live-e2e:release` | Runs strict GPT-5.5 + GLM-5.1 live evidence assertion | Manual pre-release evidence; not a normal PR/CI blocker |

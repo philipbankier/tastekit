@@ -26,7 +26,7 @@
 6. Skill bundle checks (`scripts/skill-bundle/sync.mjs --check`)
    - Verifies `skills/tastekit/` frontmatter, referenced files, schema copy parity, generated rubric references, and bundle size policy.
 7. Live pre-release smoke (`scripts/validation/pre-release-live-ollama.sh`)
-   - Real provider connectivity and deterministic session replay with Ollama across all six production domains, evidence logged for release readiness.
+   - Real provider connectivity and deterministic session replay with Ollama across all six first-class domains, evidence logged for release readiness.
 8. Live Full Taste Composition E2E (`pnpm test:live-e2e:release`)
    - GPT-5.5 interviewer and judge plus GLM-5.1 simulated human.
    - Runs an unscripted Full Taste Composition, compiles, validates, exports, checks managed-region safety, runs skills/trust/drift/eval commands, and writes report/demo/transcript evidence.
@@ -53,11 +53,11 @@
 - `pnpm test:live-e2e:release`
 - dry-run package packs for all publishable `@actrun_ai/*` packages
 
-The deterministic and live release gates must remain aligned in meaning, but not in exact runtime shape. If docs claim a production domain, deterministic replay must enumerate it. If docs claim real Full Taste Composition quality, the live E2E evidence must prove it with real model calls.
+The deterministic and live release gates must remain aligned in meaning, but not in exact runtime shape. If docs claim a domain is first-class, deterministic replay must enumerate it. If docs claim real Full Taste Composition quality, the live E2E evidence should prove it with real model calls or carry an explicit release waiver.
 
 ### Review Evidence
 
-The current subscription-backed live demo at `docs/validation/live/subscription-demo-grok-glm-20260517-180758/` passed and is useful product evidence. It used Grok 4.3 through local CLIProxyAPI for interviewer/judge and GLM-5.1 through Z.ai for the simulated human. It is not publishable release evidence because the strict release route requires official GPT-5.5 plus GLM-5.1.
+The current subscription-backed live demo at `docs/validation/live/subscription-demo-grok-glm-20260517-180758/` passed and is useful product evidence. It used Grok 4.3 through local CLIProxyAPI for interviewer/judge and GLM-5.1 through Z.ai for the simulated human. It is not official release evidence because the strict route requires official GPT-5.5 plus GLM-5.1.
 
 ## Non-goals for this wave
 - No schema version changes.

@@ -25,7 +25,7 @@ Optional:
 - `LIVE_E2E_OUTPUT_DIR` if the harness is run with an explicit output directory option.
 - `LIVE_E2E_ENV_FILE` or `--env-file <path>` to load these values from a local dotenv-style file. Existing shell variables win over values from the file.
 
-Release evidence is intentionally stricter than ad hoc diagnostics: `pnpm test:live-e2e:assert-latest` only accepts the official OpenAI endpoint with model `gpt-5.5`, the official Z.ai Coding Plan endpoint with model `glm-5.1`, canonical persona/judge prompt hashes, a GPT-5.5 judge report, matching `report.json`/`report.md`/`demo.md`/`transcript.jsonl`, semantic artifact checks, and a checkout stamp matching the current git commit/package version/dirty fingerprint. Custom gateways, private aliases, custom prompts, proxy routing, and the general Z.ai API endpoint may be useful for debugging, but they are not accepted as v1.1 release evidence.
+Release evidence is intentionally stricter than ad hoc diagnostics: `pnpm test:live-e2e:assert-latest` only accepts the official OpenAI endpoint with model `gpt-5.5`, the official Z.ai Coding Plan endpoint with model `glm-5.1`, canonical persona/judge prompt hashes, a GPT-5.5 judge report, matching `report.json`/`report.md`/`demo.md`/`transcript.jsonl`, semantic artifact checks, and a checkout stamp matching the current git commit/package version/dirty fingerprint. Custom gateways, private aliases, custom prompts, proxy routing, and the general Z.ai API endpoint may be useful for debugging, but they are not accepted as official release evidence.
 
 ## What The Harness Proves
 
@@ -61,7 +61,7 @@ For the final release operator path, run the ordered sequence:
 pnpm test:live-e2e:release
 ```
 
-That command builds once, then runs provider diagnostics, provider preflight, the full live GPT-5.5 interviewer + GLM-5.1 simulated human interview, and the release-evidence assertion. It rejects `--no-judge`, `--mock-provider-smoke`, `--preflight-only`, custom provider endpoints/models, custom prompt paths, proxy-routing environment variables, and non-Full depths because those cannot produce publishable release evidence.
+That command builds once, then runs provider diagnostics, provider preflight, the full live GPT-5.5 interviewer + GLM-5.1 simulated human interview, and the release-evidence assertion. It rejects `--no-judge`, `--mock-provider-smoke`, `--preflight-only`, custom provider endpoints/models, custom prompt paths, proxy-routing environment variables, and non-Full depths because those cannot produce official release evidence.
 
 After it passes, inspect the accepted evidence:
 
@@ -117,7 +117,7 @@ It prompts for the Z.ai key without echoing it, writes only the gitignored `tast
 pnpm configure:live-e2e -- --subscription-demo --zai-key-file /path/to/zai.key
 ```
 
-The generated `report.md` and `demo.md` are useful for product review because they show the live interview, extracted taste, value walkthrough, runtime artifacts, managed-region preservation, validator/export/trust/drift/eval checks, and judge read. They should not be used as publishable release evidence unless the official release sequence also passes.
+The generated `report.md` and `demo.md` are useful for product review because they show the live interview, extracted taste, value walkthrough, runtime artifacts, managed-region preservation, validator/export/trust/drift/eval checks, and judge read. They should not be used as official release evidence unless the official release sequence also passes.
 
 The current passing subscription-backed review run is:
 
@@ -218,4 +218,4 @@ Generate that report with:
 bash scripts/validation/pre-release-live-ollama.sh
 ```
 
-The live smoke defaults to all six production domains: development, general, content, research, sales, and support.
+The live smoke defaults to all six first-class domains: development, general, content, research, sales, and support.

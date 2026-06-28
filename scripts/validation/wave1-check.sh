@@ -234,9 +234,9 @@ for shell in bash zsh fish; do
   "${CLI[@]}" completion "$shell" >/dev/null
 done
 
-# simulate exits cleanly with a "planned for v1.1" message (no error)
-if ! "${CLI[@]}" simulate 2>&1 | grep -q "planned for TasteKit v1.1"; then
-  echo "simulate command did not show expected v1.1 message" >&2
+# simulate exits cleanly with a pre-1.0 roadmap message (no error)
+if ! "${CLI[@]}" simulate 2>&1 | grep -q "planned for a future TasteKit pre-1.0 release"; then
+  echo "simulate command did not show expected pre-1.0 message" >&2
   exit 1
 fi
 

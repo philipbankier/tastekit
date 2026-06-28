@@ -279,7 +279,7 @@ describe('compileConstitution', () => {
       },
     });
 
-    const result = compileConstitution(session, '1.1.0');
+    const result = compileConstitution(session, '0.2.0');
     const metacognition = result.extensions?.['x-tastekit-metacognition'] as any;
 
     expect(metacognition).toMatchObject({

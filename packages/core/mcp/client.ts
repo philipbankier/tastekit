@@ -124,7 +124,7 @@ export class MCPClient {
 
       const { Client } = sdk;
       this.sdkClient = new Client(
-        { name: 'tastekit', version: '1.1.0' },
+        { name: 'tastekit', version: '0.2.0' },
         { capabilities: {} },
       );
 

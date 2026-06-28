@@ -20,7 +20,7 @@ describe('tastekit compile', () => {
       expect(second.stdout + second.stderr).toContain('Compilation complete');
 
       const constitution = JSON.parse(readFileSync(join(workspace, '.tastekit', 'constitution.v1.json'), 'utf-8'));
-      expect(constitution.generator_version).toBe('1.1.0');
+      expect(constitution.generator_version).toBe('0.2.0');
     } finally {
       cleanupWorkspace(root);
     }

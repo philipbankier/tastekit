@@ -10,7 +10,7 @@ export const ResearchAgentDomain: DomainDefinition = {
   id: 'research-agent',
   name: 'Research Agent',
   description: 'Information gathering, analysis, and synthesis',
-  version: '1.1.0',
+  version: '0.2.0',
   use_cases: [
     'Market research and competitive analysis',
     'Academic research and literature reviews',

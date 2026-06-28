@@ -912,10 +912,11 @@ test('live release evidence assertion requires current checkout stamp', () => {
     writePassingReportMarkdown(dir);
     writePassingTranscript(dir);
     writePassingJudgeFiles(dir);
+    const current = currentCheckoutStamp();
     const report = createPassingLiveReleaseReport(dir, {
       package_version: undefined,
       git_commit: '19c0070-stale',
-      git_dirty: false,
+      git_dirty: !current.git_dirty,
     });
     writeFileSync(reportPath, JSON.stringify(report), 'utf-8');
     const result = spawnSync(process.execPath, [

@@ -154,7 +154,7 @@ node scripts/validation/live-full-composition-e2e.mjs \
 
 Useful flags:
 
-- `--domain <id>`: defaults to `general-agent`; accepts any production domain.
+- `--domain <id>`: defaults to `general-agent`; accepts any first-class domain.
 - `--second-domain <id>`: optional second live or artifact-only pass, usually `development-agent`.
 - `--depth <quick|guided|full|full-taste-composition|operator>`: defaults to `full-taste-composition`; stores internal `operator`.
 - `--output <dir>`: overrides the timestamped report directory.

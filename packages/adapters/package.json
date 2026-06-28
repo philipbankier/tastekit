@@ -1,7 +1,7 @@
 {
   "name": "@actrun_ai/tastekit-adapters",
-  "version": "1.1.0",
-  "description": "TasteKit runtime adapters for Claude Code, Manus, OpenClaw, and Autopilots",
+  "version": "0.2.0",
+  "description": "Pre-1.0 TasteKit runtime adapters for Claude Code, OpenClaw, Manus, Autopilots, AGENTS.md, and Agent File",
   "type": "module",
   "license": "MIT",
   "author": "TasteKit Contributors",
@@ -14,7 +14,9 @@
     "access": "public"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -39,5 +41,17 @@
     "@types/node": "^22.0.0",
     "typescript": "^5.6.0",
     "vitest": "^2.0.0"
-  }
+  },
+  "keywords": [
+    "ai-agent",
+    "agent",
+    "skills",
+    "agent-skills",
+    "agents-md",
+    "mcp",
+    "taste",
+    "onboarding",
+    "llm",
+    "open-source"
+  ]
 }
