@@ -1,6 +1,6 @@
 # Release Verification
 
-This document is the operator checklist for moving TasteKit from a development checkout to a publishable `@actrun_ai/*` release. It separates deterministic gates, live product evidence, package checks, and human review artifacts so release confidence is not based on a single green command.
+This document is the operator checklist for moving TasteKit from a development checkout to a publishable pre-1.0 `@actrun_ai/*` release. It separates deterministic gates, live product evidence, package checks, and human review artifacts so release confidence is not based on a single green command.
 
 ## Evidence Classes
 
@@ -11,9 +11,9 @@ This document is the operator checklist for moving TasteKit from a development c
 | Lint | Static code and packaging hygiene | `pnpm lint` | Yes |
 | Skill bundle sync | Native skill schema/rubric references match TypeScript source | `node scripts/skill-bundle/sync.mjs --check` | Yes |
 | Contract conformance | Canonical v1 artifacts and compatibility readers obey the contract | `bash scripts/validation/contract-conformance.sh` | Yes |
-| Six-domain replay | All production domains compile and export from fixtures | `bash scripts/validation/pr-gate.sh` | Yes |
+| Six-domain replay | All first-class domains compile and export from fixtures | `bash scripts/validation/pr-gate.sh` | Yes |
 | Live Ollama smoke | All domains can run through local live-provider smoke | `bash scripts/validation/pre-release-live-ollama.sh` | Pre-release |
-| Full live E2E | Full Taste Composition produces useful artifacts from unscripted live model interaction | `pnpm test:live-e2e:release` | Yes before publish |
+| Full live E2E | Full Taste Composition produces useful artifacts from unscripted live model interaction | `pnpm test:live-e2e:release` | Manual pre-release evidence or explicit waiver |
 | Package dry-runs | Publish contents, bins, exports, metadata, README/LICENSE inclusion | `pnpm --filter <pkg> pack --dry-run` | Yes |
 
 ## Deterministic Gate

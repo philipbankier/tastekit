@@ -81,13 +81,14 @@ export class OpenClawAdapter implements TasteKitAdapter {
 
   private buildContext(profilePath: string): GeneratorContext {
     const ctx: GeneratorContext = {
-      generator_version: '1.1.0',
+      generator_version: '0.2.0',
     };
 
     // Constitution
     const constitutionPath = resolveArtifactPath(profilePath, 'constitution');
     if (existsSync(constitutionPath)) {
       ctx.constitution = tryParse(constitutionPath);
+      ctx.generator_version = ctx.constitution?.generator_version ?? ctx.generator_version;
     }
 
     // Guardrails

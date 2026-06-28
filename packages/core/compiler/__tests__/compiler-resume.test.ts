@@ -263,13 +263,13 @@ describe('compile resume safety — schema lock holds across cached steps', () =
     const result = await compile({
       workspacePath: workspace,
       session,
-      generatorVersion: '1.1.0',
+      generatorVersion: '0.2.0',
       resume: true,
     });
 
     expect(result.success).toBe(true);
     const reloaded = JSON.parse(readFileSync(constitutionPath, 'utf-8'));
-    expect(reloaded.generator_version).toBe('1.1.0');
+    expect(reloaded.generator_version).toBe('0.2.0');
     expect(reloaded.principles[0].id).not.toBe('cached_principle');
     expect(reloaded.extensions?.['x-tastekit-metacognition']).toMatchObject({
       schema_version: 'tastekit.metacognition.v1',

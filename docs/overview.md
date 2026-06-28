@@ -2,7 +2,7 @@
 
 TasteKit is an open-source command-line interface, library, and native agent skill for capturing a user's "taste" and compiling it into portable, versioned artifacts. It makes agent behavior durable across runtimes: domain-aware onboarding, Skills with progressive disclosure, tool binding via the Model Context Protocol (MCP), trust and provenance enforcement, trace-first logging, evaluation, and drift maintenance.
 
-The current v1.1 release direction is not a shallow profile generator. TasteKit is meant to produce a usable operating profile for real agents: how to reason, challenge, verify, plan, communicate, escalate, and adapt over time.
+The current 0.2.0 release direction is not a shallow profile generator, but it remains pre-1.0 until the project has more field testing. TasteKit is meant to produce a usable operating profile for real agents: how to reason, challenge, verify, plan, communicate, escalate, and adapt over time.
 
 ## Core Concepts
 
@@ -32,7 +32,7 @@ The current v1.1 release direction is not a shallow profile generator. TasteKit 
 
 ## Workflow
 
-1. **Initialize**: `tastekit init` creates a workspace, selects a production domain, and chooses Quick, Guided, or Full Taste Composition.
+1. **Initialize**: `tastekit init` creates a workspace, selects a first-class domain, and chooses Quick, Guided, or Full Taste Composition.
 2. **Onboard**: `tastekit onboard` or the native `skills/tastekit/` agent skill runs the adaptive interview.
 3. **Compile**: `tastekit compile` generates canonical artifacts, domain skills, playbooks, and runtime guidance.
 4. **Bind Tools**: `tastekit mcp add` and `tastekit mcp bind` discover tools and produce guarded bindings.
@@ -59,6 +59,6 @@ TasteKit has two evidence classes:
 | Evidence | Purpose | Release Meaning |
 | :--- | :--- | :--- |
 | Deterministic gates | Unit, adapter, CLI, schema, skill-bundle, and six-domain replay checks | Required for ordinary development and release readiness |
-| Live Full Taste Composition | Real LLM interview plus judge, artifacts, exports, drift/eval/trust checks | Product-quality evidence; strict GPT-5.5 + GLM-5.1 route is required before publishing |
+| Live Full Taste Composition | Real LLM interview plus judge, artifacts, exports, drift/eval/trust checks | Product-quality evidence; strict GPT-5.5 + GLM-5.1 route is manual pre-release evidence or an explicit waiver |
 
 The current subscription-backed live demo is useful review evidence, not official release evidence. See `docs/validation/live/README.md` and `docs/demo/tastekit-release-readiness-one-pager.html`.

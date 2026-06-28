@@ -5,26 +5,34 @@ All notable changes to TasteKit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2026-05-11
+## 0.2.0 - 2026-06-28
+
+This is a pre-1.0 release candidate. It supersedes the earlier `1.0.0` publication, which was shipped before the project had enough battle testing to justify a stable-version claim.
 
 ### Added
 
 - Metacognitive onboarding policy for Quick, Guided, and Full Taste Composition.
 - `x-tastekit-metacognition` constitution extension with coverage summaries, assumptions, conflicts, confirmations, fatigue events, and policy decisions.
 - Runtime metacognition guidance in generated agent markdown without raw transcript leakage.
+- Package-local README and LICENSE files for publishable `@actrun_ai/*` packages so npm pages render useful install and quickstart docs.
 
 ### Changed
 
 - Full Taste Composition is coverage-driven instead of framed as a 15-25 exchange interview.
 - Native skill state now uses canonical `.tastekit/session.json`; legacy interview-state files are read-only migration context.
 - Compiler refreshes stale cached constitution `generator_version` while preserving enriched constitution content.
-- Package and shipped domain/rubric versions are aligned to `1.1.0`.
+- Package and shipped domain/rubric versions are aligned to `0.2.0`.
+- Release posture is corrected to pre-1.0 until TasteKit has more field testing and stable-contract evidence.
+- Live LLM evidence remains a manual pre-release evidence gate or explicit waiver, not a normal CI blocker.
 
 ### Fixed
 
 - Piper voice tests no longer race on timestamp-based temp WAV filenames.
+- The live-evidence assertion unit test no longer depends on whether the checkout running tests is dirty.
 
 ## [1.0.0] - 2026-02-27
+
+Published to npm, but superseded by the pre-1.0 `0.2.x` line because the project was not yet battle tested enough for a stable release claim.
 
 ### Added
 
@@ -68,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Version**: Bumped from 0.5.0 to 1.0.0 across all packages
 - **CI workflow**: Removed silent failure suppression (`|| echo`), updated pnpm 8→10, dropped Node 18.x (keep 20.x + 22.x)
-- **Simulate command**: Now exits cleanly with a friendly "planned for v1.1" message instead of error exit
+- **Simulate command**: Now exits cleanly with a friendly roadmap message instead of error exit
 - **npm packaging**: All packages configured for public npm publishing with proper `publishConfig`, `files`, `repository`, and `author` fields
 - **README**: Added CI/npm badges, "Why TasteKit?" section, npm install instructions
 - **CONTRIBUTING.md**: Expanded with development setup, "how to add a domain/adapter" guides, and commit conventions
@@ -138,7 +146,7 @@ Each domain is self-contained and can be developed independently by the communit
 
 ### Migration Notes
 
-If you were using TasteKit v1.0 (unreleased):
+If you were using the internal pre-0.5 v1.0 prototype:
 - The core architecture remains the same (artifacts, schemas, compilation)
 - New: Domain selection during initialization
 - New: Domain-specific onboarding questions replace generic questions
@@ -152,5 +160,4 @@ This internal prototype was never publicly released. It was superseded by v0.5.0
 
 The v0.1.0 prototype included all core modules (schemas, compiler, interview, skills, MCP, trust, tracing, drift, eval) but used a generic onboarding approach. Based on user feedback, we pivoted to a domain-focused architecture to make the tool immediately useful for specific use cases.
 
-[1.1.0]: https://github.com/philipbankier/tastekit/releases/tag/v1.1.0
 [1.0.0]: https://github.com/philipbankier/tastekit/releases/tag/v1.0.0

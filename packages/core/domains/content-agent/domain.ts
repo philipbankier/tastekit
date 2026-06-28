@@ -11,7 +11,7 @@ export const ContentAgentDomain: DomainDefinition = {
   id: 'content-agent',
   name: 'Content Agent',
   description: 'Content creation, adaptation, and review with strong voice and evidence controls',
-  version: '1.1.0',
+  version: '0.2.0',
   use_cases: [
     'Launch posts, founder updates, and product narratives',
     'Audience-specific content adaptation across channels',

@@ -1,7 +1,7 @@
 # TasteKit Context
 
-**Version target:** 1.1.0
-**Status:** Release-readiness work in progress, not published until release gates pass
+**Version target:** 0.2.0
+**Status:** Pre-1.0 release-readiness work in progress, not published until release gates pass
 **Repo:** Standalone TasteKit checkout at `https://github.com/philipbankier/tastekit`
 
 ## Project Overview
@@ -26,9 +26,9 @@ TasteKit addresses this by producing:
 
 ## Current Release Shape
 
-TasteKit v1.1 focuses on real profile quality and release confidence:
+TasteKit 0.2.0 focuses on real profile quality and release confidence without claiming stable v1 maturity:
 
-- Six production domains: `general-agent`, `development-agent`, `content-agent`, `research-agent`, `sales-agent`, `support-agent`
+- Six first-class domains: `general-agent`, `development-agent`, `content-agent`, `research-agent`, `sales-agent`, `support-agent`
 - Three depths: Quick, Guided, Full Taste Composition
 - Full Taste Composition is coverage-driven, not time-boxed
 - `operator` remains the internal compatibility value for Full
@@ -43,7 +43,7 @@ TasteKit v1.1 focuses on real profile quality and release confidence:
 
 ```text
 packages/core/
-├── domains/        # Six production domain modules and rubrics
+├── domains/        # Six domain modules and rubrics
 ├── interview/      # Interview loop, universal rubric, metacognitive policy
 ├── compiler/       # Session-to-artifacts compilers
 ├── generators/     # Runtime Markdown and managed-region blocks

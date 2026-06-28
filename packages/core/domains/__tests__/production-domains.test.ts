@@ -60,12 +60,12 @@ function makeSession(domainId: string): SessionState {
   };
 }
 
-describe('production domain registry', () => {
-  it('registers all six production domains', () => {
+describe('first-class domain registry', () => {
+  it('registers all six first-class domains', () => {
     expect(listDomains().map(domain => domain.id).sort()).toEqual([...PRODUCTION_DOMAIN_IDS].sort());
   });
 
-  it('exposes non-stub definitions and rubrics for every production domain', () => {
+  it('exposes non-stub definitions and rubrics for every first-class domain', () => {
     for (const domainId of PRODUCTION_DOMAIN_IDS) {
       const domain = getDomainById(domainId);
       const listed = listDomains().find(item => item.id === domainId);
@@ -87,8 +87,8 @@ describe('production domain registry', () => {
       expect(rubric!.dimensions.length, domainId).toBeGreaterThan(0);
 
       if (RECOVERED_DOMAIN_IDS.includes(domainId)) {
-        expect(domain!.version, domainId).toBe('1.1.0');
-        expect(rubric!.version, domainId).toBe('1.1.0');
+        expect(domain!.version, domainId).toBe('0.2.0');
+        expect(rubric!.version, domainId).toBe('0.2.0');
       }
     }
   });
@@ -136,7 +136,7 @@ describe('production domain registry', () => {
   });
 });
 
-describe('recovered production domain skills', () => {
+describe('recovered first-class domain skills', () => {
   it('exports the historical research, sales, and support skill sets', async () => {
     const modules = {
       'research-agent': await import('../research-agent/skills/index.js'),

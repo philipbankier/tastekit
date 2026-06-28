@@ -1,7 +1,7 @@
 {
   "name": "@actrun_ai/tastekit-cli",
-  "version": "1.1.0",
-  "description": "TasteKit CLI - command-line interface for taste compilation and management",
+  "version": "0.2.0",
+  "description": "Pre-1.0 CLI for compiling human taste into portable AI agent artifacts",
   "type": "module",
   "license": "MIT",
   "author": "TasteKit Contributors",
@@ -14,7 +14,9 @@
     "access": "public"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "bin": {
     "tastekit": "./dist/cli.js"
@@ -45,5 +47,17 @@
     "@types/uuid": "^11.0.0",
     "typescript": "^5.6.0",
     "vitest": "^2.0.0"
-  }
+  },
+  "keywords": [
+    "ai-agent",
+    "agent",
+    "skills",
+    "agent-skills",
+    "agents-md",
+    "mcp",
+    "taste",
+    "onboarding",
+    "llm",
+    "open-source"
+  ]
 }

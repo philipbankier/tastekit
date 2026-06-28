@@ -10,7 +10,7 @@ export const DevelopmentAgentDomain: DomainDefinition = {
   id: 'development-agent',
   name: 'Development Agent',
   description: 'Software development assistance and automation',
-  version: '1.1.0',
+  version: '0.2.0',
   use_cases: [
     'Code review and refactoring',
     'Documentation generation',

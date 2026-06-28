@@ -2,7 +2,7 @@
  * TasteKit Domains Registry
  *
  * Central registry of available domains.
- * Ships with six production domains.
+ * Ships with six first-class domains.
  */
 
 import { DevelopmentAgentDomain } from './development-agent/domain.js';

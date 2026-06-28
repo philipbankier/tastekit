@@ -1,7 +1,7 @@
 {
   "name": "tastekit",
-  "version": "1.1.0",
-  "description": "CLI-first taste onboarding + Skills + MCP + Drift + Trust + Tracing",
+  "version": "0.2.0",
+  "description": "Pre-1.0 taste onboarding, skills, MCP, drift, trust, and runtime artifact tooling for AI agents",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.29.2",

@@ -1,0 +1,1545 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TasteKit System One-Pager</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f5ef;
+        --paper: #fffdf8;
+        --ink: #17181c;
+        --muted: #5f6470;
+        --line: #d8d4c9;
+        --human: #c43d4d;
+        --artifact: #2f8f76;
+        --runtime: #3867b7;
+        --trust: #7d5ba6;
+        --evidence: #b0711f;
+        --risk: #b63f2f;
+        --teal-soft: #dff3ed;
+        --red-soft: #fae3e6;
+        --blue-soft: #e3ebfb;
+        --violet-soft: #eee7f6;
+        --amber-soft: #faeed7;
+        --green-soft: #e2f2df;
+        --shadow: 0 12px 32px rgba(31, 34, 42, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        line-height: 1.45;
+      }
+
+      .page {
+        width: min(1440px, 100%);
+        margin: 0 auto;
+        padding: 22px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+        gap: 18px;
+        align-items: stretch;
+        margin-bottom: 18px;
+      }
+
+      .hero-main,
+      .hero-panel,
+      section {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero-main {
+        padding: 28px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .eyebrow {
+        color: var(--runtime);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(2.5rem, 5vw, 5.4rem);
+        line-height: 0.9;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        font-size: clamp(1.35rem, 2vw, 2rem);
+        letter-spacing: 0;
+      }
+
+      h3 {
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+
+      .subtitle {
+        max-width: 860px;
+        color: #2d3037;
+        font-size: clamp(1.15rem, 1.9vw, 1.9rem);
+        font-weight: 760;
+        line-height: 1.12;
+      }
+
+      .hero-copy {
+        max-width: 920px;
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .chips,
+      .mini-list,
+      .artifact-tags,
+      .runtime-tags,
+      .question-list,
+      .evidence-lines,
+      .risk-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .chip,
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 6px 10px;
+        background: #fffaf0;
+        color: #2d3037;
+        font-size: 0.78rem;
+        font-weight: 760;
+        white-space: nowrap;
+      }
+
+      .chip:nth-child(1) {
+        background: var(--amber-soft);
+        border-color: #e2c281;
+      }
+
+      .chip:nth-child(2) {
+        background: var(--green-soft);
+        border-color: #a8d19f;
+      }
+
+      .chip:nth-child(3) {
+        background: var(--blue-soft);
+        border-color: #adc3ef;
+      }
+
+      .chip:nth-child(4) {
+        background: var(--teal-soft);
+        border-color: #a8d7c9;
+      }
+
+      .chip:nth-child(5) {
+        background: var(--red-soft);
+        border-color: #e6a8ae;
+      }
+
+      .hero-panel {
+        padding: 22px;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 16px;
+      }
+
+      .snapshot-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .snapshot-item {
+        min-height: 104px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        padding: 12px;
+        background: #fbfaf4;
+      }
+
+      .snapshot-item b,
+      .metric b {
+        display: block;
+        font-size: 1.65rem;
+        line-height: 1;
+      }
+
+      .snapshot-item span,
+      .metric span {
+        color: var(--muted);
+        display: block;
+        margin-top: 7px;
+        font-size: 0.78rem;
+        font-weight: 680;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+      }
+
+      section {
+        padding: 22px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 16px;
+      }
+
+      .section-head p {
+        max-width: 680px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .system-map {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .flow-svg {
+        width: 100%;
+        height: auto;
+        min-height: 250px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fffefa;
+      }
+
+      .flow-scroll {
+        overflow-x: auto;
+        overflow-y: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fffefa;
+      }
+
+      .flow-scroll .flow-svg {
+        min-width: 1040px;
+        border: 0;
+        border-radius: 0;
+      }
+
+      .mobile-flow {
+        display: none;
+      }
+
+      .mobile-flow .flow-node {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: var(--paper);
+      }
+
+      .mobile-flow .flow-node h3 {
+        margin-bottom: 5px;
+      }
+
+      .mobile-flow .flow-node p {
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .mobile-flow .flow-node.human {
+        background: var(--red-soft);
+        border-color: var(--human);
+      }
+
+      .mobile-flow .flow-node.depth {
+        background: var(--green-soft);
+        border-color: #4f9d55;
+      }
+
+      .mobile-flow .flow-node.session {
+        background: var(--amber-soft);
+        border-color: #cb9147;
+      }
+
+      .mobile-flow .flow-node.artifact {
+        background: var(--teal-soft);
+        border-color: var(--artifact);
+      }
+
+      .mobile-flow .flow-node.runtime {
+        background: var(--blue-soft);
+        border-color: var(--runtime);
+      }
+
+      .mobile-flow .flow-node.maintenance {
+        background: var(--violet-soft);
+        border-color: var(--trust);
+      }
+
+      .flow-node {
+        fill: #fffefa;
+        stroke: #c9c1b2;
+        stroke-width: 1.4;
+      }
+
+      .flow-node.human {
+        fill: var(--red-soft);
+        stroke: var(--human);
+      }
+
+      .flow-node.depth {
+        fill: var(--green-soft);
+        stroke: #4f9d55;
+      }
+
+      .flow-node.session {
+        fill: var(--amber-soft);
+        stroke: var(--evidence);
+      }
+
+      .flow-node.artifact {
+        fill: var(--teal-soft);
+        stroke: var(--artifact);
+      }
+
+      .flow-node.runtime {
+        fill: var(--blue-soft);
+        stroke: var(--runtime);
+      }
+
+      .flow-node.maintenance {
+        fill: var(--violet-soft);
+        stroke: var(--trust);
+      }
+
+      .flow-label {
+        fill: var(--ink);
+        font-size: 17px;
+        font-weight: 800;
+      }
+
+      .flow-note {
+        fill: #424750;
+        font-size: 11px;
+        font-weight: 620;
+      }
+
+      .flow-arrow {
+        stroke: #757b87;
+        stroke-width: 2;
+        fill: none;
+      }
+
+      .grid-4,
+      .grid-3,
+      .grid-2,
+      .domain-grid,
+      .safety-grid,
+      .evidence-grid,
+      .risk-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid-2,
+      .evidence-grid,
+      .risk-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .domain-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+
+      .entry-card,
+      .depth-card,
+      .domain-card,
+      .safety-card,
+      .evidence-card,
+      .risk-card,
+      .question-card,
+      .artifact-layer,
+      .runtime-spoke {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px;
+        background: #fffefa;
+      }
+
+      .entry-card {
+        min-height: 184px;
+        display: grid;
+        align-content: start;
+        gap: 10px;
+      }
+
+      .entry-card:nth-child(1) {
+        border-top: 5px solid var(--human);
+      }
+
+      .entry-card:nth-child(2) {
+        border-top: 5px solid var(--runtime);
+      }
+
+      .entry-card:nth-child(3) {
+        border-top: 5px solid var(--artifact);
+      }
+
+      .entry-card:nth-child(4) {
+        border-top: 5px solid var(--trust);
+      }
+
+      .card-kicker {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .card-copy {
+        color: #494e58;
+        font-size: 0.86rem;
+      }
+
+      .mini-list {
+        align-self: end;
+      }
+
+      .mini-list .tag {
+        min-height: 24px;
+        padding: 4px 8px;
+        font-size: 0.71rem;
+      }
+
+      .depth-ladder {
+        display: grid;
+        grid-template-columns: 0.55fr 0.75fr 1fr;
+        gap: 12px;
+        align-items: stretch;
+      }
+
+      .depth-card {
+        position: relative;
+        display: grid;
+        gap: 9px;
+        min-height: 180px;
+      }
+
+      .depth-card::before {
+        content: "";
+        position: absolute;
+        inset: -1px auto auto -1px;
+        width: 8px;
+        height: calc(100% + 2px);
+        border-radius: 8px 0 0 8px;
+        background: var(--artifact);
+      }
+
+      .depth-card.quick::before {
+        background: var(--human);
+      }
+
+      .depth-card.guided::before {
+        background: var(--evidence);
+      }
+
+      .depth-card.full::before {
+        background: var(--artifact);
+      }
+
+      .depth-card h3,
+      .depth-card p,
+      .depth-card .tag {
+        margin-left: 6px;
+      }
+
+      .domain-card {
+        min-height: 230px;
+        display: grid;
+        gap: 8px;
+        align-content: start;
+      }
+
+      .domain-id {
+        color: var(--runtime);
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", monospace;
+        font-size: 0.72rem;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+      }
+
+      .domain-card h3 {
+        font-size: 0.95rem;
+      }
+
+      .domain-card p {
+        color: #4c515b;
+        font-size: 0.78rem;
+      }
+
+      .artifact-system {
+        display: grid;
+        grid-template-columns: minmax(300px, 0.7fr) minmax(0, 1fr);
+        gap: 16px;
+        align-items: start;
+      }
+
+      .artifact-stack {
+        display: grid;
+        gap: 8px;
+        padding: 14px;
+        border: 1px solid #b9d8ce;
+        border-radius: 8px;
+        background: linear-gradient(180deg, #f2fbf7 0%, #fffefa 100%);
+      }
+
+      .artifact-layer {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        min-height: 42px;
+        box-shadow: inset 5px 0 0 var(--artifact);
+      }
+
+      .artifact-layer.canonical {
+        background: var(--teal-soft);
+        border-color: #9fcec0;
+        box-shadow: inset 5px 0 0 #1e8067;
+      }
+
+      .artifact-layer.runtime {
+        background: var(--blue-soft);
+        border-color: #adc3ef;
+        box-shadow: inset 5px 0 0 var(--runtime);
+      }
+
+      .artifact-layer.operational {
+        background: var(--violet-soft);
+        border-color: #cbb9de;
+        box-shadow: inset 5px 0 0 var(--trust);
+      }
+
+      .artifact-layer strong {
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", monospace;
+        font-size: 0.78rem;
+      }
+
+      .artifact-layer span {
+        color: var(--muted);
+        font-size: 0.74rem;
+        text-align: right;
+      }
+
+      .artifact-notes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .note-box {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px;
+        background: #fffefa;
+      }
+
+      .note-box h3 {
+        margin-bottom: 6px;
+      }
+
+      .note-box p {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .runtime-map {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.15fr);
+        gap: 16px;
+        align-items: center;
+      }
+
+      .runtime-core {
+        border: 2px solid var(--artifact);
+        border-radius: 8px;
+        background: var(--teal-soft);
+        padding: 18px;
+      }
+
+      .runtime-core h3 {
+        font-size: 1.15rem;
+      }
+
+      .runtime-core p {
+        margin-top: 8px;
+        color: #39423f;
+        font-size: 0.86rem;
+      }
+
+      .spoke-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .runtime-spoke {
+        min-height: 138px;
+        box-shadow: inset 0 4px 0 var(--runtime);
+      }
+
+      .runtime-spoke p {
+        color: var(--muted);
+        margin-top: 8px;
+        font-size: 0.78rem;
+      }
+
+      .safety-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .safety-card {
+        min-height: 142px;
+        background: #fffefa;
+        box-shadow: inset 0 4px 0 var(--trust);
+      }
+
+      .safety-card p {
+        color: var(--muted);
+        margin-top: 8px;
+        font-size: 0.8rem;
+      }
+
+      .loop-wrap {
+        display: grid;
+        grid-template-columns: minmax(320px, 0.8fr) minmax(0, 1.2fr);
+        gap: 18px;
+        align-items: center;
+      }
+
+      .loop-svg {
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fffefa;
+      }
+
+      .loop-node {
+        fill: #fffefa;
+        stroke-width: 1.5;
+      }
+
+      .loop-node.run {
+        stroke: var(--human);
+        fill: var(--red-soft);
+      }
+
+      .loop-node.trace {
+        stroke: var(--runtime);
+        fill: var(--blue-soft);
+      }
+
+      .loop-node.eval {
+        stroke: var(--evidence);
+        fill: var(--amber-soft);
+      }
+
+      .loop-node.drift {
+        stroke: var(--trust);
+        fill: var(--violet-soft);
+      }
+
+      .loop-node.review {
+        stroke: var(--risk);
+        fill: #fde9e1;
+      }
+
+      .loop-node.update {
+        stroke: var(--artifact);
+        fill: var(--teal-soft);
+      }
+
+      .loop-label {
+        fill: var(--ink);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .loop-copy {
+        display: grid;
+        gap: 12px;
+      }
+
+      .loop-statement {
+        border: 1px solid #cbb9de;
+        border-radius: 8px;
+        background: var(--violet-soft);
+        padding: 14px;
+        font-size: 1.08rem;
+        font-weight: 820;
+      }
+
+      .loop-copy p {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .evidence-card {
+        min-height: 250px;
+        display: grid;
+        gap: 12px;
+        align-content: start;
+      }
+
+      .evidence-card.deterministic {
+        box-shadow: inset 0 5px 0 var(--artifact);
+      }
+
+      .evidence-card.live {
+        box-shadow: inset 0 5px 0 var(--evidence);
+      }
+
+      .evidence-lines {
+        gap: 7px;
+      }
+
+      .evidence-lines .tag {
+        border-radius: 7px;
+        background: #fbfaf4;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", monospace;
+        font-size: 0.73rem;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: #fff8ea;
+      }
+
+      .risk-card {
+        min-height: 168px;
+        box-shadow: inset 0 5px 0 var(--risk);
+      }
+
+      .risk-card p {
+        color: var(--muted);
+        margin-top: 8px;
+        font-size: 0.86rem;
+      }
+
+      .question-card {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+        background: #fbfaf4;
+      }
+
+      .question {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: #fffefa;
+        color: #373c45;
+        font-size: 0.86rem;
+        font-weight: 700;
+      }
+
+      .footer-note {
+        margin: 14px 2px 0;
+        color: var(--muted);
+        font-size: 0.78rem;
+        text-align: right;
+      }
+
+      @media (max-width: 1160px) {
+        .hero,
+        .artifact-system,
+        .runtime-map,
+        .loop-wrap {
+          grid-template-columns: 1fr;
+        }
+
+        .grid-4,
+        .domain-grid,
+        .safety-grid,
+        .spoke-grid,
+        .question-card {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .depth-ladder {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          padding: 12px;
+        }
+
+        .hero-main,
+        .hero-panel,
+        section {
+          padding: 16px;
+        }
+
+        .section-head {
+          display: grid;
+          gap: 8px;
+        }
+
+        .grid-4,
+        .grid-3,
+        .grid-2,
+        .domain-grid,
+        .safety-grid,
+        .evidence-grid,
+        .risk-grid,
+        .snapshot-grid,
+        .artifact-notes,
+        .spoke-grid,
+        .metrics,
+        .question-card {
+          grid-template-columns: 1fr;
+        }
+
+        .chip,
+        .tag {
+          white-space: normal;
+        }
+
+        .flow-scroll {
+          display: none;
+        }
+
+        .mobile-flow {
+          display: grid;
+          gap: 8px;
+        }
+
+        .system-map {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero" aria-label="Executive snapshot">
+        <div class="hero-main">
+          <div class="eyebrow">Executive snapshot</div>
+          <h1>TasteKit</h1>
+          <p class="subtitle">Human operating taste -&gt; portable agent runtime artifacts</p>
+          <p class="hero-copy">
+            TasteKit captures how a person wants agents to reason, challenge, verify,
+            communicate, remember, bind tools, and adapt. The output is not a prompt
+            blob: it is a versioned system of artifacts, runtime exports, traces,
+            evals, trust checks, and reviewed drift proposals.
+          </p>
+          <div class="chips" aria-label="Status labels">
+            <span class="chip">pre-1.0 release readiness</span>
+            <span class="chip">six domains</span>
+            <span class="chip">native skill + CLI</span>
+            <span class="chip">artifact-first</span>
+            <span class="chip">not published until release gates pass</span>
+          </div>
+        </div>
+        <aside class="hero-panel">
+          <div>
+            <div class="eyebrow">Product surface</div>
+            <h2>Complete agent operating profile</h2>
+          </div>
+          <div class="snapshot-grid">
+            <div class="snapshot-item">
+              <b>3</b>
+              <span>Depths: Quick, Guided, Full Taste Composition</span>
+            </div>
+            <div class="snapshot-item">
+              <b>6</b>
+              <span>Production domains with rubrics, skills, and playbooks</span>
+            </div>
+            <div class="snapshot-item">
+              <b>1</b>
+              <span>Canonical `.tastekit/constitution.v1.json` source of truth</span>
+            </div>
+            <div class="snapshot-item">
+              <b>n</b>
+              <span>Runtime exports plus maintenance evidence over time</span>
+            </div>
+          </div>
+        </aside>
+      </header>
+
+      <main>
+        <section aria-labelledby="core-system-map">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">System diagram</div>
+              <h2 id="core-system-map">Core System Map</h2>
+            </div>
+            <p>
+              The product runs from human operating taste through depth, domain,
+              resumable state, compiled files, runtime exports, and maintenance.
+            </p>
+          </div>
+          <div class="system-map">
+            <div class="flow-scroll" role="region" aria-label="Scrollable core system map">
+              <svg class="flow-svg" viewBox="0 0 1320 330" role="img" aria-label="TasteKit system flow">
+                <defs>
+                  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#757b87"></path>
+                  </marker>
+                </defs>
+                <rect class="flow-node human" x="18" y="58" width="190" height="188" rx="14"></rect>
+                <text class="flow-label" x="40" y="98">Human Taste</text>
+                <text class="flow-note" x="40" y="126">principles, boundaries</text>
+                <text class="flow-note" x="40" y="146">reasoning style</text>
+                <text class="flow-note" x="40" y="166">evidence, tone</text>
+                <text class="flow-note" x="40" y="186">domain preferences</text>
+
+                <path class="flow-arrow" marker-end="url(#arrow)" d="M 214 152 H 246"></path>
+                <rect class="flow-node depth" x="250" y="58" width="190" height="188" rx="14"></rect>
+                <text class="flow-label" x="272" y="98">Depth + Domain</text>
+                <text class="flow-note" x="272" y="126">Quick, Guided</text>
+                <text class="flow-note" x="272" y="146">Full Taste Composition</text>
+                <text class="flow-note" x="272" y="166">six first-class domains</text>
+                <text class="flow-note" x="272" y="186">operator compatibility</text>
+
+                <path class="flow-arrow" marker-end="url(#arrow)" d="M 446 152 H 478"></path>
+                <rect class="flow-node session" x="482" y="58" width="190" height="188" rx="14"></rect>
+                <text class="flow-label" x="504" y="98">Session State</text>
+                <text class="flow-note" x="504" y="126">.tastekit/session.json</text>
+                <text class="flow-note" x="504" y="146">coverage, hypotheses</text>
+                <text class="flow-note" x="504" y="166">confirmations, conflicts</text>
+                <text class="flow-note" x="504" y="186">metacognition</text>
+
+                <path class="flow-arrow" marker-end="url(#arrow)" d="M 678 152 H 710"></path>
+                <rect class="flow-node artifact" x="714" y="58" width="190" height="188" rx="14"></rect>
+                <text class="flow-label" x="736" y="98">Artifacts</text>
+                <text class="flow-note" x="736" y="126">constitution JSON</text>
+                <text class="flow-note" x="736" y="146">guardrails, memory</text>
+                <text class="flow-note" x="736" y="166">bindings, trust pins</text>
+                <text class="flow-note" x="736" y="186">skills, playbooks</text>
+
+                <path class="flow-arrow" marker-end="url(#arrow)" d="M 910 152 H 942"></path>
+                <rect class="flow-node runtime" x="946" y="58" width="190" height="188" rx="14"></rect>
+                <text class="flow-label" x="968" y="98">Runtime Exports</text>
+                <text class="flow-note" x="968" y="126">Claude Code</text>
+                <text class="flow-note" x="968" y="146">OpenClaw, Manus</text>
+                <text class="flow-note" x="968" y="166">Autopilots, AGENTS.md</text>
+                <text class="flow-note" x="968" y="186">Agent File</text>
+
+                <path class="flow-arrow" marker-end="url(#arrow)" d="M 1142 152 H 1174"></path>
+                <rect class="flow-node maintenance" x="1178" y="58" width="124" height="188" rx="14"></rect>
+                <text class="flow-label" x="1194" y="98">Maintain</text>
+                <text class="flow-note" x="1194" y="126">run, trace</text>
+                <text class="flow-note" x="1194" y="146">eval, drift</text>
+                <text class="flow-note" x="1194" y="166">trust audit</text>
+                <text class="flow-note" x="1194" y="186">human review</text>
+              </svg>
+            </div>
+            <div class="mobile-flow" aria-label="TasteKit mobile system flow">
+              <article class="flow-node human"><h3>Human Taste</h3><p>principles, boundaries, reasoning style, evidence, tone, domain preferences</p></article>
+              <article class="flow-node depth"><h3>Depth + Domain</h3><p>Quick, Guided, Full Taste Composition, six first-class domains, operator compatibility</p></article>
+              <article class="flow-node session"><h3>Session State</h3><p>.tastekit/session.json tracks coverage, hypotheses, confirmations, conflicts, and metacognition</p></article>
+              <article class="flow-node artifact"><h3>Artifacts</h3><p>constitution JSON, guardrails, memory, bindings, trust pins, skills, playbooks</p></article>
+              <article class="flow-node runtime"><h3>Runtime Exports</h3><p>Claude Code, OpenClaw, Manus, Autopilots, AGENTS.md, and Agent File</p></article>
+              <article class="flow-node maintenance"><h3>Maintain</h3><p>run, trace, eval, drift, trust audit, human review</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="entry-points">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">How users begin</div>
+              <h2 id="entry-points">Entry Points</h2>
+            </div>
+            <p>
+              Each surface reaches the same artifact system, but with a different
+              operator posture: agent-native interview, command automation, library
+              integration, or release/runtime checks.
+            </p>
+          </div>
+          <div class="grid-4">
+            <article class="entry-card">
+              <span class="card-kicker">Lowest friction</span>
+              <h3>Native skill</h3>
+              <p class="card-copy">
+                Drop in `skills/tastekit/`, choose target, domain, and depth, answer
+                the interview, and get runtime files. Existing `CLAUDE.md`,
+                `AGENTS.md`, or `SOUL.md` become hypotheses; interview answers win.
+              </p>
+              <div class="mini-list">
+                <span class="tag">skills/tastekit/</span>
+                <span class="tag">Full Taste Composition</span>
+              </div>
+            </article>
+            <article class="entry-card">
+              <span class="card-kicker">Operator path</span>
+              <h3>CLI</h3>
+              <p class="card-copy">
+                Run init, onboard, compile, export, mcp, trust, drift, and eval
+                commands from automation or a terminal workflow.
+              </p>
+              <div class="mini-list">
+                <span class="tag">tastekit init</span>
+                <span class="tag">tastekit compile</span>
+                <span class="tag">tastekit export</span>
+              </div>
+            </article>
+            <article class="entry-card">
+              <span class="card-kicker">Integration path</span>
+              <h3>Library packages</h3>
+              <p class="card-copy">
+                Use core schemas, compilers, adapters, voice, and validator packages
+                when TasteKit is embedded in a larger toolchain.
+              </p>
+              <div class="mini-list">
+                <span class="tag">@actrun_ai/tastekit-core</span>
+                <span class="tag">adapters</span>
+              </div>
+            </article>
+            <article class="entry-card">
+              <span class="card-kicker">Release and runtime checks</span>
+              <h3>Validator</h3>
+              <p class="card-copy">
+                Validate artifact shape, schema contracts, runtime export safety,
+                skill sync, trust posture, and release gate evidence.
+              </p>
+              <div class="mini-list">
+                <span class="tag">schema-first</span>
+                <span class="tag">contract conformance</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="depth-ladder">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Onboarding modes</div>
+              <h2 id="depth-ladder">Depth Ladder</h2>
+            </div>
+            <p>
+              Depth controls how much of the rubric is explored. Full is coverage-driven,
+              with internal compatibility value `operator` and user-facing label
+              Full Taste Composition.
+            </p>
+          </div>
+          <div class="depth-ladder">
+            <article class="depth-card quick">
+              <span class="card-kicker">Fastest useful profile</span>
+              <h3>Quick</h3>
+              <p class="card-copy">
+                Captures essential preferences and makes a practical first runtime
+                profile without pretending it has complete coverage.
+              </p>
+              <span class="tag">hypothesis-driven essentials</span>
+            </article>
+            <article class="depth-card guided">
+              <span class="card-kicker">Default depth</span>
+              <h3>Guided</h3>
+              <p class="card-copy">
+                Balances release-candidate usefulness with time, covering domain-specific
+                deep dives and enough universal operating taste to guide real work.
+              </p>
+              <span class="tag">balanced coverage</span>
+            </article>
+            <article class="depth-card full">
+              <span class="card-kicker">Coverage-driven</span>
+              <h3>Full Taste Composition</h3>
+              <p class="card-copy">
+                Uses confirmation loops, assumptions, conflicts, fatigue handling,
+                extraction retries, and a late draft-as-question checkpoint across
+                all applicable dimensions.
+              </p>
+              <span class="tag">operator</span>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="six-domain-grid">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Production scope</div>
+              <h2 id="six-domain-grid">Six-Domain Grid</h2>
+            </div>
+            <p>
+              Domains are not labels only. Each domain brings rubrics, skills,
+              playbooks, guardrails, fixtures, and release checks.
+            </p>
+          </div>
+          <div class="domain-grid">
+            <article class="domain-card">
+              <div class="domain-id">general-agent</div>
+              <h3>General Agent</h3>
+              <p>Job: broad planning, synthesis, research-then-act, and decision support.</p>
+              <p>Specializes: mixed rubric, context synthesis, task orchestration.</p>
+              <p>Focus: evidence rigor, risk escalation, communication contract.</p>
+            </article>
+            <article class="domain-card">
+              <div class="domain-id">development-agent</div>
+              <h3>Development Agent</h3>
+              <p>Job: code review, debugging, testing, refactoring, and engineering docs.</p>
+              <p>Specializes: code quality, test philosophy, type safety, CI practice.</p>
+              <p>Focus: review depth, change scope, and verification style.</p>
+            </article>
+            <article class="domain-card">
+              <div class="domain-id">content-agent</div>
+              <h3>Content Agent</h3>
+              <p>Job: editorial drafting, adaptation, brand voice, and publishing boundaries.</p>
+              <p>Specializes: voice briefs, claim policy, channel strategy, workflow.</p>
+              <p>Focus: anti-generic standards and approval before publish.</p>
+            </article>
+            <article class="domain-card">
+              <div class="domain-id">research-agent</div>
+              <h3>Research Agent</h3>
+              <p>Job: source discovery, evidence grading, synthesis, and competitive analysis.</p>
+              <p>Specializes: source quality, citation expectations, uncertainty handling.</p>
+              <p>Focus: weak-source escalation and explicit caveats.</p>
+            </article>
+            <article class="domain-card">
+              <div class="domain-id">sales-agent</div>
+              <h3>Sales Agent</h3>
+              <p>Job: account research, qualification, follow-up, and deal-risk escalation.</p>
+              <p>Specializes: buyer relevance, CRM boundaries, claim discipline.</p>
+              <p>Focus: approval points for external commitments.</p>
+            </article>
+            <article class="domain-card">
+              <div class="domain-id">support-agent</div>
+              <h3>Support Agent</h3>
+              <p>Job: troubleshoot issues while preserving privacy, accuracy, and escalation.</p>
+              <p>Specializes: triage, customer response drafting, and handoff clarity.</p>
+              <p>Focus: security, billing, and account-data guardrails.</p>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="artifact-stack">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Compiled files</div>
+              <h2 id="artifact-stack">Artifact Stack</h2>
+            </div>
+            <p>
+              The canonical workspace layout lives under `.tastekit/`. Runtime
+              Markdown should summarize practical guidance without raw transcripts
+              or hidden coverage machinery.
+            </p>
+          </div>
+          <div class="artifact-system">
+            <div class="artifact-stack" aria-label="TasteKit artifact stack">
+              <div class="artifact-layer canonical">
+                <strong>.tastekit/session.json</strong>
+                <span>resumable state</span>
+              </div>
+              <div class="artifact-layer canonical">
+                <strong>.tastekit/constitution.v1.json</strong>
+                <span>canonical source</span>
+              </div>
+              <div class="artifact-layer canonical">
+                <strong>x-tastekit-composition</strong>
+                <span>rich dimensions</span>
+              </div>
+              <div class="artifact-layer canonical">
+                <strong>x-tastekit-metacognition</strong>
+                <span>coverage policy</span>
+              </div>
+              <div class="artifact-layer runtime">
+                <strong>guardrails.v1.yaml</strong>
+                <span>permissions and escalation</span>
+              </div>
+              <div class="artifact-layer runtime">
+                <strong>memory.v1.yaml</strong>
+                <span>write, retain, consolidate</span>
+              </div>
+              <div class="artifact-layer runtime">
+                <strong>bindings.v1.json</strong>
+                <span>MCP tool map</span>
+              </div>
+              <div class="artifact-layer runtime">
+                <strong>trust.v1.json</strong>
+                <span>trust pins and provenance</span>
+              </div>
+              <div class="artifact-layer operational">
+                <strong>skills/</strong>
+                <span>progressive disclosure</span>
+              </div>
+              <div class="artifact-layer operational">
+                <strong>playbooks/</strong>
+                <span>domain workflows</span>
+              </div>
+              <div class="artifact-layer operational">
+                <strong>traces/</strong>
+                <span>machine-readable runs</span>
+              </div>
+              <div class="artifact-layer operational">
+                <strong>evals/</strong>
+                <span>judges and replay</span>
+              </div>
+              <div class="artifact-layer operational">
+                <strong>drift/</strong>
+                <span>review proposals</span>
+              </div>
+            </div>
+            <div class="artifact-notes">
+              <div class="note-box">
+                <h3>Canonical versus generated</h3>
+                <p>
+                  The constitution keeps stable schema fields while preserving depth
+                  in extension keys. Generated runtime files are practical projections
+                  from that source, not the source of truth.
+                </p>
+              </div>
+              <div class="note-box">
+                <h3>Artifact-first behavior</h3>
+                <p>
+                  Everything compiles to files. Adapters map those files into the
+                  target runtime surface while preserving user-managed text outside
+                  TasteKit regions.
+                </p>
+              </div>
+              <div class="note-box">
+                <h3>Trace-first maintenance</h3>
+                <p>
+                  Agent runs can create traces that feed eval, replay, drift detection,
+                  and trust review instead of relying on memory of what happened.
+                </p>
+              </div>
+              <div class="note-box">
+                <h3>Schema-first contracts</h3>
+                <p>
+                  Versioned JSON and YAML artifacts keep release validation grounded
+                  in typed contracts rather than prose-only expectations.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="runtime-export-map">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Adapters</div>
+              <h2 id="runtime-export-map">Runtime Export Map</h2>
+            </div>
+            <p>
+              TasteKit exports from canonical artifacts into runtime-specific files.
+              Managed regions let re-runs update TasteKit content without replacing
+              manual content outside those blocks.
+            </p>
+          </div>
+          <div class="runtime-map">
+            <div class="runtime-core">
+              <h3>Canonical `.tastekit/` artifacts</h3>
+              <p>
+                Constitution, guardrails, memory policy, bindings, trust, skills,
+                playbooks, traces, evals, and drift proposals feed every export.
+              </p>
+              <div class="runtime-tags">
+                <span class="tag">managed regions</span>
+                <span class="tag">MCP-first</span>
+                <span class="tag">artifact-first</span>
+              </div>
+            </div>
+            <div class="spoke-grid">
+              <article class="runtime-spoke">
+                <h3>Claude Code</h3>
+                <p>`CLAUDE.md` plus hooks and settings shaped by guardrails and memory policy.</p>
+              </article>
+              <article class="runtime-spoke">
+                <h3>OpenClaw</h3>
+                <p>`SOUL.md`, `AGENTS.md`, `IDENTITY.md`, and `openclaw.config.json`.</p>
+              </article>
+              <article class="runtime-spoke">
+                <h3>Manus</h3>
+                <p>Runtime guidance and workspace files suitable for Manus-style agent setup.</p>
+              </article>
+              <article class="runtime-spoke">
+                <h3>Autopilots</h3>
+                <p>Portable profile projection for automated agent workflows.</p>
+              </article>
+              <article class="runtime-spoke">
+                <h3>AGENTS.md</h3>
+                <p>Standalone agent instructions with TasteKit-managed blocks.</p>
+              </article>
+              <article class="runtime-spoke">
+                <h3>Agent File</h3>
+                <p>Agent File import and export for multi-format interop.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="trust-safety-privacy">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Posture</div>
+              <h2 id="trust-safety-privacy">Trust, Safety, And Privacy</h2>
+            </div>
+            <p>
+              This is a conservative runtime posture: inspect before binding, pin
+              provenance, validate schemas, and keep hidden interview mechanics out
+              of runtime Markdown.
+            </p>
+          </div>
+          <div class="safety-grid">
+            <article class="safety-card">
+              <h3>MCP-first</h3>
+              <p>Tool discovery and binding use Model Context Protocol rather than a custom TasteKit protocol.</p>
+            </article>
+            <article class="safety-card">
+              <h3>no auto-enable</h3>
+              <p>New or changed tools should be inspected before they affect runtime behavior.</p>
+            </article>
+            <article class="safety-card">
+              <h3>trust pins</h3>
+              <p>MCP servers and skill sources are pinned for provenance and audit visibility.</p>
+            </article>
+            <article class="safety-card">
+              <h3>Validator</h3>
+              <p>Schema checks and contract gates keep artifacts reviewable before release or runtime handoff.</p>
+            </article>
+            <article class="safety-card">
+              <h3>Privacy boundary</h3>
+              <p>Runtime files summarize guidance and exclude raw transcripts or hidden policy machinery.</p>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="maintenance-loop">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Behavior over time</div>
+              <h2 id="maintenance-loop">Maintenance Loop</h2>
+            </div>
+            <p>
+              Maintenance is a core surface, not a later add-on. Drift detection
+              proposes reviewable updates; a human decides what changes.
+            </p>
+          </div>
+          <div class="loop-wrap">
+            <svg class="loop-svg" viewBox="0 0 520 420" role="img" aria-label="TasteKit maintenance loop">
+              <defs>
+                <marker id="loop-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#757b87"></path>
+                </marker>
+              </defs>
+              <circle class="loop-node run" cx="260" cy="62" r="44"></circle>
+              <text class="loop-label" x="245" y="67">Run</text>
+              <path class="flow-arrow" marker-end="url(#loop-arrow)" d="M 300 82 C 368 110 402 152 407 198"></path>
+              <circle class="loop-node trace" cx="414" cy="220" r="48"></circle>
+              <text class="loop-label" x="397" y="225">Trace</text>
+              <path class="flow-arrow" marker-end="url(#loop-arrow)" d="M 392 263 C 360 314 314 342 266 347"></path>
+              <circle class="loop-node eval" cx="238" cy="348" r="46"></circle>
+              <text class="loop-label" x="225" y="353">Eval</text>
+              <path class="flow-arrow" marker-end="url(#loop-arrow)" d="M 191 342 C 133 326 96 292 88 247"></path>
+              <circle class="loop-node drift" cx="86" cy="220" r="50"></circle>
+              <text class="loop-label" x="53" y="225">Drift Detect</text>
+              <path class="flow-arrow" marker-end="url(#loop-arrow)" d="M 91 168 C 105 120 144 85 201 70"></path>
+              <circle class="loop-node review" cx="260" cy="210" r="52"></circle>
+              <text class="loop-label" x="219" y="206">Human Review</text>
+              <text class="loop-label" x="224" y="224">then update</text>
+              <path class="flow-arrow" marker-end="url(#loop-arrow)" d="M 260 158 C 260 132 260 116 260 110"></path>
+              <circle class="loop-node update" cx="260" cy="210" r="6"></circle>
+            </svg>
+            <div class="loop-copy">
+              <div class="loop-statement">Run -&gt; Trace -&gt; Eval -&gt; Drift Detect -&gt; Human Review -&gt; Update Taste</div>
+              <p>
+                Traces provide machine-readable evidence. Evals and drift checks
+                can identify mismatches between observed behavior and the profile,
+                but updates remain proposals until reviewed.
+              </p>
+              <p>
+                This keeps taste maintenance visible: the product can detect stale
+                or mismatched behavior without silently rewriting a person's operating
+                profile.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="evidence-wall">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Release proof</div>
+              <h2 id="evidence-wall">Evidence Wall</h2>
+            </div>
+            <p>
+              Evidence is split into deterministic gates and live product evidence.
+              The subscription demo evidence is useful for review, but not official
+              release evidence.
+            </p>
+          </div>
+          <div class="evidence-grid">
+            <article class="evidence-card deterministic">
+              <span class="card-kicker">Required deterministic gates</span>
+              <h3>official release path</h3>
+              <div class="evidence-lines">
+                <span class="tag">pnpm test</span>
+                <span class="tag">pnpm -r build</span>
+                <span class="tag">pnpm lint</span>
+                <span class="tag">skill bundle sync</span>
+                <span class="tag">contract conformance</span>
+                <span class="tag">six-domain PR gate</span>
+              </div>
+              <p class="card-copy">
+                These prove core behavior, schemas, adapters, CLI paths, skill
+                generation, and fixture coverage before publication.
+              </p>
+            </article>
+            <article class="evidence-card live">
+              <span class="card-kicker">Live product evidence</span>
+              <h3>not official release evidence</h3>
+              <p class="card-copy">
+                Official release evidence requires GPT-5.5 interviewer and judge,
+                GLM-5.1 simulated human, accepted endpoints, canonical prompts, and
+                a matching checkout stamp.
+              </p>
+              <div class="metrics">
+                <div class="metric">
+                  <b>30</b>
+                  <span>live turns in subscription demo evidence</span>
+                </div>
+                <div class="metric">
+                  <b>24/24</b>
+                  <span>merged dimensions covered for general-agent</span>
+                </div>
+                <div class="metric">
+                  <b>4.78/5</b>
+                  <span>judge average in the review run</span>
+                </div>
+              </div>
+              <div class="mini-list">
+                <span class="tag">subscription demo evidence</span>
+                <span class="tag">GPT-5.5</span>
+                <span class="tag">GLM-5.1</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="risks-gaps-unknowns">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Review boundaries</div>
+              <h2 id="risks-gaps-unknowns">Risks, Gaps, And Unknowns</h2>
+            </div>
+            <p>
+              These labels keep the one-pager honest. Some surfaces are release
+              blockers, and some are explicitly Deferred rather than shipped.
+            </p>
+          </div>
+          <div class="risk-grid">
+            <article class="risk-card">
+              <h3>Release gates still decide publication</h3>
+              <p>
+                The project remains release-readiness work until deterministic gates,
+                live release evidence, package checks, and human review pass.
+              </p>
+            </article>
+            <article class="risk-card">
+              <h3>Provider availability matters</h3>
+              <p>
+                Live release evidence depends on accepted official endpoints, model
+                availability, and the strict GPT-5.5 plus GLM-5.1 route.
+              </p>
+            </article>
+            <article class="risk-card">
+              <h3>Public claims must stay conservative</h3>
+              <p>
+                Docs should distinguish current implementation, release-readiness
+                status, subscription review evidence, and official release path.
+              </p>
+            </article>
+            <article class="risk-card">
+              <h3>Deferred</h3>
+              <p>
+                Hosted dashboard, team workflows, native runtime control beyond
+                exports, clinical or diagnostic claims, fully automatic drift
+                application, and skill auto-update are outside the shipped claim.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="reviewer-questions">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Final read</div>
+              <h2 id="reviewer-questions">Reviewer Questions</h2>
+            </div>
+            <p>
+              Use these questions to judge whether the system story is useful,
+              accurate, and conservative enough for the current branch.
+            </p>
+          </div>
+          <div class="question-card">
+            <div class="question">Does this feel more useful than custom instructions?</div>
+            <div class="question">Is the skill-first path obvious enough?</div>
+            <div class="question">Is Full Taste Composition prominent enough?</div>
+            <div class="question">Are release and evidence claims conservative?</div>
+            <div class="question">Does the maintenance loop feel core?</div>
+          </div>
+        </section>
+      </main>
+
+      <p class="footer-note">Standalone static HTML, inline CSS, inline SVG, no external assets.</p>
+    </div>
+  </body>
+</html>

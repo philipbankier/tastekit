@@ -29,7 +29,7 @@ Paste any error messages here
 **Environment:**
  - OS: [e.g. macOS 14.0, Ubuntu 22.04]
  - Node version: [e.g. 20.10.0]
- - TasteKit version: [e.g. 1.0.0]
+ - TasteKit version: [e.g. 0.2.0]
  - pnpm version: [e.g. 8.15.0]
 
 **Workspace structure:**

@@ -109,7 +109,7 @@ export const onboardCommand = new Command('onboard')
       // Load domain rubric (fall back to universal-only if no domain rubric)
       const rubric: DomainRubric = getDomainRubric(domainId) ?? {
         domain_id: domainId,
-        version: '1.1.0',
+        version: '0.2.0',
         interview_goal: `Configure a ${domainId} agent based on your preferences and principles.`,
         dimensions: [],
         includes_universal: true,

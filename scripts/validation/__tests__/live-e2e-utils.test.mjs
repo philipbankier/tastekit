@@ -1127,10 +1127,11 @@ test('expected export artifact assertion proves every export target file exists'
 });
 
 test('live harness core imports are resolvable from the repo root', () => {
-  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/interview'), /packages\/core\/dist\/interview\/index\.js$/);
-  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/domains'), /packages\/core\/dist\/domains\/index\.js$/);
-  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/compiler'), /packages\/core\/dist\/compiler\/index\.js$/);
-  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/utils'), /packages\/core\/dist\/utils\/index\.js$/);
+  const workspaceCore = String.raw`(?:packages/core|node_modules/@actrun_ai/tastekit-core)`;
+  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/interview'), new RegExp(`${workspaceCore}/dist/interview/index\\.js$`));
+  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/domains'), new RegExp(`${workspaceCore}/dist/domains/index\\.js$`));
+  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/compiler'), new RegExp(`${workspaceCore}/dist/compiler/index\\.js$`));
+  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/utils'), new RegExp(`${workspaceCore}/dist/utils/index\\.js$`));
 });
 
 test('live prompt source files contain required contracts', () => {

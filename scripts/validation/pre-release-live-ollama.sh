@@ -122,7 +122,10 @@ for domain in "${DOMAINS[@]}"; do
     fi
 
     echo "[live] domain=$domain provider ping"
-    if ! OLLAMA_MODEL="$OLLAMA_MODEL" pnpm -C "$ROOT_DIR" --filter @actrun_ai/tastekit-core exec node - >/tmp/tastekit-live-provider.log 2>&1 <<'NODE'; then
+    if ! (
+      cd "$ROOT_DIR"
+      OLLAMA_MODEL="$OLLAMA_MODEL" pnpm --filter @actrun_ai/tastekit-core exec node -
+    ) >/tmp/tastekit-live-provider.log 2>&1 <<'NODE'; then
 (async () => {
   const llm = await import('@actrun_ai/tastekit-core/llm');
   const provider = await llm.resolveProvider({

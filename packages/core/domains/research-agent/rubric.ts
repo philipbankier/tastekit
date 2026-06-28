@@ -23,7 +23,7 @@ function withDefaultDimensionFields(dimension: DomainDimensionInput): RubricDime
  */
 export const ResearchAgentRubric: DomainRubric = {
   domain_id: 'research-agent',
-  version: '1.1.0',
+  version: '0.2.0',
   interview_goal: 'Understand the user\'s research methodology, source preferences, synthesis style, and quality standards to configure an agent that researches the way they would.',
   includes_universal: true,
 

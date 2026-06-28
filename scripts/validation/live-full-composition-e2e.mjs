@@ -1192,9 +1192,9 @@ function renderTastekitYaml(config) {
 
 function readRootVersion() {
   try {
-    return JSON.parse(readFileSync('package.json', 'utf-8')).version ?? '1.1.0';
+    return JSON.parse(readFileSync('package.json', 'utf-8')).version ?? '0.2.0';
   } catch {
-    return '1.1.0';
+    return '0.2.0';
   }
 }
 

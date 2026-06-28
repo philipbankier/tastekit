@@ -1,12 +1,12 @@
 # Wave-1 TasteKit Validation Plan
 
 ## Goal
-Validate TasteKit usability and reliability on the shipped production domains before new feature expansion.
+Validate TasteKit usability and reliability on the shipped first-class domains before new feature expansion.
 
 ## Current Status
 - Last two-domain historical rerun: 2026-02-23 (`codex/tastekit-wave1-closure-p1p2`)
 - Six-domain release gate update: 2026-05-10
-- Status: Release gate scope expanded to all six production domains. Final release signoff requires a green run after the domain registry and generated assets for all six domains are present.
+- Status: Release gate scope expanded to all six first-class domains. Final release signoff requires a green run after the domain registry and generated assets for all six domains are present.
 
 ## Locked Scope
 - Domains:
@@ -64,7 +64,7 @@ Validate TasteKit usability and reliability on the shipped production domains be
    - confirms all six domains initialize, connect to Ollama, replay a session, compile, graph skills, and export
 
 ## Pass Criteria
-- All six production domains complete end-to-end (`init -> onboard -> compile -> skills graph -> export`).
+- All six first-class domains complete end-to-end (`init -> onboard -> compile -> skills graph -> export`).
 - Resume/interruption paths (`/save`, `/resume`, `/skip`) are observed in logs.
 - Replay script passes across v1/v2 layout fixtures and all six release-domain fixtures.
 - Findings are recorded with severity (`P0`, `P1`, `P2`) and next PR slices.

@@ -1,6 +1,6 @@
 # Content Agent Domain
 
-The Content Agent domain is a production domain for building AI agents that create, adapt, and review written content while preserving voice, audience fit, and evidence discipline.
+The Content Agent domain is a first-class domain for building AI agents that create, adapt, and review written content while preserving voice, audience fit, and evidence discipline.
 
 ## Overview
 

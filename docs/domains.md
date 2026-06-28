@@ -131,7 +131,7 @@ The LLM interviewer adaptively explores dimensions based on the chosen depth, sp
 
 ## Release Readiness Expectations
 
-Every production domain must satisfy the same minimum bar:
+Every first-class domain must satisfy the same release-readiness bar:
 
 - Registered in the domain registry and CLI init choices.
 - Source rubric has complete fields for skill generation: id, name, tiers, priority, maps_to, question budget, description, exploration hints, coverage criteria, sub-areas when present, and cascade targets.

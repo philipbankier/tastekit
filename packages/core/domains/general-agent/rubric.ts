@@ -10,7 +10,7 @@ import { DomainRubric } from '../../interview/rubric.js';
 
 export const GeneralAgentRubric: DomainRubric = {
   domain_id: 'general-agent',
-  version: '1.1.0',
+  version: '0.2.0',
   interview_goal: 'Capture how the user wants a general-purpose agent to plan, act, communicate, and escalate across mixed workflows.',
   includes_universal: true,
   dimensions: [
