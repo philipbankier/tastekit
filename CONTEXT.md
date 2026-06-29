@@ -10,8 +10,8 @@ TasteKit compiles a person's taste into portable agent artifacts. "Taste" means 
 
 The project has three user-facing entry points:
 
-1. CLI: `@actrun_ai/tastekit-cli`
-2. Library packages: `@actrun_ai/tastekit-core`, adapters, voice, validator
+1. CLI: `@kairox_ai/tastekit-cli`
+2. Library packages: `@kairox_ai/tastekit-core`, adapters, voice, validator
 3. Native skill: `skills/tastekit/`
 
 ## Core Problem

@@ -1,4 +1,4 @@
-# @actrun_ai/tastekit-adapters
+# @kairox_ai/tastekit-adapters
 
 Pre-1.0 runtime adapters for [TasteKit](https://github.com/philipbankier/tastekit) — transform compiled artifacts into runtime-specific formats.
 
@@ -16,13 +16,13 @@ Adapters produce runtime files and skills that can travel beyond the direct adap
 ## Install
 
 ```bash
-npm install @actrun_ai/tastekit-adapters
+npm install @kairox_ai/tastekit-adapters
 ```
 
 ## Usage
 
 ```typescript
-import { ClaudeCodeAdapter } from '@actrun_ai/tastekit-adapters/claude-code';
+import { ClaudeCodeAdapter } from '@kairox_ai/tastekit-adapters/claude-code';
 
 const adapter = new ClaudeCodeAdapter();
 await adapter.export('.tastekit', './export', {
@@ -63,8 +63,8 @@ The Claude Code adapter (v2.0) generates:
 
 ## Part of TasteKit
 
-- CLI: [`@actrun_ai/tastekit-cli`](https://www.npmjs.com/package/@actrun_ai/tastekit-cli)
-- Core: [`@actrun_ai/tastekit-core`](https://www.npmjs.com/package/@actrun_ai/tastekit-core)
+- CLI: [`@kairox_ai/tastekit-cli`](https://www.npmjs.com/package/@kairox_ai/tastekit-cli)
+- Core: [`@kairox_ai/tastekit-core`](https://www.npmjs.com/package/@kairox_ai/tastekit-core)
 
 ## License
 

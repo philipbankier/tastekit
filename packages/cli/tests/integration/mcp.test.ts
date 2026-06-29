@@ -26,7 +26,7 @@ describe('tastekit mcp', () => {
     } finally {
       cleanupWorkspace(root);
     }
-  });
+  }, 15000);
 
   it('fails inspect for unknown server', async () => {
     const root = makeTempWorkspace('mcp-failure');

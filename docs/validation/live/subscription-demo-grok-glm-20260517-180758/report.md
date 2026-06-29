@@ -238,7 +238,7 @@ Passed: true
 ## Verification Commands
 
 - `pnpm test:live-e2e:subscription-demo`
-- `npx @actrun_ai/tastekit-validator .tastekit/constitution.v1.json --json`
+- `npx @kairox_ai/tastekit-validator .tastekit/constitution.v1.json --json`
 - `tastekit export --target claude-code --out .`
 - `tastekit export --target openclaw --out exports/openclaw`
 - `tastekit export --target manus --out exports/manus`

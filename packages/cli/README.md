@@ -1,4 +1,4 @@
-# @actrun_ai/tastekit-cli
+# @kairox_ai/tastekit-cli
 
 Pre-1.0 CLI for [TasteKit](https://github.com/philipbankier/tastekit) — compile human taste into portable AI agent artifacts.
 
@@ -10,10 +10,10 @@ TasteKit is still pre-1.0. Treat this package as a serious release candidate, no
 
 ```bash
 # Use directly (no install)
-npx @actrun_ai/tastekit-cli init
+npx @kairox_ai/tastekit-cli init
 
 # Or install globally
-npm install -g @actrun_ai/tastekit-cli
+npm install -g @kairox_ai/tastekit-cli
 ```
 
 ## Quick Start
@@ -93,10 +93,10 @@ export/
 
 ## Part of TasteKit
 
-- Core library: [`@actrun_ai/tastekit-core`](https://www.npmjs.com/package/@actrun_ai/tastekit-core)
-- Adapters: [`@actrun_ai/tastekit-adapters`](https://www.npmjs.com/package/@actrun_ai/tastekit-adapters)
-- Validator: [`@actrun_ai/tastekit-validator`](https://www.npmjs.com/package/@actrun_ai/tastekit-validator)
-- Voice: [`@actrun_ai/tastekit-voice`](https://www.npmjs.com/package/@actrun_ai/tastekit-voice)
+- Core library: [`@kairox_ai/tastekit-core`](https://www.npmjs.com/package/@kairox_ai/tastekit-core)
+- Adapters: [`@kairox_ai/tastekit-adapters`](https://www.npmjs.com/package/@kairox_ai/tastekit-adapters)
+- Validator: [`@kairox_ai/tastekit-validator`](https://www.npmjs.com/package/@kairox_ai/tastekit-validator)
+- Voice: [`@kairox_ai/tastekit-voice`](https://www.npmjs.com/package/@kairox_ai/tastekit-voice)
 
 ## License
 

@@ -51,7 +51,7 @@
 ### Required pre-release
 - `bash scripts/validation/pre-release-live-ollama.sh`
 - `pnpm test:live-e2e:release`
-- dry-run package packs for all publishable `@actrun_ai/*` packages
+- dry-run package packs for all publishable `@kairox_ai/*` packages
 
 The deterministic and live release gates must remain aligned in meaning, but not in exact runtime shape. If docs claim a domain is first-class, deterministic replay must enumerate it. If docs claim real Full Taste Composition quality, the live E2E evidence should prove it with real model calls or carry an explicit release waiver.
 

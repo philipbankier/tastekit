@@ -11,8 +11,8 @@ import { TasteKitAdapter, ExportOpts, InstallOpts } from '../adapter-interface.j
 import { readFileSync, writeFileSync, cpSync, existsSync, mkdirSync, chmodSync } from 'fs';
 import { join } from 'path';
 import { createRequire } from 'node:module';
-import { resolveArtifactPath, resolveBindingsPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
-import { generateClaudeMd, generateHooks, mergeManagedRegion, type GeneratorContext } from '@actrun_ai/tastekit-core/generators';
+import { resolveArtifactPath, resolveBindingsPath, resolveSkillsPath } from '@kairox_ai/tastekit-core/utils';
+import { generateClaudeMd, generateHooks, mergeManagedRegion, type GeneratorContext } from '@kairox_ai/tastekit-core/generators';
 
 const require = createRequire(import.meta.url);
 

@@ -1,5 +1,5 @@
 {
-  "name": "@actrun_ai/tastekit-core",
+  "name": "@kairox_ai/tastekit-core",
   "version": "0.2.0",
   "description": "Pre-1.0 TasteKit core library: schemas, compiler, interview, skills, MCP, trust, tracing, drift, and eval",
   "type": "module",

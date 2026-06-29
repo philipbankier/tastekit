@@ -183,7 +183,7 @@ Exit behavior:
    - Harness saves state on every TasteKit state update.
 5. End only when TasteKit marks the interview complete, the user persona explicitly asks to finish and TasteKit records assumptions, or the safety ceiling is reached.
 6. Compile artifacts.
-7. Validate constitution with `@actrun_ai/tastekit-validator`.
+7. Validate constitution with `@kairox_ai/tastekit-validator`.
 8. Generate runtime markdown.
 9. Export all supported runtime targets.
 10. Run skills graph, trust audit, eval replay, and a drift scenario.

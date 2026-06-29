@@ -100,7 +100,7 @@ Anything else is allowed. Readers MUST NOT fail on unknown keys.
 Two enforcement paths, kept in parity for what each can express:
 
 1. **Zod** — `ConstitutionV1Schema` in `packages/core/schemas/constitution.ts`. Used at runtime by the npm package. Strictest layer; enforces cross-item invariants (priority uniqueness, 1..N sequencing, principle id uniqueness) via `superRefine`.
-2. **JSON Schema** — `packages/core/schemas/json/constitution.schema.json` (Draft 2020-12). Used by the skill bundle (host LLM validates without TS), and by the future `@actrun_ai/tastekit-validator` package via AJV. Enforces shape and per-field constraints; cross-item invariants are out of scope for portable JSON Schema.
+2. **JSON Schema** — `packages/core/schemas/json/constitution.schema.json` (Draft 2020-12). Used by the skill bundle (host LLM validates without TS), and by the future `@kairox_ai/tastekit-validator` package via AJV. Enforces shape and per-field constraints; cross-item invariants are out of scope for portable JSON Schema.
 
 Parity is enforced by `schemas/__tests__/constitution-json-schema.test.ts`. The `bothAgree` corpus covers everything both validators can express. A separate suite (`Zod-only refinements`) documents the cases where Zod is stricter than JSON Schema — duplicate priorities, gapped priority sequences, duplicate principle ids. Producers must satisfy Zod (the runtime gate). Skill-bundle consumers using JSON Schema alone get *most* of the lock; the validator package shipped with v1 closes the remaining gap by running both.
 

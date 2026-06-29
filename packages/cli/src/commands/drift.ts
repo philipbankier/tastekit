@@ -3,10 +3,10 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { existsSync, readFileSync, writeFileSync, readdirSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { DriftDetector } from '@actrun_ai/tastekit-core/drift';
-import { MemoryConsolidator } from '@actrun_ai/tastekit-core/drift';
-import { resolveArtifactPath, resolveTracesPath } from '@actrun_ai/tastekit-core/utils';
-import { ConstitutionV1Schema, type ConstitutionV1, type ConstitutionPrinciple } from '@actrun_ai/tastekit-core/schemas';
+import { DriftDetector } from '@kairox_ai/tastekit-core/drift';
+import { MemoryConsolidator } from '@kairox_ai/tastekit-core/drift';
+import { resolveArtifactPath, resolveTracesPath } from '@kairox_ai/tastekit-core/utils';
+import { ConstitutionV1Schema, type ConstitutionV1, type ConstitutionPrinciple } from '@kairox_ai/tastekit-core/schemas';
 import { getGlobalOptions, riskColor, header, detail, hint, handleError, jsonOutput, verbose } from '../ui.js';
 
 function slugify(statement: string, fallbackIndex: number, used: Set<string>): string {

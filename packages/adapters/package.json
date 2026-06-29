@@ -1,5 +1,5 @@
 {
-  "name": "@actrun_ai/tastekit-adapters",
+  "name": "@kairox_ai/tastekit-adapters",
   "version": "0.2.0",
   "description": "Pre-1.0 TasteKit runtime adapters for Claude Code, OpenClaw, Manus, Autopilots, AGENTS.md, and Agent File",
   "type": "module",
@@ -30,12 +30,12 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "pnpm --filter @actrun_ai/tastekit-core build && vitest run",
+    "test": "pnpm --filter @kairox_ai/tastekit-core build && vitest run",
     "lint": "eslint --ignore-pattern dist/ --ignore-pattern __tests__/ .",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@actrun_ai/tastekit-core": "workspace:*"
+    "@kairox_ai/tastekit-core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

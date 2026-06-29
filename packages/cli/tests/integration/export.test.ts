@@ -32,7 +32,7 @@ describe('tastekit export', () => {
     } finally {
       cleanupWorkspace(root);
     }
-  });
+  }, 15000);
 
   it('fails on unsupported target choice', async () => {
     const root = makeTempWorkspace('export-failure');

@@ -8,10 +8,10 @@ importers:
 
   .:
     dependencies:
-      '@actrun_ai/tastekit-adapters':
+      '@kairox_ai/tastekit-adapters':
         specifier: workspace:*
         version: link:packages/adapters
-      '@actrun_ai/tastekit-core':
+      '@kairox_ai/tastekit-core':
         specifier: workspace:*
         version: link:packages/core
     devDependencies:
@@ -39,7 +39,7 @@ importers:
 
   packages/adapters:
     dependencies:
-      '@actrun_ai/tastekit-core':
+      '@kairox_ai/tastekit-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -55,10 +55,10 @@ importers:
 
   packages/cli:
     dependencies:
-      '@actrun_ai/tastekit-adapters':
+      '@kairox_ai/tastekit-adapters':
         specifier: workspace:*
         version: link:../adapters
-      '@actrun_ai/tastekit-core':
+      '@kairox_ai/tastekit-core':
         specifier: workspace:*
         version: link:../core
       chalk:
@@ -96,7 +96,7 @@ importers:
         specifier: ^2.0.0
         version: 2.1.9(@types/node@22.19.11)
     optionalDependencies:
-      '@actrun_ai/tastekit-voice':
+      '@kairox_ai/tastekit-voice':
         specifier: workspace:*
         version: link:../voice
 
@@ -127,7 +127,7 @@ importers:
 
   packages/validator:
     dependencies:
-      '@actrun_ai/tastekit-core':
+      '@kairox_ai/tastekit-core':
         specifier: workspace:*
         version: link:../core
       ajv:

@@ -1,5 +1,5 @@
 {
-  "name": "@actrun_ai/tastekit-cli",
+  "name": "@kairox_ai/tastekit-cli",
   "version": "0.2.0",
   "description": "Pre-1.0 CLI for compiling human taste into portable AI agent artifacts",
   "type": "module",
@@ -23,14 +23,14 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "pnpm --filter @actrun_ai/tastekit-core build && pnpm --filter @actrun_ai/tastekit-adapters build && pnpm run build && vitest run",
-    "test:integration": "pnpm --filter @actrun_ai/tastekit-core build && pnpm --filter @actrun_ai/tastekit-adapters build && pnpm run build && vitest run tests/integration",
+    "test": "pnpm --filter @kairox_ai/tastekit-core build && pnpm --filter @kairox_ai/tastekit-adapters build && pnpm run build && vitest run",
+    "test:integration": "pnpm --filter @kairox_ai/tastekit-core build && pnpm --filter @kairox_ai/tastekit-adapters build && pnpm run build && vitest run tests/integration",
     "lint": "eslint src/",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@actrun_ai/tastekit-adapters": "workspace:*",
-    "@actrun_ai/tastekit-core": "workspace:*",
+    "@kairox_ai/tastekit-adapters": "workspace:*",
+    "@kairox_ai/tastekit-core": "workspace:*",
     "chalk": "^5.3.0",
     "commander": "^12.0.0",
     "inquirer": "^10.0.0",
@@ -39,7 +39,7 @@
     "yaml": "^2.8.2"
   },
   "optionalDependencies": {
-    "@actrun_ai/tastekit-voice": "workspace:*"
+    "@kairox_ai/tastekit-voice": "workspace:*"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.0",

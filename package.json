@@ -16,7 +16,7 @@
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r build && pnpm -r test && pnpm test:live-e2e:unit",
-    "demo:one-pager": "pnpm --filter @actrun_ai/tastekit-core build && node scripts/demo/render-one-pager.mjs",
+    "demo:one-pager": "pnpm --filter @kairox_ai/tastekit-core build && node scripts/demo/render-one-pager.mjs",
     "test:pr-gate": "bash scripts/validation/pr-gate.sh",
     "test:pre-release-live": "bash scripts/validation/pre-release-live-ollama.sh",
     "test:live-e2e:unit": "node --test scripts/validation/__tests__/*.test.mjs",
@@ -52,7 +52,7 @@
     "vitest": "^2.0.0"
   },
   "dependencies": {
-    "@actrun_ai/tastekit-adapters": "workspace:*",
-    "@actrun_ai/tastekit-core": "workspace:*"
+    "@kairox_ai/tastekit-adapters": "workspace:*",
+    "@kairox_ai/tastekit-core": "workspace:*"
   }
 }

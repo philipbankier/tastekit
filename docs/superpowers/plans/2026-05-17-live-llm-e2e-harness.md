@@ -6,7 +6,7 @@
 
 **Architecture:** Keep this outside the production CLI as `scripts/validation/live-full-composition-e2e.mjs`, with small testable helper modules under `scripts/validation/lib/live-e2e/`. The harness imports the real built TasteKit core APIs for the interview loop, drives the real CLI for compile/export/drift/eval/trust/skills checks, writes all evidence under a timestamped validation directory, and never mutates the repo root runtime files.
 
-**Tech Stack:** Node.js 20+ ESM, pnpm workspace packages, built `@actrun_ai/tastekit-*` packages, native `fetch`, native `node:test`, GPT-5.5 via OpenAI-compatible chat completions, GLM-5.1 via exact Z.ai chat-completions endpoint.
+**Tech Stack:** Node.js 20+ ESM, pnpm workspace packages, built `@kairox_ai/tastekit-*` packages, native `fetch`, native `node:test`, GPT-5.5 via OpenAI-compatible chat completions, GLM-5.1 via exact Z.ai chat-completions endpoint.
 
 ---
 
@@ -52,7 +52,7 @@ This must not change production onboarding semantics. Production code should onl
 ## Implementation Notes
 
 - The current `OpenAIProvider` appends `/v1/chat/completions`. Do not use it for Z.ai Coding Plan. The new `chat-client.mjs` must call the exact endpoint `baseUrl + /chat/completions` unless the user passes a base URL already ending in `/chat/completions`.
-- The live interview must use the real `Interviewer` from `@actrun_ai/tastekit-core/interview`, not a reimplemented interview loop.
+- The live interview must use the real `Interviewer` from `@kairox_ai/tastekit-core/interview`, not a reimplemented interview loop.
 - Build first. Runtime imports should use built package exports after `pnpm -r build`.
 - The harness should use CLI commands for user-visible lifecycle behavior after the interview: `compile`, `export`, `skills graph`, `trust audit`, `eval run`, `eval replay`, and `drift detect`.
 - The main script may support `--preflight-only` and `--no-judge` for operator control. Those modes are validation ergonomics, not product features.
@@ -232,7 +232,7 @@ Patch `package.json` scripts:
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r build && pnpm -r test",
-    "demo:one-pager": "pnpm --filter @actrun_ai/tastekit-core build && node scripts/demo/render-one-pager.mjs",
+    "demo:one-pager": "pnpm --filter @kairox_ai/tastekit-core build && node scripts/demo/render-one-pager.mjs",
     "test:pr-gate": "bash scripts/validation/pr-gate.sh",
     "test:pre-release-live": "bash scripts/validation/pre-release-live-ollama.sh",
     "test:live-e2e:unit": "node --test scripts/validation/__tests__/*.test.mjs",
@@ -1317,10 +1317,10 @@ Patch the import section in `scripts/validation/live-full-composition-e2e.mjs` b
 
 ```js
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { Interviewer, createSession, saveSession } from '@actrun_ai/tastekit-core/interview';
-import { getDomainRubric } from '@actrun_ai/tastekit-core/domains';
-import { compile } from '@actrun_ai/tastekit-core/compiler';
-import { resolveSessionPath } from '@actrun_ai/tastekit-core/utils';
+import { Interviewer, createSession, saveSession } from '@kairox_ai/tastekit-core/interview';
+import { getDomainRubric } from '@kairox_ai/tastekit-core/domains';
+import { compile } from '@kairox_ai/tastekit-core/compiler';
+import { resolveSessionPath } from '@kairox_ai/tastekit-core/utils';
 ```
 
 If Node cannot resolve workspace exports before build, do not add a runtime workaround. Keep the preflight error clear and require `pnpm -r build`.
@@ -1726,7 +1726,7 @@ Expected: PASS.
 Run:
 
 ```bash
-pnpm --filter @actrun_ai/tastekit-cli test -- --run tests/integration/compile-output.test.ts tests/integration/export.test.ts
+pnpm --filter @kairox_ai/tastekit-cli test -- --run tests/integration/compile-output.test.ts tests/integration/export.test.ts
 ```
 
 Expected: PASS.
@@ -2001,7 +2001,7 @@ Expected: PASS.
 Run:
 
 ```bash
-pnpm --filter @actrun_ai/tastekit-cli test -- --run tests/integration/skills.test.ts tests/integration/trust.test.ts tests/integration/drift.test.ts tests/integration/eval.test.ts
+pnpm --filter @kairox_ai/tastekit-cli test -- --run tests/integration/skills.test.ts tests/integration/trust.test.ts tests/integration/drift.test.ts tests/integration/eval.test.ts
 ```
 
 Expected: PASS.

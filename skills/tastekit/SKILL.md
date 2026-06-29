@@ -54,4 +54,4 @@ Templates:
 - `assets/templates/hermes-agents.md`
 - `assets/templates/taste.md`
 
-Validate `.tastekit/constitution.v1.json` with `npx @actrun_ai/tastekit-validator <file>` when available. If unavailable, use `assets/schemas/constitution.schema.json` plus deterministic checks from `references/runtime-output.md`, then tell the user validation used the fallback path.
+Validate `.tastekit/constitution.v1.json` with `npx @kairox_ai/tastekit-validator <file>` when available. If unavailable, use `assets/schemas/constitution.schema.json` plus deterministic checks from `references/runtime-output.md`, then tell the user validation used the fallback path.

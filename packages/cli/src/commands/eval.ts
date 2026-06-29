@@ -3,9 +3,9 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { existsSync, readFileSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { EvalReport, EvalRunner } from '@actrun_ai/tastekit-core/eval';
-import { Replay } from '@actrun_ai/tastekit-core/eval';
-import { resolveArtifactPath } from '@actrun_ai/tastekit-core/utils';
+import { EvalReport, EvalRunner } from '@kairox_ai/tastekit-core/eval';
+import { Replay } from '@kairox_ai/tastekit-core/eval';
+import { resolveArtifactPath } from '@kairox_ai/tastekit-core/utils';
 import { getGlobalOptions, detail, hint, handleError, jsonOutput, verbose } from '../ui.js';
 
 const evalRunCommand = new Command('run')

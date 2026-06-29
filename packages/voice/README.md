@@ -1,4 +1,4 @@
-# @actrun_ai/tastekit-voice
+# @kairox_ai/tastekit-voice
 
 Pre-1.0 voice-based onboarding for [TasteKit](https://github.com/philipbankier/tastekit) — speak your preferences instead of typing them.
 
@@ -16,7 +16,7 @@ Automatic 3-layer fallback: ElevenLabs → local binaries → text input.
 ## Install
 
 ```bash
-npm install @actrun_ai/tastekit-voice
+npm install @kairox_ai/tastekit-voice
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ tastekit onboard --voice
 
 ```typescript
 // Programmatic
-import { createVoiceIO } from '@actrun_ai/tastekit-voice';
+import { createVoiceIO } from '@kairox_ai/tastekit-voice';
 
 const voiceIO = await createVoiceIO();
 const input = await voiceIO.getUserInput();      // Records mic → STT
@@ -45,8 +45,8 @@ await voiceIO.dispose();
 
 ## Part of TasteKit
 
-- CLI: [`@actrun_ai/tastekit-cli`](https://www.npmjs.com/package/@actrun_ai/tastekit-cli)
-- Core: [`@actrun_ai/tastekit-core`](https://www.npmjs.com/package/@actrun_ai/tastekit-core)
+- CLI: [`@kairox_ai/tastekit-cli`](https://www.npmjs.com/package/@kairox_ai/tastekit-cli)
+- Core: [`@kairox_ai/tastekit-core`](https://www.npmjs.com/package/@kairox_ai/tastekit-core)
 
 ## License
 
