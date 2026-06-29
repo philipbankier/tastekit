@@ -40,5 +40,5 @@ Validation fixtures and compatibility readers may accept older layout locations 
 - Legacy paths are read-compat only.
 
 ## Validation Contract
-- Artifacts must match existing `*.v1` schemas in `@actrun_ai/tastekit-core/schemas`.
+- Artifacts must match existing `*.v1` schemas in `@kairox_ai/tastekit-core/schemas`.
 - CI conformance tests enforce strict schema adherence for canonical fixtures.

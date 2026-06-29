@@ -24,15 +24,15 @@ function packageJsonPaths() {
 }
 
 describe('npm package scope', () => {
-  it('publishes TasteKit packages under the canonical @actrun_ai scope', () => {
+  it('publishes TasteKit packages under the canonical @kairox_ai scope', () => {
     const names = packageJsonPaths().map(path => readJson(path).name).sort();
 
     expect(names).toEqual([
-      '@actrun_ai/tastekit-adapters',
-      '@actrun_ai/tastekit-cli',
-      '@actrun_ai/tastekit-core',
-      '@actrun_ai/tastekit-validator',
-      '@actrun_ai/tastekit-voice',
+      '@kairox_ai/tastekit-adapters',
+      '@kairox_ai/tastekit-cli',
+      '@kairox_ai/tastekit-core',
+      '@kairox_ai/tastekit-validator',
+      '@kairox_ai/tastekit-voice',
     ]);
   });
 

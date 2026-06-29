@@ -24,9 +24,9 @@ pnpm test
 
 ```
 packages/
-├── core/          # @actrun_ai/tastekit-core - schemas, compiler, MCP, drift, eval, trust, tracing
-├── cli/           # @actrun_ai/tastekit-cli  - CLI commands (commander.js)
-└── adapters/      # @actrun_ai/tastekit-adapters - runtime adapters (Claude Code, OpenClaw, Manus, Autopilots)
+├── core/          # @kairox_ai/tastekit-core - schemas, compiler, MCP, drift, eval, trust, tracing
+├── cli/           # @kairox_ai/tastekit-cli  - CLI commands (commander.js)
+└── adapters/      # @kairox_ai/tastekit-adapters - runtime adapters (Claude Code, OpenClaw, Manus, Autopilots)
 ```
 
 Key directories in `core/`:

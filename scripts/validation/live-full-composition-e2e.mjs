@@ -207,10 +207,10 @@ async function runLiveE2E(ctx) {
     { compile },
     { resolveSessionPath },
   ] = await Promise.all([
-    import('@actrun_ai/tastekit-core/interview'),
-    import('@actrun_ai/tastekit-core/domains'),
-    import('@actrun_ai/tastekit-core/compiler'),
-    import('@actrun_ai/tastekit-core/utils'),
+    import('@kairox_ai/tastekit-core/interview'),
+    import('@kairox_ai/tastekit-core/domains'),
+    import('@kairox_ai/tastekit-core/compiler'),
+    import('@kairox_ai/tastekit-core/utils'),
   ]);
 
   const persona = readFileSync(options.persona, 'utf-8');
@@ -818,7 +818,7 @@ function buildFinalReport({ options, outputDir, workspaceDir, tastekitDir, state
         : currentProviderMode === 'subscription-live-demo'
           ? 'pnpm test:live-e2e:subscription-demo'
           : 'pnpm test:live-e2e',
-      'npx @actrun_ai/tastekit-validator .tastekit/constitution.v1.json --json',
+      'npx @kairox_ai/tastekit-validator .tastekit/constitution.v1.json --json',
       'tastekit export --target claude-code --out .',
       'tastekit export --target openclaw --out exports/openclaw',
       'tastekit export --target manus --out exports/manus',

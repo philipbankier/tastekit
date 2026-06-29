@@ -16,8 +16,8 @@ Fixes # (issue)
 
 ## Component affected
 
-- [ ] Core library (`@actrun_ai/tastekit-core`)
-- [ ] CLI (`@actrun_ai/tastekit-cli`)
+- [ ] Core library (`@kairox_ai/tastekit-core`)
+- [ ] CLI (`@kairox_ai/tastekit-cli`)
 - [ ] Adapters (specify: ___)
 - [ ] Documentation
 - [ ] Build/CI

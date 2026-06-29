@@ -1,6 +1,6 @@
 # Release Verification
 
-This document is the operator checklist for moving TasteKit from a development checkout to a publishable pre-1.0 `@actrun_ai/*` release. It separates deterministic gates, live product evidence, package checks, and human review artifacts so release confidence is not based on a single green command.
+This document is the operator checklist for moving TasteKit from a development checkout to a publishable pre-1.0 `@kairox_ai/*` release. It separates deterministic gates, live product evidence, package checks, and human review artifacts so release confidence is not based on a single green command.
 
 ## Evidence Classes
 
@@ -76,11 +76,11 @@ This is strong product review evidence, but it remains labeled `subscription-liv
 Before publishing, dry-run every publishable package:
 
 ```bash
-pnpm --filter @actrun_ai/tastekit-core pack --dry-run
-pnpm --filter @actrun_ai/tastekit-cli pack --dry-run
-pnpm --filter @actrun_ai/tastekit-adapters pack --dry-run
-pnpm --filter @actrun_ai/tastekit-voice pack --dry-run
-pnpm --filter @actrun_ai/tastekit-validator pack --dry-run
+pnpm --filter @kairox_ai/tastekit-core pack --dry-run
+pnpm --filter @kairox_ai/tastekit-cli pack --dry-run
+pnpm --filter @kairox_ai/tastekit-adapters pack --dry-run
+pnpm --filter @kairox_ai/tastekit-voice pack --dry-run
+pnpm --filter @kairox_ai/tastekit-validator pack --dry-run
 ```
 
 Check that each package includes only intentional runtime files, has correct repository metadata, includes README/LICENSE coverage through package files or root inclusion, and exposes the expected bins/exports.

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { cleanupWorkspace, fixturePath, makeTempWorkspace, runCli } from '../helpers/run-cli.js';
-import { ConstitutionV1Schema } from '@actrun_ai/tastekit-core/schemas';
+import { ConstitutionV1Schema } from '@kairox_ai/tastekit-core/schemas';
 
 describe('tastekit import', () => {
   it('imports from SOUL.md and Agent File fixtures', async () => {

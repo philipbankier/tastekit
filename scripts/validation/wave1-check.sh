@@ -82,10 +82,10 @@ echo "[wave1] install/build/test gates"
 cd "$ROOT_DIR"
 pnpm install
 pnpm -r build
-pnpm --filter @actrun_ai/tastekit-core test
-pnpm --filter @actrun_ai/tastekit-adapters test
-pnpm --filter @actrun_ai/tastekit-cli test
-pnpm node -e "import('@actrun_ai/tastekit-adapters/claude-code').then(m=>{if(!m.ClaudeCodeAdapter) process.exit(1);})"
+pnpm --filter @kairox_ai/tastekit-core test
+pnpm --filter @kairox_ai/tastekit-adapters test
+pnpm --filter @kairox_ai/tastekit-cli test
+pnpm node -e "import('@kairox_ai/tastekit-adapters/claude-code').then(m=>{if(!m.ClaudeCodeAdapter) process.exit(1);})"
 
 echo "[wave1] cli smoke"
 "${CLI[@]}" --help >/dev/null

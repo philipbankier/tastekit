@@ -3,9 +3,9 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
-import { compile, canResume } from '@actrun_ai/tastekit-core/compiler';
-import { loadSession } from '@actrun_ai/tastekit-core/interview';
-import { resolveSessionPath } from '@actrun_ai/tastekit-core/utils';
+import { compile, canResume } from '@kairox_ai/tastekit-core/compiler';
+import { loadSession } from '@kairox_ai/tastekit-core/interview';
+import { resolveSessionPath } from '@kairox_ai/tastekit-core/utils';
 import { getGlobalOptions, nextSteps, handleError, jsonOutput } from '../ui.js';
 import { getCliPackageVersion } from '../version.js';
 

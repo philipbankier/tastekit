@@ -1,4 +1,4 @@
-# @actrun_ai/tastekit-core
+# @kairox_ai/tastekit-core
 
 Pre-1.0 core library for [TasteKit](https://github.com/philipbankier/tastekit) — compile human taste into portable AI agent artifacts.
 
@@ -24,15 +24,15 @@ This package contains the schemas, compilers, interview engine, drift detector, 
 ## Install
 
 ```bash
-npm install @actrun_ai/tastekit-core
+npm install @kairox_ai/tastekit-core
 ```
 
 ## Usage
 
 ```typescript
-import { compile } from '@actrun_ai/tastekit-core/compiler';
-import { loadSession } from '@actrun_ai/tastekit-core/interview';
-import { ConstitutionV1Schema } from '@actrun_ai/tastekit-core/schemas';
+import { compile } from '@kairox_ai/tastekit-core/compiler';
+import { loadSession } from '@kairox_ai/tastekit-core/interview';
+import { ConstitutionV1Schema } from '@kairox_ai/tastekit-core/schemas';
 
 // Load a session from an onboarding interview
 const session = loadSession('.tastekit/session.json');
@@ -53,7 +53,7 @@ console.log(result.artifacts);
 All artifact schemas are Zod-validated:
 
 ```typescript
-import { ConstitutionV1Schema } from '@actrun_ai/tastekit-core/schemas';
+import { ConstitutionV1Schema } from '@kairox_ai/tastekit-core/schemas';
 
 const result = ConstitutionV1Schema.safeParse(data);
 if (result.success) {
@@ -63,7 +63,7 @@ if (result.success) {
 
 ## Part of TasteKit
 
-This is the core library. For the CLI tool, see [`@actrun_ai/tastekit-cli`](https://www.npmjs.com/package/@actrun_ai/tastekit-cli). For runtime adapters, see [`@actrun_ai/tastekit-adapters`](https://www.npmjs.com/package/@actrun_ai/tastekit-adapters).
+This is the core library. For the CLI tool, see [`@kairox_ai/tastekit-cli`](https://www.npmjs.com/package/@kairox_ai/tastekit-cli). For runtime adapters, see [`@kairox_ai/tastekit-adapters`](https://www.npmjs.com/package/@kairox_ai/tastekit-adapters).
 
 ## License
 

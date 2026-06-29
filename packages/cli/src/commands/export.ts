@@ -4,8 +4,8 @@ import ora from 'ora';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import YAML from 'yaml';
-import { generateAgentsMd, mergeManagedRegion } from '@actrun_ai/tastekit-core/generators';
-import { resolveArtifactPath, resolveSkillsPath } from '@actrun_ai/tastekit-core/utils';
+import { generateAgentsMd, mergeManagedRegion } from '@kairox_ai/tastekit-core/generators';
+import { resolveArtifactPath, resolveSkillsPath } from '@kairox_ai/tastekit-core/utils';
 import { detail, handleError } from '../ui.js';
 import { getCliPackageVersion } from '../version.js';
 
@@ -127,19 +127,19 @@ export const exportCommand = new Command('export')
 async function loadAdapter(target: string): Promise<any> {
   switch (target) {
     case 'claude-code': {
-      const mod = await import('@actrun_ai/tastekit-adapters/claude-code');
+      const mod = await import('@kairox_ai/tastekit-adapters/claude-code');
       return mod.ClaudeCodeAdapter;
     }
     case 'manus': {
-      const mod = await import('@actrun_ai/tastekit-adapters/manus');
+      const mod = await import('@kairox_ai/tastekit-adapters/manus');
       return mod.ManusAdapter;
     }
     case 'openclaw': {
-      const mod = await import('@actrun_ai/tastekit-adapters/openclaw');
+      const mod = await import('@kairox_ai/tastekit-adapters/openclaw');
       return mod.OpenClawAdapter;
     }
     case 'autopilots': {
-      const mod = await import('@actrun_ai/tastekit-adapters/autopilots');
+      const mod = await import('@kairox_ai/tastekit-adapters/autopilots');
       return mod.AutopilotsAdapter;
     }
     default:

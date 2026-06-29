@@ -4,7 +4,7 @@ import ora from 'ora';
 import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { detail, hint, handleError } from '../ui.js';
-import { ConstitutionV1Schema, type ConstitutionV1 } from '@actrun_ai/tastekit-core/schemas';
+import { ConstitutionV1Schema, type ConstitutionV1 } from '@kairox_ai/tastekit-core/schemas';
 import { getCliPackageVersion } from '../version.js';
 
 function principleIdFromStatement(statement: string, index: number, used: Set<string>): string {

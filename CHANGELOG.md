@@ -14,7 +14,7 @@ This is a pre-1.0 release candidate. It supersedes the earlier `1.0.0` publicati
 - Metacognitive onboarding policy for Quick, Guided, and Full Taste Composition.
 - `x-tastekit-metacognition` constitution extension with coverage summaries, assumptions, conflicts, confirmations, fatigue events, and policy decisions.
 - Runtime metacognition guidance in generated agent markdown without raw transcript leakage.
-- Package-local README and LICENSE files for publishable `@actrun_ai/*` packages so npm pages render useful install and quickstart docs.
+- Package-local README and LICENSE files for publishable `@kairox_ai/*` packages so npm pages render useful install and quickstart docs.
 
 ### Changed
 

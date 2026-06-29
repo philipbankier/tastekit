@@ -1,6 +1,6 @@
 import Ajv2020 from 'ajv/dist/2020.js';
 import { createRequire } from 'node:module';
-import { ConstitutionV1Schema, type ConstitutionV1 } from '@actrun_ai/tastekit-core/schemas';
+import { ConstitutionV1Schema, type ConstitutionV1 } from '@kairox_ai/tastekit-core/schemas';
 
 export interface ValidationIssue {
   code: string;
@@ -13,7 +13,7 @@ export type ValidationResult =
   | { ok: false; issues: ValidationIssue[] };
 
 const require = createRequire(import.meta.url);
-const constitutionJsonSchema = require('@actrun_ai/tastekit-core/schemas/json/constitution.schema.json');
+const constitutionJsonSchema = require('@kairox_ai/tastekit-core/schemas/json/constitution.schema.json');
 
 const ESCALATION_HINTS = [
   'escalat',

@@ -17,11 +17,11 @@ TasteKit is in a v1.1 release-readiness phase. The important current work is:
 
 | Package | Purpose |
 |:---|:---|
-| `@actrun_ai/tastekit-core` | Schemas, compiler, domains, interview policy, generators, MCP, trust, tracing, drift, eval |
-| `@actrun_ai/tastekit-cli` | User-facing command line |
-| `@actrun_ai/tastekit-adapters` | Runtime adapter interfaces and exports |
-| `@actrun_ai/tastekit-voice` | Voice provider interfaces and local/provider integrations |
-| `@actrun_ai/tastekit-validator` | Validation for `constitution.v1.json` and known deterministic extraction failures |
+| `@kairox_ai/tastekit-core` | Schemas, compiler, domains, interview policy, generators, MCP, trust, tracing, drift, eval |
+| `@kairox_ai/tastekit-cli` | User-facing command line |
+| `@kairox_ai/tastekit-adapters` | Runtime adapter interfaces and exports |
+| `@kairox_ai/tastekit-voice` | Voice provider interfaces and local/provider integrations |
+| `@kairox_ai/tastekit-validator` | Validation for `constitution.v1.json` and known deterministic extraction failures |
 
 ## Product Shape
 

@@ -1,5 +1,5 @@
 {
-  "name": "@actrun_ai/tastekit-validator",
+  "name": "@kairox_ai/tastekit-validator",
   "version": "0.2.0",
   "description": "Pre-1.0 validator for TasteKit constitution artifacts",
   "type": "module",
@@ -28,12 +28,12 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "pnpm --filter @actrun_ai/tastekit-core build && vitest run",
+    "test": "pnpm --filter @kairox_ai/tastekit-core build && vitest run",
     "lint": "eslint --ignore-pattern dist/ --ignore-pattern __tests__/ src/",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@actrun_ai/tastekit-core": "workspace:*",
+    "@kairox_ai/tastekit-core": "workspace:*",
     "ajv": "^8.12.0"
   },
   "devDependencies": {

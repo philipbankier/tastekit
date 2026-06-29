@@ -904,7 +904,7 @@ footer {
     <h2>System Architecture</h2>
     <p class="section-desc">5 packages, 9 artifact types, 4 adapters. The core compiles artifacts. Adapters export them. Drift detection closes the loop.</p>
     <div class="schema-tree" style="font-size:0.78rem;line-height:2;">
-<span class="key">@actrun_ai/tastekit-core</span> <span class="comment">— Schemas, compiler, interview, drift, eval, generators</span>
+<span class="key">@kairox_ai/tastekit-core</span> <span class="comment">— Schemas, compiler, interview, drift, eval, generators</span>
 ├── <span class="key">schemas/</span> <span class="comment">— 9 Zod schemas (constitution, guardrails, memory, skills, bindings, trust, playbook, evalpack, workspace)</span>
 ├── <span class="key">compiler/</span> <span class="comment">— 5-step pipeline with derivation state + resume</span>
 ├── <span class="key">interview/</span> <span class="comment">— LLM interviewer engine with confidence tracking + cascades</span>
@@ -916,9 +916,9 @@ footer {
 ├── <span class="key">mcp/</span> <span class="comment">— MCP client wrapping official SDK</span>
 └── <span class="key">trust/</span> <span class="comment">— Fingerprint pinning, audit</span>
 
-<span class="key">@actrun_ai/tastekit-cli</span> <span class="comment">— 12 commands, inquirer prompts, ora spinners</span>
-<span class="key">@actrun_ai/tastekit-adapters</span> <span class="comment">— Claude Code (v2.0), OpenClaw (v2.0), Manus, ActRun Autopilots (v2.0)</span>
-<span class="key">@actrun_ai/tastekit-voice</span> <span class="comment">— ElevenLabs Scribe/TTS + Whisper.cpp/Piper local fallbacks</span>
+<span class="key">@kairox_ai/tastekit-cli</span> <span class="comment">— 12 commands, inquirer prompts, ora spinners</span>
+<span class="key">@kairox_ai/tastekit-adapters</span> <span class="comment">— Claude Code (v2.0), OpenClaw (v2.0), Manus, ActRun Autopilots (v2.0)</span>
+<span class="key">@kairox_ai/tastekit-voice</span> <span class="comment">— ElevenLabs Scribe/TTS + Whisper.cpp/Piper local fallbacks</span>
 
 <span class="key">Data Flow:</span>
   User → <span style="color:var(--accent)">Interview</span> → Session → <span style="color:var(--cyan)">Compiler</span> → Artifacts → <span style="color:var(--green)">Adapters</span> → Runtime

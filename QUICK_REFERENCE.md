@@ -19,7 +19,7 @@ node packages/cli/dist/cli.js --help
 After publishing, users can run:
 
 ```bash
-npx @actrun_ai/tastekit-cli --help
+npx @kairox_ai/tastekit-cli --help
 ```
 
 ## Core Workflow

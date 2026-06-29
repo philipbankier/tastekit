@@ -689,14 +689,14 @@ test('report markdown includes artifact evidence and verification commands', () 
       passed: true,
       scores: [{ dimension: 'Depth', score: 4, rationale: 'Operational preferences were extracted.' }],
     },
-    verificationCommands: ['npx @actrun_ai/tastekit-validator .tastekit/constitution.v1.json --json'],
+    verificationCommands: ['npx @kairox_ai/tastekit-validator .tastekit/constitution.v1.json --json'],
     releaseInterpretation: 'This run increases release confidence.',
     followUps: [],
   });
   assert.match(markdown, /sha256: abc123/);
   assert.match(markdown, /# CLAUDE/);
   assert.match(markdown, /source: synthetic drift trace fixture/);
-  assert.match(markdown, /npx @actrun_ai\/tastekit-validator/);
+  assert.match(markdown, /npx @kairox_ai\/tastekit-validator/);
   assert.match(markdown, /Verification Commands/);
 });
 
@@ -1127,11 +1127,11 @@ test('expected export artifact assertion proves every export target file exists'
 });
 
 test('live harness core imports are resolvable from the repo root', () => {
-  const workspaceCore = String.raw`(?:packages/core|node_modules/@actrun_ai/tastekit-core)`;
-  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/interview'), new RegExp(`${workspaceCore}/dist/interview/index\\.js$`));
-  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/domains'), new RegExp(`${workspaceCore}/dist/domains/index\\.js$`));
-  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/compiler'), new RegExp(`${workspaceCore}/dist/compiler/index\\.js$`));
-  assert.match(import.meta.resolve('@actrun_ai/tastekit-core/utils'), new RegExp(`${workspaceCore}/dist/utils/index\\.js$`));
+  const workspaceCore = String.raw`(?:packages/core|node_modules/@kairox_ai/tastekit-core)`;
+  assert.match(import.meta.resolve('@kairox_ai/tastekit-core/interview'), new RegExp(`${workspaceCore}/dist/interview/index\\.js$`));
+  assert.match(import.meta.resolve('@kairox_ai/tastekit-core/domains'), new RegExp(`${workspaceCore}/dist/domains/index\\.js$`));
+  assert.match(import.meta.resolve('@kairox_ai/tastekit-core/compiler'), new RegExp(`${workspaceCore}/dist/compiler/index\\.js$`));
+  assert.match(import.meta.resolve('@kairox_ai/tastekit-core/utils'), new RegExp(`${workspaceCore}/dist/utils/index\\.js$`));
 });
 
 test('live prompt source files contain required contracts', () => {

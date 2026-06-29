@@ -10,7 +10,7 @@ The current priority is finishing 0.2.0 with no corner cutting while keeping the
 - Native `skills/tastekit/` onboarding remains source-complete and generated from source rubrics.
 - Full Taste Composition remains coverage-driven and useful in real-world live runs.
 - Managed-region runtime exports preserve manual edits.
-- Validator, docs, package metadata, and release gates align with `@actrun_ai/*`.
+- Validator, docs, package metadata, and release gates align with `@kairox_ai/*`.
 - Official live evidence is produced or explicitly waived before publishing.
 
 ## Immediate Release Gates
@@ -32,7 +32,7 @@ Also required:
 
 - Dry-run packs for all publishable packages.
 - Review of `README.md`, `docs/quickstart.md`, `docs/overview.md`, `docs/domains.md`, and live evidence docs.
-- Post-publish `npx @actrun_ai/tastekit-cli` smoke checks.
+- Post-publish `npx @kairox_ai/tastekit-cli` smoke checks.
 
 ## Near-Term Backlog
 

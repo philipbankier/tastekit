@@ -34,7 +34,7 @@ When `extensions["x-tastekit-metacognition"]` exists, fill `{{metacognition}}` w
 Preferred:
 
 ```bash
-npx @actrun_ai/tastekit-validator .tastekit/constitution.v1.json
+npx @kairox_ai/tastekit-validator .tastekit/constitution.v1.json
 ```
 
 Fallback when `npx` is unavailable: validate against `assets/schemas/constitution.schema.json`, then deterministically check duplicate principle IDs, duplicate priorities, gapped priorities, repeated rationales, identical examples, and escalation phrasing inside `taboos.never_do`.

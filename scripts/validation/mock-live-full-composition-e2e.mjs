@@ -3,8 +3,8 @@ import { createServer } from 'node:http';
 import { existsSync, mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { getDomainRubric } from '@actrun_ai/tastekit-core/domains';
-import { getDimensionsForDepth } from '@actrun_ai/tastekit-core/interview';
+import { getDomainRubric } from '@kairox_ai/tastekit-core/domains';
+import { getDimensionsForDepth } from '@kairox_ai/tastekit-core/interview';
 import { runCommand } from './lib/live-e2e/cli-runner.mjs';
 
 async function main(argv) {

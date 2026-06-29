@@ -1,5 +1,5 @@
 {
-  "name": "@actrun_ai/tastekit-voice",
+  "name": "@kairox_ai/tastekit-voice",
   "version": "0.2.0",
   "description": "Pre-1.0 voice I/O layer for TasteKit onboarding",
   "type": "module",

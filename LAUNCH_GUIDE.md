@@ -6,7 +6,7 @@ TasteKit 0.2.0 is a pre-1.0 OSS release candidate. It is not considered released
 
 Public claims should stay within what the repo currently ships and verifies:
 
-- Open-source CLI, library, and native skill under `@actrun_ai/*`.
+- Open-source CLI, library, and native skill under `@kairox_ai/*`.
 - Six first-class domains: General, Development, Content, Research, Sales, Support.
 - Quick, Guided, and Full Taste Composition onboarding.
 - Canonical `.tastekit/constitution.v1.json` with composition and metacognition extensions.
@@ -43,11 +43,11 @@ pnpm test:live-e2e:assert-latest
 5. Dry-run package contents:
 
 ```bash
-pnpm --filter @actrun_ai/tastekit-core pack --dry-run
-pnpm --filter @actrun_ai/tastekit-cli pack --dry-run
-pnpm --filter @actrun_ai/tastekit-adapters pack --dry-run
-pnpm --filter @actrun_ai/tastekit-voice pack --dry-run
-pnpm --filter @actrun_ai/tastekit-validator pack --dry-run
+pnpm --filter @kairox_ai/tastekit-core pack --dry-run
+pnpm --filter @kairox_ai/tastekit-cli pack --dry-run
+pnpm --filter @kairox_ai/tastekit-adapters pack --dry-run
+pnpm --filter @kairox_ai/tastekit-voice pack --dry-run
+pnpm --filter @kairox_ai/tastekit-validator pack --dry-run
 ```
 
 6. Review public docs:
@@ -66,11 +66,11 @@ pnpm --filter @actrun_ai/tastekit-validator pack --dry-run
 Only publish after the checklist passes:
 
 ```bash
-pnpm --filter @actrun_ai/tastekit-core publish --access public
-pnpm --filter @actrun_ai/tastekit-adapters publish --access public
-pnpm --filter @actrun_ai/tastekit-voice publish --access public
-pnpm --filter @actrun_ai/tastekit-validator publish --access public
-pnpm --filter @actrun_ai/tastekit-cli publish --access public
+pnpm --filter @kairox_ai/tastekit-core publish --access public
+pnpm --filter @kairox_ai/tastekit-adapters publish --access public
+pnpm --filter @kairox_ai/tastekit-voice publish --access public
+pnpm --filter @kairox_ai/tastekit-validator publish --access public
+pnpm --filter @kairox_ai/tastekit-cli publish --access public
 ```
 
 Publish the CLI last so users do not install a CLI that depends on unavailable package versions.
@@ -84,11 +84,10 @@ git push origin v0.2.0
 
 Create the GitHub release from `CHANGELOG.md` and link only to evidence that passed in the release checkout.
 
-Because `1.0.0` was published before this pre-1.0 correction, the release operator should also deprecate the old npm version and point `latest` at `0.2.0` after publish:
+The `@kairox_ai/*` packages are new, so `0.2.0` becomes their first published version. If access to the old `@actrun_ai/*` scope is restored, deprecate the accidental `1.0.0` packages there separately:
 
 ```bash
 npm deprecate @actrun_ai/tastekit-cli@1.0.0 "Superseded by the pre-1.0 0.2.x line; 1.0.0 was published before stable readiness."
-npm dist-tag add @actrun_ai/tastekit-cli@0.2.0 latest
 ```
 
 ## Post-Publish Smoke
@@ -96,10 +95,10 @@ npm dist-tag add @actrun_ai/tastekit-cli@0.2.0 latest
 Run in a temp directory:
 
 ```bash
-npx @actrun_ai/tastekit-cli --help
-npx @actrun_ai/tastekit-cli init --domain general-agent --depth guided
-npx @actrun_ai/tastekit-cli compile
-npx @actrun_ai/tastekit-cli export --target agents-md --out .
+npx @kairox_ai/tastekit-cli --help
+npx @kairox_ai/tastekit-cli init --domain general-agent --depth guided
+npx @kairox_ai/tastekit-cli compile
+npx @kairox_ai/tastekit-cli export --target agents-md --out .
 ```
 
 Also manually smoke the native `skills/tastekit/` path for Quick, Guided, and Full Taste Composition before public announcement.
